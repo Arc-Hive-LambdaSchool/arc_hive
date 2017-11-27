@@ -2,7 +2,7 @@
 cs1 Group Capstone Project
 
 ### Tyge's Meeting Notes
-- https://drive.google.com/drive/folders/1wHgZE1rqbNi3ox_cuduMRad8k0LXgRuz?usp=sharing
+- https://docs.google.com/document/d/1XIZVj97Kjwc3g1ib7fZh6Zbnx0fi9ZDjBy6BlFJOHT0/edit
 
 ### KickOff meeting
 - https://docs.google.com/document/d/1sboqV94eDzEiKEs8Lh4W6DTSlwJMIczww0Kpv1__cU4/edit#
