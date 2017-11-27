@@ -6,7 +6,8 @@ cs1 Group Capstone Project
 
 ### KickOff meeting
 - https://docs.google.com/document/d/1sboqV94eDzEiKEs8Lh4W6DTSlwJMIczww0Kpv1__cU4/edit#
-- Lecture organizer/viewer
+
+#### Lecture organizer/viewer
 - House/organize daily schedule/videos (replace spreadsheets, Piazza)
 - Can sort lectures by topics, upvote, basically similar functionality to Piazza but more friendly (and more video-focused)
 - Slackbot to expose/share, make it more efficient to find recent videos
