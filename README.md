@@ -37,3 +37,6 @@ cs1 Group Capstone Project
 ### API's
 - https://api.slack.com/bot-users
 - https://api.slack.com/slack-apps
+
+### User Flow Chart
+- https://www.lucidchart.com/invitations/accept/bd71243a-9abb-4e1f-8825-15db3e872044
