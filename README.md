@@ -35,8 +35,10 @@ cs1 Group Capstone Project
 > One other good initial task (once you have a slack channel) - copy the section of the kickoff doc corresponding to your project, make a new doc, and elaborate on it together. Keep brainstorming, but also start taking a more critical/realistic eye to narrow scope and really define what it is you want to achieve over the next ~4-6 weeks.
 
 ### API's
+##### Slack
 - https://api.slack.com/bot-users
 - https://api.slack.com/slack-apps
+- https://api.slack.com/tutorials
 
 ### User Flow Chart
 - https://www.lucidchart.com/invitations/accept/bd71243a-9abb-4e1f-8825-15db3e872044
