@@ -40,3 +40,8 @@ cs1 Group Capstone Project
 
 ### User Flow Chart
 - https://www.lucidchart.com/invitations/accept/bd71243a-9abb-4e1f-8825-15db3e872044
+
+### Trello
+- https://trello.com/b/VJ9rXVN4/cms-slackbot
+
+
