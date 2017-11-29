@@ -71,11 +71,12 @@ cs1 Group Capstone Project
 
 > Yeah it'll make sense pretty quickly - also I do all git interaction command line, so I'll be giving those commands here, but specific IDE integration may vary.
 
-> The basic workflow though is:
--Clone the org repo
--`git checkout -b type/user_short_description` to make the branch (this also switches you to it)
--Work as normally - edit files, make commits.
--`git push` should work as normal, on your first push you may have to set the upstream e.g. `git push --set-upstream origin type/user_short_description`
+> The basic workflow though is:  
+
+1. Clone the org repo
+2. `git checkout -b type/user_short_description` to make the branch (this also switches you to it)
+3. Work as normally - edit files, make commits.
+4. `git push` should work as normal, on your first push you may have to set the upstream e.g. `git push --set-upstream origin type/user_short_description`
 
 > That's what you do to get the code and add your own branch with your commits, and then push it back to GitHub. To actually merge your branch into master when it's done, you can make a pull request on GitHub similar to across forked repos.
 
