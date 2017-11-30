@@ -17,7 +17,7 @@ server.get('/', (req, res, err) => {
     res.json({'Error message: ': err.message, 'Error stack: ': err.stack});
     return;
   }
-  res.send('hello world');
+  res.json({});
 });
 
 server.listen(port, () => {
