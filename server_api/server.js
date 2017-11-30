@@ -11,13 +11,8 @@ mongoose.Promise = global.Promise;
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
-server.get('/', (req, res, err) => {
-  if (err) {
-    res.status(422);
-    res.json({'Error message: ': err.message, 'Error stack: ': err.stack});
-    return;
-  }
-  res.json({});
+server.get('/', (req, res) => {
+  res.send('Hello World');
 });
 
 server.listen(port, () => {
