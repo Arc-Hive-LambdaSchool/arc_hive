@@ -132,6 +132,7 @@
   - timecode links to lecture video sections.
 3. Custom/Propritary Lambda School video/audio file hosting for all lectures, brownbags and in-house generated streaming content.
   - https://ourcodeworld.com/articles/read/496/how-to-create-a-videochat-with-webrtc-using-peerjs-and-node-js
+  - http://doc-kurento.readthedocs.io/en/latest/what_is_kurento.html
 
 ![Logo](art/arc_hive1.jpg)
 ***
