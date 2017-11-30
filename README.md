@@ -1,12 +1,12 @@
-# LS_Lectures
-cs1 Group Capstone Project  
-NOTE: click on the ▶︎ black ▶︎ triangles ▶︎ to expand a section
+# Lambda School Lectures & Brownbags: Arc Hive
+- Collected notes for cs1 Group Capstone Project: Lois, Tyge, Evan, Ryan & Patrick
+- NOTE: click on the ▶︎ black ▶︎ triangles ▶︎ to expand a section
 
 #### KickOff meeting
 - https://docs.google.com/document/d/1sboqV94eDzEiKEs8Lh4W6DTSlwJMIczww0Kpv1__cU4/edit#
 - https://youtu.be/NaCJiR7pi4E
 
-#### Lecture organizer/viewer
+#### Lecture organizer/viewer idea: rough sketch
 - House/organize daily schedule/videos (replace spreadsheets, Piazza)
 - Can sort lectures by topics, upvote, basically similar functionality to Piazza but more friendly (and more video-focused)
 - Slackbot to expose/share, make it more efficient to find recent videos
