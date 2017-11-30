@@ -41,6 +41,8 @@
 - https://api.slack.com/tutorials
 - https://blog.takipi.com/7-essential-slack-integrations-developers-should-know/
 - https://blog.takipi.com/how-we-used-slack-scala-and-play-to-automate-our-lunch-order/
+- https://medium.com/slack-developer-blog/build-a-serverless-slack-bot-in-9-minutes-with-node-js-and-stdlib-b993cfa15358
+- https://join.slack.com/t/testspaceforbots/shared_invite/enQtMjgwODM5ODMwOTAyLWZlZGI4YmY0NjBmYmFhYzI2NWMyNTg0ZmM1NDhiOTAyZDdlNzE1MzViMWEyNzJjN2FiNWYzMGE2M2Q1N2E2ZTM
 
 ### Airtable
 - Introduction: https://airtable.com/appaWw6cCsdq5snMh/api/docs#curl/introduction
