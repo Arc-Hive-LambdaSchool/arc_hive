@@ -6,7 +6,10 @@
 - https://docs.google.com/document/d/1sboqV94eDzEiKEs8Lh4W6DTSlwJMIczww0Kpv1__cU4/edit#
 - https://youtu.be/NaCJiR7pi4E
 
-#### Lecture organizer/viewer idea: rough sketch
+#### Lecture organizer/viewer idea:
+
+<details><summary>Rough Sketch Ideas From Kickoff Meeting</summary><p>
+
 - House/organize daily schedule/videos (replace spreadsheets, Piazza)
 - Can sort lectures by topics, upvote, basically similar functionality to Piazza but more friendly (and more video-focused)
 - Slackbot to expose/share, make it more efficient to find recent videos
@@ -17,9 +20,12 @@
 - Challenge: app would have to accommodate delay in video upload/processing
 - Challenge: permissions, auth, acl, etc.
 
+</p></details>
+
+
 # Project Management
 ### User Flow Chart
-- https://www.lucidchart.com/invitations/accept/bd71243a-9abb-4e1f-8825-15db3e872044
+- https://www.lucidchart.com/invitations/accept/df9009eb-6ffb-467e-9327-38077ed0331a
 
 ### Trello
 - https://trello.com/b/VJ9rXVN4/cms-slackbot
@@ -35,6 +41,8 @@
 - https://api.slack.com/tutorials
 - https://blog.takipi.com/7-essential-slack-integrations-developers-should-know/
 - https://blog.takipi.com/how-we-used-slack-scala-and-play-to-automate-our-lunch-order/
+- https://medium.com/slack-developer-blog/build-a-serverless-slack-bot-in-9-minutes-with-node-js-and-stdlib-b993cfa15358
+- https://join.slack.com/t/testspaceforbots/shared_invite/enQtMjgwODM5ODMwOTAyLWZlZGI4YmY0NjBmYmFhYzI2NWMyNTg0ZmM1NDhiOTAyZDdlNzE1MzViMWEyNzJjN2FiNWYzMGE2M2Q1N2E2ZTM
 
 ### Airtable
 - Introduction: https://airtable.com/appaWw6cCsdq5snMh/api/docs#curl/introduction
@@ -112,3 +120,8 @@
 > You can check out branches from other people too, that way you can run their code locally to review it.
 
 </p></details>
+
+# Wishful Thinking
+1. Automated Zoom video uploading >>> Posting resulting YouTube link in Slack (Piazza or whatever LS is moving fwd with). Possible Zoom cloud options, or from Instructors desktop mp4 once the video/audio file is done being written.
+2. Expanded content management to include extensive tags per lecture content (e.g. React, Redux, React-Native, ES6, MongoDB, etc.) and timecode links to lecture video sections.
+3. Custom video/audio file hosting.
