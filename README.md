@@ -100,7 +100,7 @@
 
 > Yeah it'll make sense pretty quickly - also I do all git interaction command line, so I'll be giving those commands here, but specific IDE integration may vary.
 
-> The basic workflow though is:  
+> The basic workflow though is:
 
 1. Clone the org repo
 2. `git checkout -b type/user_short_description` to make the branch (this also switches you to it)
@@ -125,3 +125,7 @@
 1. Automated Zoom video uploading >>> Posting resulting YouTube link in Slack (Piazza or whatever LS is moving fwd with). Possible Zoom cloud options, or from Instructors desktop mp4 once the video/audio file is done being written.
 2. Expanded content management to include extensive tags per lecture content (e.g. React, Redux, React-Native, ES6, MongoDB, etc.) and timecode links to lecture video sections.
 3. Custom video/audio file hosting.
+
+![Logo](art/arc_hive1.jpg)
+***
+![Logo](art/arc_hive2.png)
