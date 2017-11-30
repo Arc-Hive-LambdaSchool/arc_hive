@@ -19,7 +19,7 @@
 
 # Project Management
 ### User Flow Chart
-- https://www.lucidchart.com/invitations/accept/bd71243a-9abb-4e1f-8825-15db3e872044
+- https://www.lucidchart.com/invitations/accept/df9009eb-6ffb-467e-9327-38077ed0331a
 
 ### Trello
 - https://trello.com/b/VJ9rXVN4/cms-slackbot
