@@ -120,3 +120,8 @@
 > You can check out branches from other people too, that way you can run their code locally to review it.
 
 </p></details>
+
+# Wishful Thinking
+1. Automated Zoom video uploading >>> Posting resulting YouTube link in Slack (Piazza or whatever LS is moving fwd with). Possible Zoom cloud options, or from Instructors desktop mp4 once the video/audio file is done being written.
+2. Expanded content management to include extensive tags per lecture content (e.g. React, Redux, React-Native, ES6, MongoDB, etc.) and timecode links to lecture video sections.
+3. Custom video/audio file hosting.
