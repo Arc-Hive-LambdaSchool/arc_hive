@@ -126,10 +126,12 @@
   - Posting resulting YouTube link in Slack (Piazza or whatever LS is moving fwd with).
   - Possible Zoom cloud options, or from direct from Instructors' desktop mp4 files once the video/audio file is done being written (if desktop recording, likely limited to macOS and Linux development?)
   - Also, possible full automation of uploading Zoom video to YouTube AND posting of link to Slack AND ingesting link into Content management system database for retrieval by students.
+  - https://zapier.com/apps/youtube/integrations/zoom
 2. Expanded content management to include extensive tags per lecture content
   - e.g. React, Redux, React-Native, ES6, MongoDB, etc.
   - timecode links to lecture video sections.
 3. Custom/Propritary Lambda School video/audio file hosting for all lectures, brownbags and in-house generated streaming content.
+  - https://ourcodeworld.com/articles/read/496/how-to-create-a-videochat-with-webrtc-using-peerjs-and-node-js
 
 ![Logo](art/arc_hive1.jpg)
 ***
