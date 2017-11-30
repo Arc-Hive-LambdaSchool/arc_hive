@@ -1,13 +1,15 @@
-# LS_Lectures
-cs1 Group Capstone Project
+# Lambda School Lectures & Brownbags: Arc Hive
+- Collected notes for cs1 Group Capstone Project: Lois, Tyge, Evan, Ryan & Patrick
+- NOTE: click on the ▶︎ black ▶︎ triangles ▶︎ to expand a section
 
-### Tyge's Meeting Notes
-- https://docs.google.com/document/d/1XIZVj97Kjwc3g1ib7fZh6Zbnx0fi9ZDjBy6BlFJOHT0/edit
-
-### KickOff meeting
+#### KickOff meeting
 - https://docs.google.com/document/d/1sboqV94eDzEiKEs8Lh4W6DTSlwJMIczww0Kpv1__cU4/edit#
+- https://youtu.be/NaCJiR7pi4E
 
-#### Lecture organizer/viewer
+#### Lecture organizer/viewer idea:
+
+<details><summary>Rough Sketch Ideas From Kickoff Meeting</summary><p>
+
 - House/organize daily schedule/videos (replace spreadsheets, Piazza)
 - Can sort lectures by topics, upvote, basically similar functionality to Piazza but more friendly (and more video-focused)
 - Slackbot to expose/share, make it more efficient to find recent videos
@@ -18,8 +20,39 @@ cs1 Group Capstone Project
 - Challenge: app would have to accommodate delay in video upload/processing
 - Challenge: permissions, auth, acl, etc.
 
-### Per Aaron
+</p></details>
+
+
+# Project Management
+### User Flow Chart
+- https://www.lucidchart.com/invitations/accept/df9009eb-6ffb-467e-9327-38077ed0331a
+
+### Trello
+- https://trello.com/b/VJ9rXVN4/cms-slackbot
+
+### Tyge's Meeting Notes
+- https://docs.google.com/document/d/1XIZVj97Kjwc3g1ib7fZh6Zbnx0fi9ZDjBy6BlFJOHT0/edit
+
+
+# API's
+### Slack
+- https://api.slack.com/bot-users
+- https://api.slack.com/slack-apps
+- https://api.slack.com/tutorials
+- https://blog.takipi.com/7-essential-slack-integrations-developers-should-know/
+- https://blog.takipi.com/how-we-used-slack-scala-and-play-to-automate-our-lunch-order/
+
+### Airtable
+- Introduction: https://airtable.com/appaWw6cCsdq5snMh/api/docs#curl/introduction
+- Invite from Evan: https://airtable.com/invite/l?inviteId=invbyUaq8FEA2OAcE&inviteToken=a7034c2596791de502f55f96f39b7c4f
+- Guide: https://guide.airtable.com/
+- https://github.com/airtable/airtable.js
+
+# NOTES
+### Aaron's set-up notes from Slack
 - https://lambdaschoolstudents.slack.com/archives/G5TDU61DE/p1511816408000751
+<details><summary>Project and Group Set-up</summary><p>
+
 > Please chat amongst your group, form a private slack channel (wacky team names encouraged), and invite your lecturer. Once that's all set, you'll work with them to continue getting repos/boilerplate set up.
 
 > Immediate goals: grouped with Slack channel and GitHub org, basic boilerplate repo (with initial tech decisions) created. Tomorrow you'll start getting Agile, set up Trello, do issue estimation/prioritization/assignment. From Wednesday on - code!
@@ -34,19 +67,13 @@ cs1 Group Capstone Project
 
 > One other good initial task (once you have a slack channel) - copy the section of the kickoff doc corresponding to your project, make a new doc, and elaborate on it together. Keep brainstorming, but also start taking a more critical/realistic eye to narrow scope and really define what it is you want to achieve over the next ~4-6 weeks.
 
-### API's
-##### Slack
-- https://api.slack.com/bot-users
-- https://api.slack.com/slack-apps
-- https://api.slack.com/tutorials
+</p></details>
 
-### User Flow Chart
-- https://www.lucidchart.com/invitations/accept/bd71243a-9abb-4e1f-8825-15db3e872044
+### Aaron's `git branch` notes from Slack:
+- https://lambdaschoolstudents.slack.com/archives/C8771SARM/p1511912639000132
 
-### Trello
-- https://trello.com/b/VJ9rXVN4/cms-slackbot
+<details><summary>git branching</summary><p>
 
-### Aaron's `git branch` notes:
 > I'll give a few-sentence version of my git branching approach - caveat is that their are a ton of these, none is definitively right or wrong, use whatever is right for your team/context and that you all agree on. Same for most process stuff, as you've learned.
 
 > Basically, master branch is the main branch - code is delivered by merging into master.
@@ -71,11 +98,12 @@ cs1 Group Capstone Project
 
 > Yeah it'll make sense pretty quickly - also I do all git interaction command line, so I'll be giving those commands here, but specific IDE integration may vary.
 
-> The basic workflow though is:
--Clone the org repo
--`git checkout -b type/user_short_description` to make the branch (this also switches you to it)
--Work as normally - edit files, make commits.
--`git push` should work as normal, on your first push you may have to set the upstream e.g. `git push --set-upstream origin type/user_short_description`
+> The basic workflow though is:  
+
+1. Clone the org repo
+2. `git checkout -b type/user_short_description` to make the branch (this also switches you to it)
+3. Work as normally - edit files, make commits.
+4. `git push` should work as normal, on your first push you may have to set the upstream e.g. `git push --set-upstream origin type/user_short_description`
 
 > That's what you do to get the code and add your own branch with your commits, and then push it back to GitHub. To actually merge your branch into master when it's done, you can make a pull request on GitHub similar to across forked repos.
 
@@ -88,3 +116,5 @@ cs1 Group Capstone Project
 > Also `git checkout branchname` is how you just switch between existing branches without making new ones - the `-b` flag is the special case of making it for the first time.
 
 > You can check out branches from other people too, that way you can run their code locally to review it.
+
+</p></details>
