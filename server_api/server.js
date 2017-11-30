@@ -11,13 +11,13 @@ mongoose.Promise = global.Promise;
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
-server.get('/', (req, res) => {
+server.get('/', (req, res, err) => {
   if (err) {
     res.status(422);
     res.json({'Error message: ': err.message, 'Error stack: ': err.stack});
     return;
   }
-  res.json({'Hey, I am up and running!'});
+  res.json({});
 });
 
 server.listen(port, () => {

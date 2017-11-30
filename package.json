@@ -2,9 +2,10 @@
   "name": "arc_hive",
   "version": "0.0.0",
   "description": "Slack app used for cataloging lecture videos",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./server_api/server.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
     "express": "^4.16.2",
     "mongoose": "^4.13.5",
     "react": "^16.2.0"
+  },
+  "engines": {
+    "node": "8.0.0"
   }
 }
