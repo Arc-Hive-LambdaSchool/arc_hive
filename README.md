@@ -125,6 +125,9 @@
 
 </p></details>
 
+- git branching procedure cheatsheet?
+- git branch merging cheatsheet?
+
 # Wishful Thinking
 1. Automated Zoom video uploading to YouTube.
   - Posting resulting YouTube link in Slack (Piazza or whatever LS is moving fwd with).
