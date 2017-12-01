@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 5000;
+const ATKey = import('../.env');
+const AirTable = process.env.AIR_TABLE_KEY;
 
 const server = express();
 
@@ -14,7 +16,8 @@ server.use(bodyParser.urlencoded({extended: true}));
 server.get('/', (req, res) => {
   console.log('Hello world - get');
   const data = 'hello world - get';
-  res.json({data});
+  const data2 = process.env;
+  res.json({data, data2});
 });
 
 server.post('/', (req, res) => {
