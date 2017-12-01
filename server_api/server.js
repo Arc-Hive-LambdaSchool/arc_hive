@@ -14,7 +14,7 @@ Airtable.configure({
 let base = Airtable.base('appMs812ZOuhtf8Un');
 
 const server = express();
-let data2 = [thePrecious];
+let data2 = [];
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
@@ -47,8 +47,9 @@ server.post('/', (req, res) => {
   let data = 'hello world - post';
   console.log(req.body);
   if (req.body) {
-    data2.push(JSON.stringify(req.body.text));
-    res.send(data2);
+    data2.push(JSON.stringify(req.body.text))
+    data = data2.length-1;
+    res.send(data);
     return;
   }
   res.send(data);
