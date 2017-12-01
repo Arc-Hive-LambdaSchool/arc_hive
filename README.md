@@ -51,6 +51,9 @@
 - Guide: https://guide.airtable.com/
 - https://github.com/airtable/airtable.js
 
+### Authentication Middleware
+- https://developer.okta.com/blog/2017/09/14/lazy-developers-guide-to-auth-with-vue
+
 # NOTES
 ### Aaron's set-up notes from Slack
 - https://lambdaschoolstudents.slack.com/archives/G5TDU61DE/p1511816408000751
