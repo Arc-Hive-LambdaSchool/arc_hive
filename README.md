@@ -22,6 +22,9 @@
 
 </p></details>
 
+# Minimum Viable Product
+- a teacher pastes a youtube link into Slack with a slash command `/arc youtu.be/jkh7S90udf`
+- a student retrieves chronological list of youtube vids `/hive`
 
 # Project Management
 ### User Flow Chart
