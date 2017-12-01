@@ -19,8 +19,11 @@ server.get('/', (req, res) => {
 
 server.post('/', (req, res) => {
   console.log('Hello world - post');
-  const data = 'hello world - post';
-  data = req.body;
+  let data = 'hello world - post';
+  console.log(req.body);
+  if (req.body) {
+    data = req.body;
+  }
   res.json({data});
 });
 
