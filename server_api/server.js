@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const port = process.env.PORT || 5000;
 const Airtable = require('airtable');
 require('dotenv').config();
-// const AirTable = process.env.AIR_TABLE_KEY;
+const thePrecious = process.env.AIR_TABLE_KEY;
 const ATKEY = 'keySPG804go0FXK3F';
 
 Airtable.configure({
@@ -14,7 +14,7 @@ Airtable.configure({
 let base = Airtable.base('appMs812ZOuhtf8Un');
 
 const server = express();
-let data2 = {};
+let data2 = [thePrecious];
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
@@ -47,7 +47,7 @@ server.post('/', (req, res) => {
   let data = 'hello world - post';
   console.log(req.body);
   if (req.body) {
-    data2 = JSON.stringify(req.body.text);
+    data2.push(JSON.stringify(req.body.text));
     res.send(data2);
     return;
   }
