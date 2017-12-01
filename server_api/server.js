@@ -48,7 +48,7 @@ server.post('/', (req, res) => {
   console.log(req.body);
   if (req.body) {
     data2.push(JSON.stringify(req.body.text))
-    data = data2.length-1;
+    data = JSON.stringify(req.body.text);
     res.send(data);
     return;
   }
