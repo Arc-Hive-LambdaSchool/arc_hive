@@ -146,6 +146,8 @@
   - https://ourcodeworld.com/articles/read/496/how-to-create-a-videochat-with-webrtc-using-peerjs-and-node-js
   - http://doc-kurento.readthedocs.io/en/latest/what_is_kurento.html
 
+# Logo Ideas:
+
 ![Logo](art/arc_hive1.jpg)
 ***
 ![Logo](art/arc_hive2.png)
