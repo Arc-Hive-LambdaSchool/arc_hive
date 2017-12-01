@@ -39,6 +39,7 @@
 - https://api.slack.com/bot-users
 - https://api.slack.com/slack-apps
 - https://api.slack.com/tutorials
+- https://api.slack.com/slash-commands
 - https://blog.takipi.com/7-essential-slack-integrations-developers-should-know/
 - https://blog.takipi.com/how-we-used-slack-scala-and-play-to-automate-our-lunch-order/
 - https://medium.com/slack-developer-blog/build-a-serverless-slack-bot-in-9-minutes-with-node-js-and-stdlib-b993cfa15358
