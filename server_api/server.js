@@ -47,7 +47,8 @@ server.post('/', (req, res) => {
   let data = 'hello world - post';
   console.log(req.body);
   if (req.body) {
-    data2.push(JSON.stringify(req.body.text))
+    // data2.push(JSON.stringify(req.body.text));
+    data2.push(req.body);
     data = JSON.stringify(req.body.text);
     res.send(data);
     return;
