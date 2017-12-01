@@ -43,11 +43,11 @@ server.post('/', (req, res) => {
   let data = 'hello world - post';
   console.log(req.body);
   if (req.body) {
-    data = req.body.text;
-    res.send(data.stringify());
+    data2 = req.body.text.stringify();
+    res.send(data2);
     return;
   }
-  res.json({data.stringify()});
+  res.send(data);
 });
 
 server.listen(port, () => {
