@@ -32,6 +32,7 @@ server.get('/', (req, res) => {
       return res.json({"Error": err.message, "Stack": err.stack});
 
     }
+    console.log(record);
     return res.json({"Record": record});
   });
 });
@@ -42,10 +43,10 @@ server.post('/', (req, res) => {
   console.log(req.body);
   if (req.body) {
     data = req.body.text;
-    res.send(data.stringify());
+    res.json({data.stringify()});
     return;
   }
-  res.send(data.stringify());
+  res.json({data.stringify()});
 });
 
 server.listen(port, () => {
