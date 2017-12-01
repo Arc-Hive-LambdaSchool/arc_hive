@@ -48,10 +48,10 @@ server.post('/', (req, res) => {
   if (req.body) {
     data2.push(JSON.stringify(req.body.text));
     data = JSON.stringify(req.body.text);
-    const slackBlob = req.body;
+    /*const slackBlob = req.body;
     const newPost = new slackModel(slackBlob);
-    fullData.push(newPost);
-    res.json({'link': data, 'response_type': newPost.response_type});
+    fullData.push(newPost);*/
+    res.send(data);
     return;
   }
   res.send(data);
