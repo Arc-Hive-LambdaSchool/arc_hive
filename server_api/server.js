@@ -44,10 +44,10 @@ server.post('/', (req, res) => {
   console.log(req.body);
   if (req.body) {
     data = req.body.text;
-    res.json({data});
+    res.send(data.stringify());
     return;
   }
-  res.json({data});
+  res.json({data.stringify()});
 });
 
 server.listen(port, () => {
