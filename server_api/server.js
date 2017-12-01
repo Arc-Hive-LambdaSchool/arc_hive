@@ -2,8 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 5000;
-const ATKey = require('../.env');
-const AirTable = process.env.AIR_TABLE_KEY;
+require('dotenv').config();
+// const AirTable = process.env.AIR_TABLE_KEY;
+const AirTable = 'keySPG804go0FXK3F';
 
 const server = express();
 
@@ -18,7 +19,7 @@ server.get('/', (req, res) => {
   const data = 'hello world - get';
   const data2 = AirTable;
   if (data2) {
-    res.json({data, data2});
+    res.json({data});
     return;
   }
   res.json({data});
@@ -30,6 +31,8 @@ server.post('/', (req, res) => {
   console.log(req.body);
   if (req.body) {
     data = req.body;
+    res.json({data, AirTable});
+    return;
   }
   res.json({data});
 });
