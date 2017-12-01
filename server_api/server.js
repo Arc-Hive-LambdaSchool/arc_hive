@@ -13,11 +13,13 @@ server.use(bodyParser.urlencoded({extended: true}));
 
 server.get('/', (req, res) => {
   console.log('Hello world - get');
+  const data = 'hello world - get';
   res.json({data});
 });
 
 server.post('/', (req, res) => {
   console.log('Hello world - post');
+  const data = 'hello world - post';
   data = req.body;
   res.json({data});
 });
