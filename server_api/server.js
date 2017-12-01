@@ -25,7 +25,7 @@ server.get('/', (req, res) => {
   console.log('Hello world - get');
   const data = 'hello world - get';
   const data2 = ATKEY;
-  let base = new Airtable({apiKey: ATKEY}).base('appMs812ZOuhtf8Un');
+  /*let base = new Airtable({apiKey: ATKEY}).base('appMs812ZOuhtf8Un');
   base('Table 1').find('recDVfMW2yBtY0Cxi', (err, record) => {
     if (err) {
       console.log(err);
@@ -34,7 +34,8 @@ server.get('/', (req, res) => {
     }
     console.log(record);
     return res.json({"Record": record});
-  });
+  });*/
+  res.json({data});
 });
 
 server.post('/', (req, res) => {
@@ -43,10 +44,10 @@ server.post('/', (req, res) => {
   console.log(req.body);
   if (req.body) {
     data = req.body.text;
-    res.json({data.stringify()});
+    res.json({data});
     return;
   }
-  res.json({data.stringify()});
+  res.json({data});
 });
 
 server.listen(port, () => {
