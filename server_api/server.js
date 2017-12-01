@@ -12,7 +12,19 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
 server.get('/', (req, res) => {
-  res.send('Hello World');
+  console.log('Hello world - get');
+  const data = 'hello world - get';
+  res.json({data});
+});
+
+server.post('/', (req, res) => {
+  console.log('Hello world - post');
+  let data = 'hello world - post';
+  console.log(req.body);
+  if (req.body) {
+    data = req.body;
+  }
+  res.json({data});
 });
 
 server.listen(port, () => {
