@@ -15,7 +15,7 @@ let base = Airtable.base('appMs812ZOuhtf8Un');
 
 const server = express();
 let data2 = [];
-const fullData = [];
+const fullData = [thePrecious];
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
@@ -48,10 +48,15 @@ server.post('/', (req, res) => {
   if (req.body) {
     data2.push(JSON.stringify(req.body.text));
     data = JSON.stringify(req.body.text);
-    /*const slackBlob = req.body;
-    const newPost = new slackModel(slackBlob);
-    fullData.push(newPost);*/
-    res.send(data);
+    const slackBlob = req.body;
+    console.log('slackBlob:');
+    console.log(slackBlob);
+    const newPost = slackModel(slackBlob);
+    console.log('newPost/slackModel: ')
+    console.log(slackModel(slackBlob));
+    console.log(newPost);
+    fullData.push(newPost);
+    res.send(data.concat(fullData));
     return;
   }
   res.send(data);
