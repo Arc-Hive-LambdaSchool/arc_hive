@@ -9,13 +9,13 @@ const slackModel = require('./slackModel');
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
-  apiKey: 'keySPG804go0FXK3F'
+  apiKey: thePrecious
 });
 let base = Airtable.base('appMs812ZOuhtf8Un');
 
 const server = express();
 let data2 = [];
-const fullData = [thePrecious];
+const fullData = [];
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
