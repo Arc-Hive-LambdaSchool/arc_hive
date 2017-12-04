@@ -56,7 +56,7 @@ server.post('/', (req, res) => {
     data2.push(JSON.stringify(req.body.text));
     data = JSON.stringify(req.body.text);
     const slackBlob = req.body;
-    const infoSplit = slackBlob.text.split(', ');
+    const infoSplit = slackBlob.text.split(', ' || ': ');
     for (let i = 0; i < infoSplit.length; i++) {
       let index = infoSplit.length;
       if (i < index) {
