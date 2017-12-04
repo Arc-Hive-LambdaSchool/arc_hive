@@ -1,10 +1,13 @@
+// require('dotenv').load();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 5000;
 const Airtable = require('airtable');
-require('dotenv').config();
-const thePrecious = process.env.AIR_TABLE_KEY;
+// const thePrecious = process.env.AIR_TABLE_KEY;
+const thePrecious = 'Bearer keySPG804go0FXK3F'
+//console.log(thePrecious);
+//console.log(process.env);
 const slackModel = require('./slackModel');
 
 Airtable.configure({
@@ -26,7 +29,7 @@ server.use(bodyParser.urlencoded({extended: true}));
 server.get('/', (req, res) => {
   console.log('Hello world - get');
   const data = 'hello world - get';
-  /*let base = new Airtable({apiKey: ATKEY}).base('appMs812ZOuhtf8Un');
+  /*let base = new Airtable({apiKey: thePrecious}).base('appMs812ZOuhtf8Un');
   base('Table 1').find('recDVfMW2yBtY0Cxi', (err, record) => {
     if (err) {
       console.log(err);
@@ -45,17 +48,53 @@ server.get('/', (req, res) => {
 
 server.post('/', (req, res) => {
   let data = 'hello world - post';
+  let title;
+  let link;
+  let cohort;
+  const tags = [];
   if (req.body) {
     data2.push(JSON.stringify(req.body.text));
     data = JSON.stringify(req.body.text);
     const slackBlob = req.body;
-    console.log('slackBlob:');
-    console.log(slackBlob);
-    const newPost = slackModel(slackBlob);
-    console.log('newPost/slackModel: ')
-    console.log(slackModel(slackBlob));
-    console.log(newPost);
-    fullData.push(newPost);
+    const infoSplit = slackBlob.text.split(', ');
+    for (let i = 0; i < infoSplit.length; i++) {
+      let index = infoSplit.length;
+      if (i < index) {
+        switch (infoSplit[i].toLowerCase()) {
+          case 'title':
+            title = infoSplit[i+1];
+            break;
+          case 'link':
+            link = infoSplit[i+1];
+            break;
+          case 'cohort':
+            cohort = infoSplit[i+1];
+            break;
+          case 'tags':
+            let index = i;
+            break;
+          default:
+            break;
+        }
+      } else {
+        tags.push(infoSplit[i]);
+      }
+    }
+    let base = new Airtable({apiKey: 'thePrecious'})
+    .base('appMs812ZOuhtf8Un');
+
+    base('Table 1').create({
+      "Title":  title,
+      "YouTube link": link,
+      "cohort": cohort,
+      "tags": tags
+    }, (err, record) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(record.getId());
+});
     res.send(data.concat(fullData));
     return;
   }
