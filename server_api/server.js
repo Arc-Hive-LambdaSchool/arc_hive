@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const request = require('request');
 const port = process.env.PORT || 5000;
 const Airtable = require('airtable');
 // const thePrecious = process.env.AIR_TABLE_KEY;
@@ -26,10 +27,34 @@ mongoose.Promise = global.Promise;
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
+const g = {
+  method: 'GET',
+  uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
+  headers: {
+    Authorization: 'Bearer keySPG804go0FXK3F',
+    'content-type': 'application/json'
+  }
+};
+
+server.get('/', (req, res) => {
+  request(g, (error, response, body) => {
+    if(error) {
+      console.log(error);
+      return;
+    }
+    console.log('Response: ' + response);
+    console.log('Body: ' + body);
+    res.json(body);
+  });
+  // res.send('here');
+});
+
+/* ORIGINAL GET
 server.get('/', (req, res) => {
   console.log('Hello world - get');
   const data = 'hello world - get';
-  /*let base = new Airtable({apiKey: thePrecious}).base('appMs812ZOuhtf8Un');
+
+  let base = new Airtable({apiKey: thePrecious}).base('appMs812ZOuhtf8Un');
   base('Table 1').find('recDVfMW2yBtY0Cxi', (err, record) => {
     if (err) {
       console.log(err);
@@ -38,13 +63,13 @@ server.get('/', (req, res) => {
     }
     console.log(record);
     return res.json({"Record": record});
-  });*/
+  });
   if (data2 && fullData) {
     res.json({data2, fullData});
     return;
   }
   res.send(data);
-});
+}); */
 
 server.post('/', (req, res) => {
   let data = 'hello world - post';

@@ -24,7 +24,8 @@
     "express": "^4.16.2",
     "mongoose": "^4.13.5",
     "nodemon": "^1.12.1",
-    "react": "^16.2.0"
+    "react": "^16.2.0",
+    "request": "^2.83.0"
   },
   "engines": {
     "node": "8.9.1",
