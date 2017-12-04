@@ -32,7 +32,8 @@ const g = {
   uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
   headers: {
     Authorization: 'Bearer keySPG804go0FXK3F',
-    'content-type': 'application/json'
+    'content-type': 'application/json',
+    'id': 'recDVfMW2yBtY0Cxi'
   }
 };
 
@@ -42,34 +43,11 @@ server.get('/', (req, res) => {
       console.log(error);
       return;
     }
-    console.log('Response: ' + response);
+    console.log('Response: ' + JSON.stringify(response));
     console.log('Body: ' + body);
     res.json(body);
   });
-  // res.send('here');
 });
-
-/* ORIGINAL GET
-server.get('/', (req, res) => {
-  console.log('Hello world - get');
-  const data = 'hello world - get';
-
-  let base = new Airtable({apiKey: thePrecious}).base('appMs812ZOuhtf8Un');
-  base('Table 1').find('recDVfMW2yBtY0Cxi', (err, record) => {
-    if (err) {
-      console.log(err);
-      return res.json({"Error": err.message, "Stack": err.stack});
-
-    }
-    console.log(record);
-    return res.json({"Record": record});
-  });
-  if (data2 && fullData) {
-    res.json({data2, fullData});
-    return;
-  }
-  res.send(data);
-}); */
 
 server.post('/', (req, res) => {
   let data = 'hello world - post';
