@@ -56,32 +56,43 @@ server.post('/', (req, res) => {
     data2.push(JSON.stringify(req.body.text));
     data = JSON.stringify(req.body.text);
     const slackBlob = req.body;
-    const infoSplit = slackBlob.text.split(', ' || ': ');
+    const infoSplit = slackBlob.text.split(', ');
+    let index = infoSplit.length;
     for (let i = 0; i < infoSplit.length; i++) {
-      let index = infoSplit.length;
-      if (i < index) {
+      // console.log(index);
+      if (i <= 6) {
         switch (infoSplit[i].toLowerCase()) {
           case 'title':
             title = infoSplit[i+1];
+            // console.log(title);
             break;
           case 'link':
             link = infoSplit[i+1];
+            // console.log(link);
             break;
           case 'cohort':
             cohort = infoSplit[i+1];
+            // console.log(cohort);
             break;
           case 'tags':
             let index = i;
+            // console.log(tags);
+            // console.log(index);
             break;
           default:
             break;
         }
       } else {
         tags.push(infoSplit[i]);
+        // console.log(tags);
       }
     }
     let base = new Airtable({apiKey: 'thePrecious'})
     .base('appMs812ZOuhtf8Un');
+    console.log(title);
+    console.log(link);
+    console.log(cohort);
+    console.log(tags);
 
     base('Table 1').create({
       "Title":  title,
