@@ -3,13 +3,39 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const request = require('request');
-const port = process.env.PORT || 5000;
+const mongodb = require('mongodb');
+const port = process.env.PORT || 5001;
 const Airtable = require('airtable');
 // const thePrecious = process.env.AIR_TABLE_KEY;
 const thePrecious = 'Bearer keySPG804go0FXK3F'
 //console.log(thePrecious);
 //console.log(process.env);
 const slackModel = require('./slackModel');
+
+/*
+const MONGO_URL = 'mongodb://arc_hive_admin:arc hive 555@ds013475.mlab.com:13475/arc_hive_testdb';
+
+MongoClient.connect(MONGO_URL, (err, db) => {
+  if (err) {
+    return console.log(err);
+  }
+
+  // Do something with db here, like inserting a record
+  db.collection('arc_hive_testdb').insertOne(
+    {
+      text: 'Hopefully this works!'
+    },
+    function (err, res) {
+      if (err) {
+        db.close();
+        return console.log(err);
+      }
+      // Success
+      db.close();
+    }
+  )
+});
+*/
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
@@ -39,16 +65,50 @@ const g = {
 
 server.get('/', (req, res) => {
   request(g, (error, response, body) => {
-    if(error) {
+    if (error) {
       console.log(error);
       return;
     }
     console.log('Response: ' + JSON.stringify(response));
     console.log('Body: ' + body);
-    res.json(body);
+    res.send(body);
   });
 });
 
+server.post('/', (req, res) => {
+  // console.log(req.body.fields.Link);
+  const rbf = req.body.fields;
+  const p = {
+    method: 'POST',
+    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
+    headers: {
+      Authorization: 'Bearer keySPG804go0FXK3F',
+      'content-type': 'application/json',
+    },
+    body: {
+      "fields": {
+        Link: req.body.fields.Link,
+        Title: req.body.fields.Title,
+        Cohort: req.body.fields.Cohort,
+        Tags: req.body.fields.Tags
+      }
+    },
+    json: true
+  };
+  request(p, (error, response, body) => {
+    if (error) {
+      console.log('HI I AM AN ERROR')
+      console.log(error);
+      return;
+    }
+    // console.log('Response: ' + JSON.stringify(response));
+    // console.log('Body: ' + JSON.stringify(body));
+    // console.log(req.body);
+    res.send(JSON.stringify(body));
+  });
+});
+
+/*
 server.post('/', (req, res) => {
   let data = 'hello world - post';
   let title;
@@ -114,6 +174,7 @@ server.post('/', (req, res) => {
   }
   res.send(data);
 });
+*/
 
 server.listen(port, () => {
   console.log(`Servs up dude ${port}`);
