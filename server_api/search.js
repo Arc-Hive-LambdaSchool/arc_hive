@@ -3,10 +3,7 @@ const debug = require('debug')('slash-command-template:slackSearch');
 const qs = require('querystring');
 const users = require('./users');
 
-/*
- *  Send ticket creation confirmation via
- *  chat.postMessage to the user who created it
- */
+
 const sendConfirmation = (slackSearch) => {
   console.log(slackSearch);
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
@@ -16,7 +13,6 @@ const sendConfirmation = (slackSearch) => {
     attachments: JSON.stringify([
       {
         title: `Ticket created for ${slackSearch.userEmail}`,
-        // Get this from the 3rd party helpdesk system
         title_link: 'http://example.com',
         text: slackSearch.text,
         fields: [
@@ -44,8 +40,6 @@ const sendConfirmation = (slackSearch) => {
   });
 };
 
-// Create helpdesk slackSearch. Call users.find to get the user's email address
-// from their user ID
 const create = (userId, submission) => {
   const slackSearch = {};
 

@@ -116,13 +116,6 @@ server.post('/commands', (req, res) => {
         callback_id: 'submit-search',
         submit_label: 'Submit',
         elements: [
-          // {
-          //   label: 'Title',
-          //   // type: 'text',
-          //   // name: 'title',
-          //   value: 'https://pacific-waters-60975.herokuapp.com/',
-          //   // hint: '30 second summary of the problem',
-          // },
           {
             label: 'Tags',
             type: 'select',
