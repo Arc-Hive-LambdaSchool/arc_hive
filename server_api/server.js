@@ -1,4 +1,4 @@
-// require('dotenv').load();
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -12,31 +12,6 @@ const thePrecious = 'Bearer keySPG804go0FXK3F'
 //console.log(process.env);
 const slackModel = require('./slackModel');
 
-/*
-const MONGO_URL = 'mongodb://arc_hive_admin:arc hive 555@ds013475.mlab.com:13475/arc_hive_testdb';
-
-MongoClient.connect(MONGO_URL, (err, db) => {
-  if (err) {
-    return console.log(err);
-  }
-
-  // Do something with db here, like inserting a record
-  db.collection('arc_hive_testdb').insertOne(
-    {
-      text: 'Hopefully this works!'
-    },
-    function (err, res) {
-      if (err) {
-        db.close();
-        return console.log(err);
-      }
-      // Success
-      db.close();
-    }
-  )
-});
-*/
-
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
   apiKey: thePrecious
@@ -44,8 +19,6 @@ Airtable.configure({
 let base = Airtable.base('appMs812ZOuhtf8Un');
 
 const server = express();
-let data2 = [];
-const fullData = [];
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
@@ -53,31 +26,76 @@ mongoose.Promise = global.Promise;
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
-const g = {
-  method: 'GET',
-  uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
-  headers: {
-    Authorization: 'Bearer keySPG804go0FXK3F',
-    'content-type': 'application/json',
-    'id': 'recDVfMW2yBtY0Cxi'
-  }
-};
 
 server.get('/', (req, res) => {
+  const g = {
+    method: 'GET',
+    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx',
+    headers: {
+      Authorization: 'Bearer keySPG804go0FXK3F',
+      'content-type': 'application/json',
+      'id': 'recDVfMW2yBtY0Cxi'
+    }
+  };
+  console.log(g.uri);
   request(g, (error, response, body) => {
     if (error) {
       console.log(error);
       return;
     }
-    console.log('Response: ' + JSON.stringify(response));
-    console.log('Body: ' + body);
+    // console.log('Response: ' + JSON.stringify(response));
+    // console.log('Body: ' + body);
+    res.send(body);
+  });
+});
+
+server.get('/:search/:value', (req, res) => {
+  let search = req.params.search;
+  const val = req.params.value;
+  const allRec = 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx';
+  const brownBags = '?filterByFormula=IF(Brownbag%2C+Link)';
+  const notBrownBags = '?filterByFormula=IF(NOT(Brownbag)%2C+Link)';
+  const byCohort = '?filterByFormula=OR(IF(FIND(%22' + val + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))';
+  const byTags = '?filterByFormula=OR(IF(FIND(%22' + val + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22DoNotUse%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link))';
+
+  switch (search) {
+    case 'brownBags':
+      search = brownBags;
+      break;
+    case 'notBrownBags':
+      search = notBrownBags;
+      break;
+    case 'byCohort':
+      search = byCohort;
+      break;
+    case 'byTags':
+      search = byTags;
+      break;
+    default:
+      break;
+  }
+  const g = {
+    method: 'GET',
+    uri: allRec + search,
+    headers: {
+      Authorization: 'Bearer keySPG804go0FXK3F',
+      'content-type': 'application/json',
+      'id': 'recDVfMW2yBtY0Cxi'
+    }
+  };
+  console.log(g.uri);
+  request(g, (error, response, body) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+    // console.log('Response: ' + JSON.stringify(response));
+    // console.log('Body: ' + body);
     res.send(body);
   });
 });
 
 server.post('/', (req, res) => {
-  // console.log(req.body.fields.Link);
-  const rbf = req.body.fields;
   const p = {
     method: 'POST',
     uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
@@ -108,74 +126,33 @@ server.post('/', (req, res) => {
   });
 });
 
-/*
-server.post('/', (req, res) => {
-  let data = 'hello world - post';
-  let title;
-  let link;
-  let cohort;
-  const tags = [];
-  if (req.body) {
-    data2.push(JSON.stringify(req.body.text));
-    data = JSON.stringify(req.body.text);
-    const slackBlob = req.body;
-    const infoSplit = slackBlob.text.split(', ');
-    let index = infoSplit.length;
-    for (let i = 0; i < infoSplit.length; i++) {
-      // console.log(index);
-      if (i <= 6) {
-        switch (infoSplit[i].toLowerCase()) {
-          case 'title':
-            title = infoSplit[i+1];
-            // console.log(title);
-            break;
-          case 'link':
-            link = infoSplit[i+1];
-            // console.log(link);
-            break;
-          case 'cohort':
-            cohort = infoSplit[i+1];
-            // console.log(cohort);
-            break;
-          case 'tags':
-            let index = i;
-            // console.log(tags);
-            // console.log(index);
-            break;
-          default:
-            break;
-        }
-      } else {
-        tags.push(infoSplit[i]);
-        // console.log(tags);
-      }
-    }
-    let base = new Airtable({apiKey: 'thePrecious'})
-    .base('appMs812ZOuhtf8Un');
-    console.log(title);
-    console.log(link);
-    console.log(cohort);
-    console.log(tags);
 
-    base('Table 1').create({
-      "Title":  title,
-      "YouTube link": link,
-      "cohort": cohort,
-      "tags": tags
-    }, (err, record) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log(record.getId());
-});
-    res.send(data.concat(fullData));
-    return;
-  }
-  res.send(data);
-});
-*/
 
 server.listen(port, () => {
   console.log(`Servs up dude ${port}`);
 });
+
+/*
+const MONGO_URL = 'mongodb://arc_hive_admin:arc hive 555@ds013475.mlab.com:13475/arc_hive_testdb';
+
+MongoClient.connect(MONGO_URL, (err, db) => {
+  if (err) {
+    return console.log(err);
+  }
+
+  // Do something with db here, like inserting a record
+  db.collection('arc_hive_testdb').insertOne(
+    {
+      text: 'Hopefully this works!'
+    },
+    function (err, res) {
+      if (err) {
+        db.close();
+        return console.log(err);
+      }
+      // Success
+      db.close();
+    }
+  )
+});
+*/
