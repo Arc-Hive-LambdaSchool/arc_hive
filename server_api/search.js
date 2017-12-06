@@ -1,5 +1,5 @@
 const axios = require('axios');
-const debug = require('debug')('slash-command-template:search');
+const debug = require('debug')('slash-command-template:slackSearch');
 const qs = require('querystring');
 const users = require('./users');
 
@@ -7,31 +7,31 @@ const users = require('./users');
  *  Send ticket creation confirmation via
  *  chat.postMessage to the user who created it
  */
-const sendConfirmation = (search) => {
-  console.log(search);
+const sendConfirmation = (slackSearch) => {
+  console.log(slackSearch);
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
-    channel: search.userId,
+    channel: slackSearch.userId,
     text: 'View links below',
     attachments: JSON.stringify([
       {
-        title: `Ticket created for ${search.userEmail}`,
+        title: `Ticket created for ${slackSearch.userEmail}`,
         // Get this from the 3rd party helpdesk system
         title_link: 'http://example.com',
-        text: search.text,
+        text: slackSearch.text,
         fields: [
           {
             title: 'Tags',
-            value: search.tags || 'None provided',
+            value: slackSearch.tags || 'None provided',
           },
           {
             title: 'Cohort',
-            value: search.cohort || 'None provided',
+            value: slackSearch.cohort || 'None provided',
             short: true,
           },
           {
             title: 'Brownbag',
-            value: search.brownbag || 'No',
+            value: slackSearch.brownbag || 'No',
           }
         ],
       },
@@ -44,10 +44,10 @@ const sendConfirmation = (search) => {
   });
 };
 
-// Create helpdesk search. Call users.find to get the user's email address
+// Create helpdesk slackSearch. Call users.find to get the user's email address
 // from their user ID
 const create = (userId, submission) => {
-  const search = {};
+  const slackSearch = {};
 
   const fetchUserEmail = new Promise((resolve, reject) => {
     users.find(userId).then((result) => {
@@ -57,14 +57,14 @@ const create = (userId, submission) => {
   });
 
   fetchUserEmail.then((result) => {
-    search.userId = userId;
-    search.userEmail = result;
-    // search.title = submission.title;
-    search.tags = submission.tags;
-    search.cohort = submission.cohort;
-    search.brownbag = submission.brownbag;
-    sendConfirmation(search);
-    return search;
+    slackSearch.userId = userId;
+    slackSearch.userEmail = result;
+    // slackSearch.title = submission.title;
+    slackSearch.tags = submission.tags;
+    slackSearch.cohort = submission.cohort;
+    slackSearch.brownbag = submission.brownbag;
+    sendConfirmation(slackSearch);
+    return slackSearch;
   }).catch((err) => { console.error(err); });
 };
 
