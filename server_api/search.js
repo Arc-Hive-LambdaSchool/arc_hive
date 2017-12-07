@@ -66,7 +66,8 @@ const create = (userId, submission) => {
         Authorization: 'Bearer keySPG804go0FXK3F',
         'content-type': 'application/json',
       },
-      body: slackSearch
+      body: slackSearch,
+      json: true
     };
     request(g, (error, response, body) => {
       if (error) {
