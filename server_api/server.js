@@ -30,7 +30,15 @@ mongoose.Promise = global.Promise;
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
+/*=======================================================================
+=========================================================================
+* AIRTABLE ROUTES
+=========================================================================
+========================================================================*/
 
+/*************************************************************************
+* =============AIRTABLE GET ROUTE=============
+**************************************************************************
 server.get('/', (req, res) => {
   const g = {
     method: 'GET',
@@ -52,8 +60,12 @@ server.get('/', (req, res) => {
     res.send(body);
   });
 });
-
-server.get('/:search/:value', (req, res) => {
+*/
+/*************************************************************************
+* =============AIRTABLE QUERY-GET ROUTE==============
+**************************************************************************/
+server.get('/', (req, res) => {
+  console.log('AT GET: ' + JSON.stringify(req.body));
   let search = req.params.search;
   const val = req.params.value;
   const allRec = 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx';
@@ -99,6 +111,49 @@ server.get('/:search/:value', (req, res) => {
   });
 });
 
+/*************************************************************************
+* =============AIRTABLE CREATE-POST ROUTE==============
+**************************************************************************/
+server.post('/', (req, res) => {
+  const p = {
+    method: 'POST',
+    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
+    headers: {
+      Authorization: 'Bearer keySPG804go0FXK3F',
+      'content-type': 'application/json',
+    },
+    body: {
+      "fields": {
+        Link: req.body.fields.Link,
+        Title: req.body.fields.Title,
+        Cohort: req.body.fields.Cohort,
+        Tags: req.body.fields.Tags
+      }
+    },
+    json: true
+  };
+  request(p, (error, response, body) => {
+    if (error) {
+      console.log('HI I AM AN ERROR')
+      console.log(error);
+      return;
+    }
+    // console.log('Response: ' + JSON.stringify(response));
+    // console.log('Body: ' + JSON.stringify(body));
+    // console.log(req.body);
+    res.send(JSON.stringify(body));
+  });
+});
+
+/*=======================================================================
+=========================================================================
+* SLACK ROUTES
+=========================================================================
+========================================================================*/
+
+/*************************************************************************
+* =============SLACK COMMANDS-POST ROUTE==============
+**************************************************************************/
 server.post('/commands', (req, res) => {
   // extract the verification token, slash command text,
   // and trigger ID from payload
@@ -148,7 +203,8 @@ server.post('/commands', (req, res) => {
             type: 'select',
             name: 'brownbag',
             options: [
-              { label: 'Yes', value: 'true' },
+              { label: 'Only Brownbags', value: true },
+              { label: 'No Brownbags', value: false },
             ]
           }
         ],
@@ -170,39 +226,11 @@ server.post('/commands', (req, res) => {
   }
 });
 
-server.post('/', (req, res) => {
-  const p = {
-    method: 'POST',
-    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
-    headers: {
-      Authorization: 'Bearer keySPG804go0FXK3F',
-      'content-type': 'application/json',
-    },
-    body: {
-      "fields": {
-        Link: req.body.fields.Link,
-        Title: req.body.fields.Title,
-        Cohort: req.body.fields.Cohort,
-        Tags: req.body.fields.Tags
-      }
-    },
-    json: true
-  };
-  request(p, (error, response, body) => {
-    if (error) {
-      console.log('HI I AM AN ERROR')
-      console.log(error);
-      return;
-    }
-    // console.log('Response: ' + JSON.stringify(response));
-    // console.log('Body: ' + JSON.stringify(body));
-    // console.log(req.body);
-    res.send(JSON.stringify(body));
-  });
-});
-
+/*************************************************************************
+* ==============SLACK INTERACTIVE-COMPONENT-POST ROUTE==============
+**************************************************************************/
 server.post('/interactive-component', (req, res) => {
-  console.log('Just making sure: \n' + req.body);
+  console.log('Just making sure: \n' + JSON.stringify(req.body));
   console.log('PL: \n' + req.body.payload);
   const body = JSON.parse(req.body.payload);
 

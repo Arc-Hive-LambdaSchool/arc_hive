@@ -5,7 +5,7 @@ const users = require('./users');
 
 
 const sendConfirmation = (slackSearch) => {
-  console.log(slackSearch);
+  // console.log(slackSearch);
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     channel: slackSearch.userId,
@@ -57,7 +57,8 @@ const create = (userId, submission) => {
     slackSearch.tags = submission.tags;
     slackSearch.cohort = submission.cohort;
     slackSearch.brownbag = submission.brownbag;
-    sendConfirmation(slackSearch);
+    // sendConfirmation(slackSearch);
+    axios.get('https://pacific-waters-60975.herokuapp.com/', slackSearch);
     return slackSearch;
   }).catch((err) => { console.error(err); });
 };
