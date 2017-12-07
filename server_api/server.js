@@ -203,8 +203,8 @@ server.post('/commands', (req, res) => {
             type: 'select',
             name: 'brownbag',
             options: [
-              { label: 'Only Brownbags', value: true },
-              { label: 'No Brownbags', value: false },
+              { label: 'Only Brownbags', value: 'true' },
+              { label: 'No Brownbags', value: 'false' },
             ]
           }
         ],
