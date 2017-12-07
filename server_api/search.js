@@ -2,6 +2,7 @@ const axios = require('axios');
 const debug = require('debug')('slash-command-template:slackSearch');
 const qs = require('querystring');
 const users = require('./users');
+const request = require('request');
 
 
 const sendConfirmation = (slackSearch) => {
@@ -58,7 +59,21 @@ const create = (userId, submission) => {
     slackSearch.cohort = submission.cohort;
     slackSearch.brownbag = submission.brownbag;
     // sendConfirmation(slackSearch);
-    axios.get('https://pacific-waters-60975.herokuapp.com/', qs.stringify({slackSearch}));
+    const g = {
+      method: 'GET',
+      uri: 'https://pacific-waters-60975.herokuapp.com/',
+      headers: {
+        Authorization: 'Bearer keySPG804go0FXK3F',
+        'content-type': 'application/json',
+      },
+      body: slackSearch
+    };
+    request(g, (error, response, body) => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+    });
     return slackSearch;
   }).catch((err) => { console.error(err); });
 };
