@@ -1,15 +1,20 @@
-// require('dotenv').load();
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const request = require('request');
-const port = process.env.PORT || 5000;
+const mongodb = require('mongodb');
+const port = process.env.PORT || 5001;
 const Airtable = require('airtable');
 // const thePrecious = process.env.AIR_TABLE_KEY;
 const thePrecious = 'Bearer keySPG804go0FXK3F'
 //console.log(thePrecious);
 //console.log(process.env);
 const slackModel = require('./slackModel');
+const slackSearch = require('./search');
+const axios = require('axios');
+const qs = require('querystring');
+const debug = require('debug')('slash-command-template:index');
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
@@ -18,8 +23,6 @@ Airtable.configure({
 let base = Airtable.base('appMs812ZOuhtf8Un');
 
 const server = express();
-let data2 = [];
-const fullData = [];
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
@@ -27,94 +30,223 @@ mongoose.Promise = global.Promise;
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
-const g = {
-  method: 'GET',
-  uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
-  headers: {
-    Authorization: 'Bearer keySPG804go0FXK3F',
-    'content-type': 'application/json',
-    'id': 'recDVfMW2yBtY0Cxi'
-  }
-};
 
 server.get('/', (req, res) => {
+  const g = {
+    method: 'GET',
+    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx',
+    headers: {
+      Authorization: 'Bearer keySPG804go0FXK3F',
+      'content-type': 'application/json',
+      'id': 'recDVfMW2yBtY0Cxi'
+    }
+  };
+  console.log(g.uri);
   request(g, (error, response, body) => {
-    if(error) {
+    if (error) {
       console.log(error);
       return;
     }
-    console.log('Response: ' + JSON.stringify(response));
-    console.log('Body: ' + body);
-    res.json(body);
+    // console.log('Response: ' + JSON.stringify(response));
+    // console.log('Body: ' + body);
+    res.send(body);
   });
 });
 
-server.post('/', (req, res) => {
-  let data = 'hello world - post';
-  let title;
-  let link;
-  let cohort;
-  const tags = [];
-  if (req.body) {
-    data2.push(JSON.stringify(req.body.text));
-    data = JSON.stringify(req.body.text);
-    const slackBlob = req.body;
-    const infoSplit = slackBlob.text.split(', ');
-    let index = infoSplit.length;
-    for (let i = 0; i < infoSplit.length; i++) {
-      // console.log(index);
-      if (i <= 6) {
-        switch (infoSplit[i].toLowerCase()) {
-          case 'title':
-            title = infoSplit[i+1];
-            // console.log(title);
-            break;
-          case 'link':
-            link = infoSplit[i+1];
-            // console.log(link);
-            break;
-          case 'cohort':
-            cohort = infoSplit[i+1];
-            // console.log(cohort);
-            break;
-          case 'tags':
-            let index = i;
-            // console.log(tags);
-            // console.log(index);
-            break;
-          default:
-            break;
-        }
-      } else {
-        tags.push(infoSplit[i]);
-        // console.log(tags);
-      }
-    }
-    let base = new Airtable({apiKey: 'thePrecious'})
-    .base('appMs812ZOuhtf8Un');
-    console.log(title);
-    console.log(link);
-    console.log(cohort);
-    console.log(tags);
+server.get('/:search/:value', (req, res) => {
+  let search = req.params.search;
+  const val = req.params.value;
+  const allRec = 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx';
+  const brownBags = '?filterByFormula=IF(Brownbag%2C+Link)';
+  const notBrownBags = '?filterByFormula=IF(NOT(Brownbag)%2C+Link)';
+  const byCohort = '?filterByFormula=OR(IF(FIND(%22' + val + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))';
+  const byTags = '?filterByFormula=OR(IF(FIND(%22' + val + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22DoNotUse%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link))';
 
-    base('Table 1').create({
-      "Title":  title,
-      "YouTube link": link,
-      "cohort": cohort,
-      "tags": tags
-    }, (err, record) => {
-    if (err) {
-      console.error(err);
+  switch (search) {
+    case 'brownBags':
+      search = brownBags;
+      break;
+    case 'notBrownBags':
+      search = notBrownBags;
+      break;
+    case 'byCohort':
+      search = byCohort;
+      break;
+    case 'byTags':
+      search = byTags;
+      break;
+    default:
+      break;
+  }
+  const g = {
+    method: 'GET',
+    uri: allRec + search,
+    headers: {
+      Authorization: 'Bearer keySPG804go0FXK3F',
+      'content-type': 'application/json',
+      'id': 'recDVfMW2yBtY0Cxi'
+    }
+  };
+  console.log(g.uri);
+  request(g, (error, response, body) => {
+    if (error) {
+      console.log(error);
       return;
     }
-    console.log(record.getId());
+    // console.log('Response: ' + JSON.stringify(response));
+    // console.log('Body: ' + body);
+    res.send(body);
+  });
 });
-    res.send(data.concat(fullData));
-    return;
+
+server.post('/commands', (req, res) => {
+  // extract the verification token, slash command text,
+  // and trigger ID from payload
+  const { token, text, trigger_id } = req.body;
+
+  // check that the verification token matches expected value
+  if (token === process.env.SLACK_VERIFICATION_TOKEN) {
+    // create the dialog payload - includes the dialog structure, Slack API token,
+    // and trigger ID
+    const dialog = {
+      token: process.env.SLACK_ACCESS_TOKEN,
+      trigger_id,
+      dialog: JSON.stringify({
+        title: 'LS Videos',
+        callback_id: 'submit-search',
+        submit_label: 'Submit',
+        elements: [
+          {
+            label: 'Tags',
+            type: 'select',
+            name: 'tags',
+            optional: true,
+            options: [
+              { label: 'JS', value: 'JS' },
+              { label: 'React', value: 'React' },
+              { label: 'Redux', value: 'Redux' },
+              { label: 'Auth', value: 'Auth' },
+              { label: 'C', value: 'C' },
+              { label: 'Testing', value: 'Testing' },
+            ],
+          },
+          {
+            label: 'Cohort',
+            optional: true,
+            type: 'select',
+            name: 'cohort',
+            options: [
+              { label: 'CS1', value: 'CS1' },
+              { label: 'CS2', value: 'CS2' },
+              { label: 'CS3', value: 'CS3' },
+              { label: 'CS4', value: 'CS4' },
+            ],
+          },
+          {
+            label: 'Brownbag?',
+            optional: true,
+            type: 'select',
+            name: 'brownbag',
+            options: [
+              { label: 'Yes', value: 'true' },
+            ]
+          }
+        ],
+      }),
+    };
+
+    // open the dialog by calling dialogs.open method and sending the payload
+    axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
+      .then((result) => {
+        debug('dialog.open: %o', result.data);
+        res.send('');
+      }).catch((err) => {
+        debug('dialog.open call failed: %o', err);
+        res.sendStatus(500);
+      });
+  } else {
+    debug('Verification token mismatch');
+    res.sendStatus(500);
   }
-  res.send(data);
 });
+
+server.post('/', (req, res) => {
+  const p = {
+    method: 'POST',
+    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
+    headers: {
+      Authorization: 'Bearer keySPG804go0FXK3F',
+      'content-type': 'application/json',
+    },
+    body: {
+      "fields": {
+        Link: req.body.fields.Link,
+        Title: req.body.fields.Title,
+        Cohort: req.body.fields.Cohort,
+        Tags: req.body.fields.Tags
+      }
+    },
+    json: true
+  };
+  request(p, (error, response, body) => {
+    if (error) {
+      console.log('HI I AM AN ERROR')
+      console.log(error);
+      return;
+    }
+    // console.log('Response: ' + JSON.stringify(response));
+    // console.log('Body: ' + JSON.stringify(body));
+    // console.log(req.body);
+    res.send(JSON.stringify(body));
+  });
+});
+
+server.post('/interactive-component', (req, res) => {
+  const body = JSON.parse(req.body.payload);
+
+  // check that the verification token matches expected value
+  if (body.token === process.env.SLACK_VERIFICATION_TOKEN) {
+    debug(`Form submission received: ${body.submission.trigger_id}`);
+
+    // immediately respond with a empty 200 response to let
+    // Slack know the command was received
+    res.send('');
+
+    // create Helpdesk ticket
+    slackSearch.create(body.user.id, body.submission);
+  } else {
+    debug('Token mismatch');
+    res.sendStatus(500);
+  }
+});
+
+
 
 server.listen(port, () => {
   console.log(`Servs up dude ${port}`);
 });
+
+/*
+const MONGO_URL = 'mongodb://arc_hive_admin:arc hive 555@ds013475.mlab.com:13475/arc_hive_testdb';
+
+MongoClient.connect(MONGO_URL, (err, db) => {
+  if (err) {
+    return console.log(err);
+  }
+
+  // Do something with db here, like inserting a record
+  db.collection('arc_hive_testdb').insertOne(
+    {
+      text: 'Hopefully this works!'
+    },
+    function (err, res) {
+      if (err) {
+        db.close();
+        return console.log(err);
+      }
+      // Success
+      db.close();
+    }
+  )
+});
+*/
