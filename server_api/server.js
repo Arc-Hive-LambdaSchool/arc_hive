@@ -92,7 +92,7 @@ server.get('/', (req, res) => {
   }
   const g = {
     method: 'GET',
-    uri: allRec + search,
+    uri: allRec,
     headers: {
       Authorization: 'Bearer keySPG804go0FXK3F',
       'content-type': 'application/json',
