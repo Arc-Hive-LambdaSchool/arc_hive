@@ -230,7 +230,6 @@ server.post('/commands', (req, res) => {
 * ==============SLACK INTERACTIVE-COMPONENT-POST ROUTE==============
 **************************************************************************/
 server.post('/interactive-component', (req, res) => {
-  console.log('Just making sure: \n' + JSON.stringify(req.body));
   console.log('PL: \n' + req.body.payload);
   const body = JSON.parse(req.body.payload);
 
