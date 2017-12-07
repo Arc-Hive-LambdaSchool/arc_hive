@@ -65,7 +65,7 @@ server.get('/', (req, res) => {
 * =============AIRTABLE QUERY-GET ROUTE==============
 **************************************************************************/
 server.get('/', (req, res) => {
-  console.log('AT GET: ' + req.body);
+  console.log('AT GET: ' + JSON.stringify(req.body));
   let search = req.params.search;
   const val = req.params.value;
   const allRec = 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx';
