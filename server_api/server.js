@@ -66,33 +66,30 @@ server.get('/', (req, res) => {
 **************************************************************************/
 server.get('/', (req, res) => {
   console.log('AT GET: ' + JSON.stringify(req.body));
-  let search = req.params.search;
-  const val = req.params.value;
-  const allRec = 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx';
-  const brownBags = '?filterByFormula=IF(Brownbag%2C+Link)';
-  const notBrownBags = '?filterByFormula=IF(NOT(Brownbag)%2C+Link)';
-  const byCohort = '?filterByFormula=OR(IF(FIND(%22' + val + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))';
-  const byTags = '?filterByFormula=OR(IF(FIND(%22' + val + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22DoNotUse%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link))';
-
-  switch (search) {
-    case 'brownBags':
-      search = brownBags;
-      break;
-    case 'notBrownBags':
-      search = notBrownBags;
-      break;
-    case 'byCohort':
-      search = byCohort;
-      break;
-    case 'byTags':
-      search = byTags;
-      break;
-    default:
-      break;
+  const tagVal = req.body.tags;
+  const cohortVal = req.body.cohort;
+  const brownBagVal = req.body.brownbag;
+  const path = {
+    allRec: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx';
+    onlyBrownBags: '?filterByFormula=IF(Brownbag%2C+Link)';
+    noBrownBags: '?filterByFormula=IF(NOT(Brownbag)%2C+Link)';
+    cohort: '?filterByFormula=OR(IF(FIND(%22' + req.body.cohort + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))';
+    tags: '?filterByFormula=OR(IF(FIND(%22' + req.body.tags + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22DoNotUse%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link))';
+  };
+  const pathArray = [path.allRec];
+  if (tagVal) {
+    pathArray.push(path.tags);
   }
+  if (cohortVal) {
+    pathArray.push(path.cohort);
+  }
+  if (brownBagVal) {
+    pathArray.push(path[brownBagVal]);
+  }
+
   const g = {
     method: 'GET',
-    uri: allRec,
+    uri: pathArray.join(''),
     headers: {
       Authorization: 'Bearer keySPG804go0FXK3F',
       'content-type': 'application/json',
@@ -106,7 +103,7 @@ server.get('/', (req, res) => {
       return;
     }
     // console.log('Response: ' + JSON.stringify(response));
-    // console.log('Body: ' + body);
+    console.log('Body: ' + body);
     res.send(body);
   });
 });
@@ -203,8 +200,8 @@ server.post('/commands', (req, res) => {
             type: 'select',
             name: 'brownbag',
             options: [
-              { label: 'Only Brownbags', value: 'true' },
-              { label: 'No Brownbags', value: 'false' },
+              { label: 'Only Brownbags', value: 'onlyBrownBags' },
+              { label: 'No Brownbags', value: 'noBrownBags' },
             ]
           }
         ],
