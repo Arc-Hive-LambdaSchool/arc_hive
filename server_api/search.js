@@ -57,7 +57,7 @@ const create = (userId, submission) => {
     slackSearch.tags = submission.tags;
     slackSearch.cohort = submission.cohort;
     slackSearch.brownbag = submission.brownbag;
-    // sendConfirmation(slackSearch);
+    sendConfirmation(slackSearch);
     axios.get('https://pacific-waters-60975.herokuapp.com/', slackSearch);
     return slackSearch;
   }).catch((err) => { console.error(err); });
