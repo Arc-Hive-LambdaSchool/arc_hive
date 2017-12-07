@@ -202,6 +202,7 @@ server.post('/', (req, res) => {
 });
 
 server.post('/interactive-component', (req, res) => {
+  console.log('Just making sure: \n' + req.body);
   const body = JSON.parse(req.body.payload);
 
   // check that the verification token matches expected value
