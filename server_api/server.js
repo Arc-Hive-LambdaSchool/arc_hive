@@ -203,6 +203,7 @@ server.post('/', (req, res) => {
 
 server.post('/interactive-component', (req, res) => {
   console.log('Just making sure: \n' + req.body);
+  console.log('PL: \n' + req.body.payload);
   const body = JSON.parse(req.body.payload);
 
   // check that the verification token matches expected value
