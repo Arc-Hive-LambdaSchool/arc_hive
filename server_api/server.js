@@ -70,26 +70,36 @@ server.get('/', (req, res) => {
   const cohortVal = req.body.cohort;
   const brownBagVal = req.body.brownbag;
   const path = {
-    allRec: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx',
-    onlyBrownBags: '?filterByFormula=IF(Brownbag%2C+Link)',
-    noBrownBags: '?filterByFormula=IF(NOT(Brownbag)%2C+Link)',
-    cohort: '?filterByFormula=OR(IF(FIND(%22' + req.body.cohort + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))',
-    tags: '?filterByFormula=OR(IF(FIND(%22' + req.body.tags + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22DoNotUse%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link))'
+    allRec: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=',
+    onlyBrownBags: 'IF(Brownbag%2C+Link)',
+    noBrownBags: 'IF(NOT(Brownbag)%2C+Link)',
+    cohort: 'IF(FIND(%22' + req.body.cohort + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)',
+    allCohorts: 'IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)',
+    tags: 'IF(FIND(%22' + req.body.tags + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)'
   };
-  const pathArray = [path.allRec];
+  const pathArray = [];
+  let url = path.allRec;
   if (tagVal) {
     pathArray.push(path.tags);
   }
   if (cohortVal) {
     pathArray.push(path.cohort);
+    pathArray.push(path.allCohorts);
   }
   if (brownBagVal) {
     pathArray.push(path[brownBagVal]);
   }
+  if (pathArray.length === 1) {
+    url += pathArray[0];
+  } else if (pathArray.length > 1) {
+    url += 'AND(' + pathArray.join('%2C+') + ')';
+  }
 
+  console.log(url);
+  // https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=AND(IF(FIND(%22CS1%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22JS%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link))
   const g = {
     method: 'GET',
-    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=AND(IF(FIND(%22CS1%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22JS%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link))',
+    uri: url,
     headers: {
       Authorization: 'Bearer keySPG804go0FXK3F',
       'content-type': 'application/json',
