@@ -7,8 +7,13 @@ const request = require('request');
 
 const sendConfirmation = (slackSearch) => {
   // console.log(slackSearch);
-  const field = {};
-
+  const field = [];
+  for (let val of slackSearch.Records) {
+    fields.push({
+      title: `${slackSearch.Records[val].fields.Title}`,
+      value: slackSearch.Records[val].fields.Link,
+    })
+  }
   console.log('SEARCH: \n' + JSON.stringify(slackSearch));
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
@@ -16,12 +21,7 @@ const sendConfirmation = (slackSearch) => {
     text: 'View links below',
     attachments: JSON.stringify([
       {
-        fields: [
-          {
-            title: `${slackSearch.Records[0].fields.Title}`,
-            value: slackSearch.Records[0].fields.Link,
-          },
-        ],
+        fields: field,
       },
     ]),
   })).then((result) => {
