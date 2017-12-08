@@ -31,6 +31,31 @@ const sendConfirmation = (slackSearch) => {
   });
 };
 
+const arcConfirmation = (slackSearch) => {
+  // console.log(slackSearch);
+  axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+    token: process.env.SLACK_ACCESS_TOKEN,
+    // response_type: "in_channel",
+    channel: `#${slackSearch.cohort}`,
+    text: '@channel video has been successfully inserted to Airtable',
+    attachments: JSON.stringify([
+      {
+        fields: [
+          {
+            title: `${slackSearch.arcTitle}`,
+            value: slackSearch.arcLink
+          }
+        ],
+      },
+    ]),
+  })).then((result) => {
+    debug('arcConfirmation: %o', result.data);
+  }).catch((err) => {
+    debug('arcConfirmation error: %o', err);
+    console.error(err);
+  });
+};
+
 const create = (userId, submission) => {
   const slackSearch = {};
 
@@ -44,29 +69,48 @@ const create = (userId, submission) => {
   fetchUserEmail.then((result) => {
     slackSearch.userId = userId;
     slackSearch.userEmail = result;
-    // slackSearch.title = submission.title;
     slackSearch.tags = submission.tags;
     slackSearch.cohort = submission.cohort;
     slackSearch.brownbag = submission.brownbag;
-    // sendConfirmation(slackSearch);
-    const g = {
-      method: 'GET',
-      uri: 'https://pacific-waters-60975.herokuapp.com/',
-      headers: {
-        Authorization: 'Bearer keySPG804go0FXK3F',
-        'content-type': 'application/json',
-      },
-      body: slackSearch,
-      json: true
-    };
-    request(g, (error, response, body) => {
-      if (error) {
-        console.log(error);
-        return;
-      }
-    });
-    return slackSearch;
+    slackSearch.arcLink = submission.arcLink;
+    slackSearch.arcTitle = submission.arcTitle;
+    if (slackSearch.arcLink) {
+      console.log('99 search: ' + JSON.stringify(slackSearch));
+      const p = {
+        method: 'POST',
+        uri: 'https://pacific-waters-60975.herokuapp.com/',
+        headers: {
+          Authorization: 'Bearer keySPG804go0FXK3F',
+          'content-type': 'application/json',
+        },
+        body: slackSearch,
+        json: true
+      };
+      request(p, (error, response, body) => {
+        if (error) {
+          console.log(error);
+          return;
+        }
+      });
+    } else {
+      const g = {
+        method: 'GET',
+        uri: 'https://pacific-waters-60975.herokuapp.com/',
+        headers: {
+          Authorization: 'Bearer keySPG804go0FXK3F',
+          'content-type': 'application/json',
+        },
+        body: slackSearch,
+        json: true
+      };
+      request(g, (error, response, body) => {
+        if (error) {
+          console.log(error);
+          return;
+        }
+      });
+    }
   }).catch((err) => { console.error(err); });
 };
 
-module.exports = { create, sendConfirmation };
+module.exports = { create, sendConfirmation, arcConfirmation };

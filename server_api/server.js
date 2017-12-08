@@ -120,6 +120,11 @@ server.get('/', (req, res) => {
 * =============AIRTABLE CREATE-POST ROUTE==============
 **************************************************************************/
 server.post('/', (req, res) => {
+  console.log(JSON.stringify(req.body));
+  let brownbag = null;
+  if (req.body.brownbag) {
+    brownbag = true;
+  }
   const p = {
     method: 'POST',
     uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
@@ -129,10 +134,11 @@ server.post('/', (req, res) => {
     },
     body: {
       "fields": {
-        Link: req.body.fields.Link,
-        Title: req.body.fields.Title,
-        Cohort: req.body.fields.Cohort,
-        Tags: req.body.fields.Tags
+        Link: req.body.arcLink,
+        Title: req.body.arcTitle,
+        Cohort: [req.body.cohort],
+        Tags: [req.body.tags],
+        Brownbag: brownbag
       }
     },
     json: true
@@ -143,9 +149,10 @@ server.post('/', (req, res) => {
       console.log(error);
       return;
     }
-    // console.log('Response: ' + JSON.stringify(response));
-    // console.log('Body: ' + JSON.stringify(body));
+    // console.log('server 148 Response: ' + JSON.stringify(response));
+    // console.log('server 149 Body: ' + JSON.stringify(body));
     // console.log(req.body);
+    slackSearch.arcConfirmation(req.body);
     res.send(JSON.stringify(body));
   });
 });
@@ -252,6 +259,91 @@ server.post('/interactive-component', (req, res) => {
     res.sendStatus(500);
   }
 });
+
+/*************************************************************************
+* ==============SLACK ARCCOMMANDS-POST ROUTE==============
+**************************************************************************/
+server.post('/arcCommands', (req, res) => {
+  // extract the verification token, slash command text,
+  // and trigger ID from payload
+  const { token, text, trigger_id } = req.body;
+
+  // check that the verification token matches expected value
+  if (token === process.env.SLACK_VERIFICATION_TOKEN) {
+    // create the dialog payload - includes the dialog structure, Slack API token,
+    // and trigger ID
+    const dialog = {
+      token: process.env.SLACK_ACCESS_TOKEN,
+      trigger_id,
+      dialog: JSON.stringify({
+        title: 'LS Videos',
+        callback_id: 'submit-search',
+        submit_label: 'Submit',
+        elements: [
+          {
+            label: 'Enter video link here',
+            type: 'text',
+            name: 'arcLink',
+            value: text,
+          },
+          {
+            label: 'Enter video title',
+            type: 'text',
+            name: 'arcTitle',
+          },
+          {
+            label: 'Tags',
+            type: 'select',
+            name: 'tags',
+            optional: true,
+            options: [
+              { label: 'JS', value: 'JS' },
+              { label: 'React', value: 'React' },
+              { label: 'Redux', value: 'Redux' },
+              { label: 'Auth', value: 'Auth' },
+              { label: 'C', value: 'C' },
+              { label: 'Testing', value: 'Testing' },
+            ],
+          },
+          {
+            label: 'Cohort',
+            type: 'select',
+            name: 'cohort',
+            optional: true,
+            options: [
+              { label: 'CS1', value: 'CS1' },
+              { label: 'CS2', value: 'CS2' },
+              { label: 'CS3', value: 'CS3' },
+              { label: 'CS4', value: 'CS4' },
+            ],
+          },
+          {
+            label: 'Brownbag?',
+            optional: true,
+            type: 'select',
+            name: 'brownbag',
+            options: [
+              { label: 'Yes', value: true },
+            ]
+          }
+        ],
+      }),
+    };
+
+    axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
+      .then((result) => {
+        debug('dialog.open: %o', result.data);
+        res.send('');
+      }).catch((err) => {
+        debug('dialog.open call failed: %o', err);
+        res.sendStatus(500);
+      });
+  } else {
+    debug('Verification token mismatch');
+    res.sendStatus(500);
+  }
+});
+
 
 
 
