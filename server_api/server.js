@@ -73,8 +73,7 @@ server.get('/', (req, res) => {
     allRec: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=',
     onlyBrownBags: 'IF(Brownbag%2C+Link)',
     noBrownBags: 'IF(NOT(Brownbag)%2C+Link)',
-    cohort: 'IF(FIND(%22' + req.body.cohort + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)',
-    allCohorts: 'IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)',
+    cohort: 'OR(IF(FIND(%22' + req.body.cohort + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))',
     tags: 'IF(FIND(%22' + req.body.tags + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)'
   };
   const pathArray = [];
@@ -84,7 +83,6 @@ server.get('/', (req, res) => {
   }
   if (cohortVal) {
     pathArray.push(path.cohort);
-    pathArray.push(path.allCohorts);
   }
   if (brownBagVal) {
     console.log(brownBagVal);
@@ -97,10 +95,10 @@ server.get('/', (req, res) => {
   }
 
   console.log(url);
-  // https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=AND(IF(FIND(%22CS1%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22JS%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link))
   const g = {
     method: 'GET',
-    uri: url,
+    // uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=AND(IF(FIND(%22Redux%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22CS1%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))'
+    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=AND(IF(FIND(%22CS1%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22Redux%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link))',
     headers: {
       Authorization: 'Bearer keySPG804go0FXK3F',
       'content-type': 'application/json',
