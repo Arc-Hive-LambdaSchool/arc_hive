@@ -42,8 +42,8 @@ const arcConfirmation = (slackSearch) => {
       {
         fields: [
           {
-            title: slackSearch.arcTitle,
-            value: slackSearch.arcLinkc
+            title: `${slackSearch.arcTitle}`,
+            value: slackSearch.arcLink
           }
         ],
       },
