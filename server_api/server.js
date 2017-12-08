@@ -132,8 +132,8 @@ server.post('/', (req, res) => {
       "fields": {
         Link: req.body.arcLink,
         Title: req.body.arcTitle,
-        // Cohort: req.body.cohort,
-        // Tags: req.body.tags
+        Cohort: req.body.cohort,
+        Tags: req.body.tags
       }
     },
     json: true
@@ -148,6 +148,7 @@ server.post('/', (req, res) => {
     console.log('server 148 Response: ' + JSON.stringify(response));
     console.log('server 149 Body: ' + JSON.stringify(body));
     console.log(req.body);
+    // slackSearch.arcConfirmation()
     res.send(JSON.stringify(body));
   });
 });

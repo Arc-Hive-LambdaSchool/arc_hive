@@ -96,6 +96,7 @@ const create = (userId, submission) => {
     slackSearch.arcLink = submission.arcLink;
     slackSearch.arcTitle = submission.arcTitle;
     if (slackSearch.arcLink) {
+      console.log('99 search: ' + JSON.stringify(slackSearch));
       const p = {
         method: 'POST',
         uri: 'https://pacific-waters-60975.herokuapp.com/',
