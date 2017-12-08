@@ -144,9 +144,9 @@ server.post('/', (req, res) => {
       console.log(error);
       return;
     }
-    // console.log('Response: ' + JSON.stringify(response));
-    // console.log('Body: ' + JSON.stringify(body));
-    // console.log(req.body);
+    console.log('Response: ' + JSON.stringify(response));
+    console.log('Body: ' + JSON.stringify(body));
+    console.log(req.body);
     res.send(JSON.stringify(body));
   });
 });
