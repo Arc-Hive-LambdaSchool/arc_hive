@@ -8,12 +8,11 @@ const request = require('request');
 const sendConfirmation = (slackSearch) => {
   // console.log(slackSearch);
   const field = [];
-  for (let val of slackSearch.Records) {
-    console.log('Val: ' + val);
-    console.log('ss.r: ' + slackSearch.Records[val]);
+  for (let i = 0; i < slackSearch.Records.length; i++) {
+    console.log('ss.r: ' + slackSearch.Records[i]);
     field.push({
-      title: `${slackSearch.Records[val].fields.Title}`,
-      value: slackSearch.Records[val].fields.Link,
+      title: `${slackSearch.Records[i].fields.Title}`,
+      value: slackSearch.Records[i].fields.Link,
     })
   }
   console.log(field);
