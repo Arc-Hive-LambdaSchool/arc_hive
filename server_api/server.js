@@ -285,18 +285,17 @@ server.post('/arcCommands', (req, res) => {
             type: 'text',
             name: 'arcLink',
             value: text,
-            // value: 'enter link here',
           },
           {
             label: 'Enter video title',
             type: 'text',
             name: 'arcTitle',
-            // value: 'enter title here',
           },
           {
             label: 'Tags',
             type: 'select',
             name: 'tags',
+            optional: true,
             options: [
               { label: 'JS', value: 'JS' },
               { label: 'React', value: 'React' },
@@ -310,6 +309,7 @@ server.post('/arcCommands', (req, res) => {
             label: 'Cohort',
             type: 'select',
             name: 'cohort',
+            optional: true,
             options: [
               { label: 'CS1', value: 'CS1' },
               { label: 'CS2', value: 'CS2' },
