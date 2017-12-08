@@ -2,34 +2,25 @@ const axios = require('axios');
 const debug = require('debug')('slash-command-template:slackSearch');
 const qs = require('querystring');
 const users = require('./users');
+const request = require('request');
 
 
 const sendConfirmation = (slackSearch) => {
-  console.log(slackSearch);
+  // console.log(slackSearch);
+  const field = [];
+  for (let i = 0; i < slackSearch.Records.length; i++) {
+    field.push({
+      title: `${slackSearch.Records[i].fields.Title}`,
+      value: slackSearch.Records[i].fields.Link,
+    })
+  }
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     channel: slackSearch.userId,
     text: 'View links below',
     attachments: JSON.stringify([
       {
-        title: `Ticket created for ${slackSearch.userEmail}`,
-        title_link: 'http://example.com',
-        text: slackSearch.text,
-        fields: [
-          {
-            title: 'Tags',
-            value: slackSearch.tags || 'None provided',
-          },
-          {
-            title: 'Cohort',
-            value: slackSearch.cohort || 'None provided',
-            short: true,
-          },
-          {
-            title: 'Brownbag',
-            value: slackSearch.brownbag || 'No',
-          }
-        ],
+        fields: field,
       },
     ]),
   })).then((result) => {
@@ -57,7 +48,23 @@ const create = (userId, submission) => {
     slackSearch.tags = submission.tags;
     slackSearch.cohort = submission.cohort;
     slackSearch.brownbag = submission.brownbag;
-    sendConfirmation(slackSearch);
+    // sendConfirmation(slackSearch);
+    const g = {
+      method: 'GET',
+      uri: 'https://pacific-waters-60975.herokuapp.com/',
+      headers: {
+        Authorization: 'Bearer keySPG804go0FXK3F',
+        'content-type': 'application/json',
+      },
+      body: slackSearch,
+      json: true
+    };
+    request(g, (error, response, body) => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+    });
     return slackSearch;
   }).catch((err) => { console.error(err); });
 };

@@ -30,7 +30,15 @@ mongoose.Promise = global.Promise;
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
+/*=======================================================================
+=========================================================================
+* AIRTABLE ROUTES
+=========================================================================
+========================================================================*/
 
+/*************************************************************************
+* =============AIRTABLE GET ROUTE=============
+**************************************************************************
 server.get('/', (req, res) => {
   const g = {
     method: 'GET',
@@ -52,53 +60,105 @@ server.get('/', (req, res) => {
     res.send(body);
   });
 });
-
-server.get('/:search/:value', (req, res) => {
-  let search = req.params.search;
-  const val = req.params.value;
-  const allRec = 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx';
-  const brownBags = '?filterByFormula=IF(Brownbag%2C+Link)';
-  const notBrownBags = '?filterByFormula=IF(NOT(Brownbag)%2C+Link)';
-  const byCohort = '?filterByFormula=OR(IF(FIND(%22' + val + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))';
-  const byTags = '?filterByFormula=OR(IF(FIND(%22' + val + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22DoNotUse%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link))';
-
-  switch (search) {
-    case 'brownBags':
-      search = brownBags;
-      break;
-    case 'notBrownBags':
-      search = notBrownBags;
-      break;
-    case 'byCohort':
-      search = byCohort;
-      break;
-    case 'byTags':
-      search = byTags;
-      break;
-    default:
-      break;
+*/
+/*************************************************************************
+* =============AIRTABLE QUERY-GET ROUTE==============
+**************************************************************************/
+server.get('/', (req, res) => {
+  const tagVal = req.body.tags;
+  const cohortVal = req.body.cohort;
+  const brownBagVal = req.body.brownbag;
+  const path = {
+    allRec: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=',
+    onlyBrownBags: 'IF(Brownbag%2C+Link)',
+    noBrownBags: 'IF(NOT(Brownbag)%2C+Link)',
+    cohort: 'OR(IF(FIND(%22' + req.body.cohort + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))',
+    tags: 'IF(FIND(%22' + req.body.tags + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)'
+  };
+  const pathArray = [];
+  let url = path.allRec;
+  if (tagVal) {
+    pathArray.push(path.tags);
   }
+  if (cohortVal) {
+    pathArray.push(path.cohort);
+  }
+  if (brownBagVal) {
+    pathArray.push(path[brownBagVal]);
+  }
+  if (pathArray.length === 1) {
+    url += pathArray[0];
+  } else if (pathArray.length > 1) {
+    url += 'AND(' + pathArray.join('%2C+') + ')';
+  }
+
+  console.log(url);
   const g = {
     method: 'GET',
-    uri: allRec + search,
+    uri: url,
     headers: {
       Authorization: 'Bearer keySPG804go0FXK3F',
       'content-type': 'application/json',
-      'id': 'recDVfMW2yBtY0Cxi'
-    }
+    },
+    json: true
   };
-  console.log(g.uri);
   request(g, (error, response, body) => {
     if (error) {
       console.log(error);
       return;
     }
-    // console.log('Response: ' + JSON.stringify(response));
-    // console.log('Body: ' + body);
+    const sendToSlack = {
+      Records: body.records,
+      userId: req.body.userId
+    };
+    slackSearch.sendConfirmation(sendToSlack);
     res.send(body);
   });
 });
 
+/*************************************************************************
+* =============AIRTABLE CREATE-POST ROUTE==============
+**************************************************************************/
+server.post('/', (req, res) => {
+  const p = {
+    method: 'POST',
+    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
+    headers: {
+      Authorization: 'Bearer keySPG804go0FXK3F',
+      'content-type': 'application/json',
+    },
+    body: {
+      "fields": {
+        Link: req.body.fields.Link,
+        Title: req.body.fields.Title,
+        Cohort: req.body.fields.Cohort,
+        Tags: req.body.fields.Tags
+      }
+    },
+    json: true
+  };
+  request(p, (error, response, body) => {
+    if (error) {
+      console.log('HI I AM AN ERROR')
+      console.log(error);
+      return;
+    }
+    // console.log('Response: ' + JSON.stringify(response));
+    // console.log('Body: ' + JSON.stringify(body));
+    // console.log(req.body);
+    res.send(JSON.stringify(body));
+  });
+});
+
+/*=======================================================================
+=========================================================================
+* SLACK ROUTES
+=========================================================================
+========================================================================*/
+
+/*************************************************************************
+* =============SLACK COMMANDS-POST ROUTE==============
+**************************************************************************/
 server.post('/commands', (req, res) => {
   // extract the verification token, slash command text,
   // and trigger ID from payload
@@ -148,7 +208,8 @@ server.post('/commands', (req, res) => {
             type: 'select',
             name: 'brownbag',
             options: [
-              { label: 'Yes', value: 'true' },
+              { label: 'Only Brownbags', value: 'onlyBrownBags' },
+              { label: 'No Brownbags', value: 'noBrownBags' },
             ]
           }
         ],
@@ -170,37 +231,9 @@ server.post('/commands', (req, res) => {
   }
 });
 
-server.post('/', (req, res) => {
-  const p = {
-    method: 'POST',
-    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
-    headers: {
-      Authorization: 'Bearer keySPG804go0FXK3F',
-      'content-type': 'application/json',
-    },
-    body: {
-      "fields": {
-        Link: req.body.fields.Link,
-        Title: req.body.fields.Title,
-        Cohort: req.body.fields.Cohort,
-        Tags: req.body.fields.Tags
-      }
-    },
-    json: true
-  };
-  request(p, (error, response, body) => {
-    if (error) {
-      console.log('HI I AM AN ERROR')
-      console.log(error);
-      return;
-    }
-    // console.log('Response: ' + JSON.stringify(response));
-    // console.log('Body: ' + JSON.stringify(body));
-    // console.log(req.body);
-    res.send(JSON.stringify(body));
-  });
-});
-
+/*************************************************************************
+* ==============SLACK INTERACTIVE-COMPONENT-POST ROUTE==============
+**************************************************************************/
 server.post('/interactive-component', (req, res) => {
   const body = JSON.parse(req.body.payload);
 
