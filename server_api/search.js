@@ -7,7 +7,7 @@ const request = require('request');
 
 const sendConfirmation = (slackSearch) => {
   // console.log(slackSearch);
-  console.log('SEARCH: \n' + slackSearch);
+  console.log('SEARCH: \n' + JSON.stringify(slackSearch));
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     channel: slackSearch.userId,
