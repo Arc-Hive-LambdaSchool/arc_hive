@@ -133,7 +133,8 @@ server.post('/', (req, res) => {
         Link: req.body.arcLink,
         Title: req.body.arcTitle,
         Cohort: [req.body.cohort],
-        Tags: [req.body.tags]
+        Tags: [req.body.tags],
+        Brownbag: req.body.brownbag
       }
     },
     json: true
