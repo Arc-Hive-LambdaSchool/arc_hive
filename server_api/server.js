@@ -138,7 +138,7 @@ server.post('/', (req, res) => {
     },
     json: true
   };
-  console.log('server 141: ' JSON.stringify(p.body));
+  console.log('server 141: ' + JSON.stringify(p.body));
   request(p, (error, response, body) => {
     if (error) {
       console.log('HI I AM AN ERROR')
