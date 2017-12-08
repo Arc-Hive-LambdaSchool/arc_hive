@@ -87,6 +87,7 @@ server.get('/', (req, res) => {
     pathArray.push(path.allCohorts);
   }
   if (brownBagVal) {
+    console.log(brownBagVal);
     pathArray.push(path[brownBagVal]);
   }
   if (pathArray.length === 1) {
