@@ -130,10 +130,10 @@ server.post('/', (req, res) => {
     },
     body: {
       "fields": {
-        Link: req.body.fields.Link,
-        Title: req.body.fields.Title,
-        Cohort: req.body.fields.Cohort,
-        Tags: req.body.fields.Tags
+        Link: req.body.arcLink,
+        Title: req.body.arcTitle,
+        Cohort: req.body.cohort,
+        Tags: req.body.tags
       }
     },
     json: true
