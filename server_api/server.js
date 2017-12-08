@@ -116,7 +116,7 @@ server.get('/', (req, res) => {
       Records: body.records,
       userId: req.body.userId
     };
-    sendConfirmation(sendToSlack);
+    slackSearch.sendConfirmation(sendToSlack);
     res.send(body);
   });
 });
