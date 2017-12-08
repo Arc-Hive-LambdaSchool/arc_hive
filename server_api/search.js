@@ -128,9 +128,8 @@ const create = (userId, submission) => {
           console.log(error);
           return;
         }
-      }
+      });
     }
-  });
   }).catch((err) => { console.error(err); });
 };
 
