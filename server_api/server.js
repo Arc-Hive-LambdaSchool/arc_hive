@@ -136,6 +136,7 @@ server.post('/', (req, res) => {
         Tags: [req.body.tags]
       }
     },
+    json: true
   };
   console.log('server 141: ' + JSON.stringify(p.body));
   request(p, (error, response, body) => {
