@@ -13,17 +13,14 @@ const sendConfirmation = (slackSearch) => {
     text: 'View links below',
     attachments: JSON.stringify([
       {
-        title: `Ticket created for ${slackSearch.userEmail}`,
-        title_link: 'http://example.com',
-        // text: slackSearch.text,
         fields: [
           {
             title: 'Title: ',
-            value: slackSearch.Title,
+            value: slackSearch.Records[0].Title,
           },
           {
             title: 'Link: ',
-            value: slackSearch.Link,
+            value: slackSearch.Records[0].Link,
           }
         ],
       },

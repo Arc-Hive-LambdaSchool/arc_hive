@@ -113,10 +113,8 @@ server.get('/', (req, res) => {
     // console.log('Response: ' + JSON.stringify(response));
     console.log('Body: ' + body);
     const sendToSlack = {
-      Link: body.records.fields.Link,
-      Title: body.records.fields.Title,
-      UserEmail: req.body.userEmail,
-      UserId: req.body.userId
+      Records: body.records,
+      userId: req.body.userId
     };
     sendConfirmation(sendToSlack);
     res.send(body);
