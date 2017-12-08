@@ -120,6 +120,7 @@ server.get('/', (req, res) => {
 * =============AIRTABLE CREATE-POST ROUTE==============
 **************************************************************************/
 server.post('/', (req, res) => {
+  console.log(JSON.stringify(req.body));
   const p = {
     method: 'POST',
     uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
