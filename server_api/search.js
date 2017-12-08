@@ -15,20 +15,15 @@ const sendConfirmation = (slackSearch) => {
       {
         title: `Ticket created for ${slackSearch.userEmail}`,
         title_link: 'http://example.com',
-        text: slackSearch.text,
+        // text: slackSearch.text,
         fields: [
           {
-            title: 'Tags',
-            value: slackSearch.tags || 'None provided',
+            title: 'Title: ',
+            value: slackSearch.Title,
           },
           {
-            title: 'Cohort',
-            value: slackSearch.cohort || 'None provided',
-            short: true,
-          },
-          {
-            title: 'Brownbag',
-            value: slackSearch.brownbag || 'No',
+            title: 'Link: ',
+            value: slackSearch.Link,
           }
         ],
       },
