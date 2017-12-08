@@ -9,14 +9,11 @@ const sendConfirmation = (slackSearch) => {
   // console.log(slackSearch);
   const field = [];
   for (let i = 0; i < slackSearch.Records.length; i++) {
-    console.log('ss.r: ' + slackSearch.Records[i]);
     field.push({
       title: `${slackSearch.Records[i].fields.Title}`,
       value: slackSearch.Records[i].fields.Link,
     })
   }
-  console.log(field);
-  console.log('SEARCH: \n' + JSON.stringify(slackSearch));
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     channel: slackSearch.userId,

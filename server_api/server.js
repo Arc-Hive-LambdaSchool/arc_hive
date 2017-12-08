@@ -65,7 +65,6 @@ server.get('/', (req, res) => {
 * =============AIRTABLE QUERY-GET ROUTE==============
 **************************************************************************/
 server.get('/', (req, res) => {
-  console.log('AT GET: ' + JSON.stringify(req.body));
   const tagVal = req.body.tags;
   const cohortVal = req.body.cohort;
   const brownBagVal = req.body.brownbag;
@@ -85,7 +84,6 @@ server.get('/', (req, res) => {
     pathArray.push(path.cohort);
   }
   if (brownBagVal) {
-    console.log(brownBagVal);
     pathArray.push(path[brownBagVal]);
   }
   if (pathArray.length === 1) {
@@ -104,14 +102,11 @@ server.get('/', (req, res) => {
     },
     json: true
   };
-  // console.log(g.uri);
   request(g, (error, response, body) => {
     if (error) {
       console.log(error);
       return;
     }
-    // console.log('Response: ' + JSON.stringify(response));
-    console.log('Body: ' + body);
     const sendToSlack = {
       Records: body.records,
       userId: req.body.userId
@@ -240,7 +235,6 @@ server.post('/commands', (req, res) => {
 * ==============SLACK INTERACTIVE-COMPONENT-POST ROUTE==============
 **************************************************************************/
 server.post('/interactive-component', (req, res) => {
-  console.log('PL: \n' + req.body.payload);
   const body = JSON.parse(req.body.payload);
 
   // check that the verification token matches expected value
