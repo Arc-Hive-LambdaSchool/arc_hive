@@ -17,11 +17,11 @@ const sendConfirmation = (slackSearch) => {
         fields: [
           {
             title: 'Title: ',
-            value: slackSearch.Records[0].Title,
+            value: slackSearch.Records[0].fields.Title,
           },
           {
             title: 'Link: ',
-            value: slackSearch.Records[0].Link,
+            value: slackSearch.Records[0].fields.Link,
           }
         ],
       },

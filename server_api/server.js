@@ -97,8 +97,7 @@ server.get('/', (req, res) => {
   console.log(url);
   const g = {
     method: 'GET',
-    // uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=AND(IF(FIND(%22Redux%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22CS1%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))'
-    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=AND(IF(FIND(%22CS4%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22Testing%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link))',
+    uri: url,
     headers: {
       Authorization: 'Bearer keySPG804go0FXK3F',
       'content-type': 'application/json',
