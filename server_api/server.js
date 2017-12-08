@@ -143,17 +143,16 @@ server.post('/', (req, res) => {
     },
     json: true
   };
-  console.log('server 141: ' + JSON.stringify(p.body));
   request(p, (error, response, body) => {
     if (error) {
       console.log('HI I AM AN ERROR')
       console.log(error);
       return;
     }
-    console.log('server 148 Response: ' + JSON.stringify(response));
-    console.log('server 149 Body: ' + JSON.stringify(body));
-    console.log(req.body);
-    // slackSearch.arcConfirmation()
+    // console.log('server 148 Response: ' + JSON.stringify(response));
+    // console.log('server 149 Body: ' + JSON.stringify(body));
+    // console.log(req.body);
+    slackSearch.arcConfirmation(req.body);
     res.send(JSON.stringify(body));
   });
 });

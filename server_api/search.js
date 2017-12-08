@@ -37,34 +37,13 @@ const arcConfirmation = (slackSearch) => {
     token: process.env.SLACK_ACCESS_TOKEN,
     // response_type: "in_channel",
     channel: `#${slackSearch.cohort}`,
-    text: '@channel',
+    text: '@channel video has been successfully inserted to Airtable',
     attachments: JSON.stringify([
       {
-        title: `Ticket created for ${slackSearch.userEmail}`,
-        // Get this from the 3rd party helpdesk system
-        title_link: 'http://example.com',
-        text: slackSearch.text,
         fields: [
           {
-            title: 'Link',
-            value: slackSearch.arcLink,
-          },
-          {
-            title: 'Title',
-            value: slackSearch.arcTitle,
-          },
-          {
-            title: 'Tags',
-            value: slackSearch.tags,
-          },
-          {
-            title: 'Cohort',
-            value: slackSearch.cohort,
-            short: true,
-          },
-          {
-            title: 'Brownbag',
-            value: slackSearch.brownbag || 'No',
+            title: slackSearch.arcTitle,
+            value: slackSearch.arcLinkc
           }
         ],
       },
