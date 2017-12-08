@@ -132,8 +132,8 @@ server.post('/', (req, res) => {
       "fields": {
         Link: req.body.arcLink,
         Title: req.body.arcTitle,
-        Cohort: req.body.cohort,
-        Tags: req.body.tags
+        Cohort: "CS1",
+        Tags: "JS"
       }
     },
     json: true
