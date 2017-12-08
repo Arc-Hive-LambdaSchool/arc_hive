@@ -80,7 +80,7 @@ const create = (userId, submission) => {
         method: 'POST',
         uri: 'https://pacific-waters-60975.herokuapp.com/',
         headers: {
-          Authorization: 'Bearer keySPG804go0FXK3F',
+          Authorization: process.env.AIR_TABLE_KEY,
           'content-type': 'application/json',
         },
         body: slackSearch,
@@ -97,7 +97,7 @@ const create = (userId, submission) => {
         method: 'GET',
         uri: 'https://pacific-waters-60975.herokuapp.com/',
         headers: {
-          Authorization: 'Bearer keySPG804go0FXK3F',
+          Authorization: process.env.AIR_TABLE_KEY,
           'content-type': 'application/json',
         },
         body: slackSearch,

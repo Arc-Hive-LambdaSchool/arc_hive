@@ -97,7 +97,7 @@ server.get('/', (req, res) => {
     method: 'GET',
     uri: url,
     headers: {
-      Authorization: 'Bearer keySPG804go0FXK3F',
+      Authorization: process.env.AIR_TABLE_KEY,
       'content-type': 'application/json',
     },
     json: true
@@ -129,7 +129,7 @@ server.post('/', (req, res) => {
     method: 'POST',
     uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
     headers: {
-      Authorization: 'Bearer keySPG804go0FXK3F',
+      Authorization: process.env.AIR_TABLE_KEY,
       'content-type': 'application/json',
     },
     body: {
