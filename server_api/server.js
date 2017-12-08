@@ -320,7 +320,7 @@ server.post('/arcCommands', (req, res) => {
             type: 'select',
             name: 'brownbag',
             options: [
-              { label: 'Yes', value: 'true' },
+              { label: 'Yes', value: true },
             ]
           }
         ],
