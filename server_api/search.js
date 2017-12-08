@@ -9,7 +9,7 @@ const sendConfirmation = (slackSearch) => {
   // console.log(slackSearch);
   const field = [];
   for (let val of slackSearch.Records) {
-    fields.push({
+    field.push({
       title: `${slackSearch.Records[val].fields.Title}`,
       value: slackSearch.Records[val].fields.Link,
     })
