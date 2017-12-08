@@ -121,6 +121,10 @@ server.get('/', (req, res) => {
 **************************************************************************/
 server.post('/', (req, res) => {
   console.log(JSON.stringify(req.body));
+  let brownbag = null;
+  if (req.body.brownbag) {
+    brownbag = true;
+  }
   const p = {
     method: 'POST',
     uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
@@ -134,7 +138,7 @@ server.post('/', (req, res) => {
         Title: req.body.arcTitle,
         Cohort: [req.body.cohort],
         Tags: [req.body.tags],
-        Brownbag: req.body.brownbag
+        Brownbag: brownbag
       }
     },
     json: true
