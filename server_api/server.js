@@ -132,11 +132,10 @@ server.post('/', (req, res) => {
       "fields": {
         Link: req.body.arcLink,
         Title: req.body.arcTitle,
-        Cohort: "CS1",
-        Tags: "JS"
+        Cohort: [req.body.cohort],
+        Tags: [req.body.tags]
       }
     },
-    json: true
   };
   console.log('server 141: ' + JSON.stringify(p.body));
   request(p, (error, response, body) => {
