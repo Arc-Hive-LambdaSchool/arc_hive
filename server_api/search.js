@@ -18,7 +18,7 @@ const sendConfirmation = (slackSearch) => {
       {
         fields: [
           {
-            title: `Title: ${slackSearch.Records[0].fields.Title}`,
+            title: `${slackSearch.Records[0].fields.Title}`,
             value: slackSearch.Records[0].fields.Link,
           },
         ],
