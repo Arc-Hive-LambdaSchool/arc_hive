@@ -70,7 +70,7 @@ server.get('/', (req, res) => {
   console.log(url);
   const g = {
     method: 'GET',
-    uri: url + "&sort%5B0%5D%5Bfield%5D=Title&sort%5B0%5D%5Bdirection%5D=asc",
+    uri: url // + "&sort%5B0%5D%5Bfield%5D=Title&sort%5B0%5D%5Bdirection%5D=asc",
     headers: {
       Authorization: process.env.AIR_TABLE_KEY,
       'content-type': 'application/json',
