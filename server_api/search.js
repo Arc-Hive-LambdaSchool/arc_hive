@@ -9,7 +9,7 @@ const sendConfirmation = (slackSearch) => {
   // console.log(slackSearch);
   console.log('Before: ' + JSON.stringify(slackSearch.Records));
   slackSearch.Records.sort((a, b) => {
-    return JSON.stringify(a.createdTime) - JSON.stringify(b.createdTime);
+    return new Date(a.createdTime) - new Date(b.createdTime);
   });
   console.log('After: ' + JSON.stringify(slackSearch.Records));
   const field = [];
