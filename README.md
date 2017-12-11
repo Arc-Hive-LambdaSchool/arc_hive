@@ -61,6 +61,14 @@
 ### Authentication Middleware
 - https://developer.okta.com/blog/2017/09/14/lazy-developers-guide-to-auth-with-vue
 
+### Zapier
+- https://zapier.com/apps/integrations
+- https://support.zoom.us/hc/en-us/articles/205260649-How-To-Use-Zapier
+
+### YouTube
+- https://developers.google.com/youtube/v3/
+- https://github.com/tokland/youtube-upload/blob/master/setup.py
+
 # NOTES
 ### Aaron's set-up notes from Slack
 - https://lambdaschoolstudents.slack.com/archives/G5TDU61DE/p1511816408000751
