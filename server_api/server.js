@@ -37,31 +37,6 @@ server.use(bodyParser.urlencoded({extended: true}));
 ========================================================================*/
 
 /*************************************************************************
-* =============AIRTABLE GET ROUTE=============
-**************************************************************************
-server.get('/', (req, res) => {
-  const g = {
-    method: 'GET',
-    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx',
-    headers: {
-      Authorization: 'Bearer keySPG804go0FXK3F',
-      'content-type': 'application/json',
-      'id': 'recDVfMW2yBtY0Cxi'
-    }
-  };
-  console.log(g.uri);
-  request(g, (error, response, body) => {
-    if (error) {
-      console.log(error);
-      return;
-    }
-    // console.log('Response: ' + JSON.stringify(response));
-    // console.log('Body: ' + body);
-    res.send(body);
-  });
-});
-*/
-/*************************************************************************
 * =============AIRTABLE QUERY-GET ROUTE==============
 **************************************************************************/
 server.get('/', (req, res) => {
@@ -95,7 +70,7 @@ server.get('/', (req, res) => {
   console.log(url);
   const g = {
     method: 'GET',
-    uri: url,
+    uri: url + 'sort%5B0%5D%5Bfield%5D=CREATED_TIME()&sort%5B0%5D%5Bdirection%5D=asc',
     headers: {
       Authorization: process.env.AIR_TABLE_KEY,
       'content-type': 'application/json',
