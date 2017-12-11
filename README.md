@@ -48,6 +48,7 @@
 
 ### Tyge's Meeting Notes
 - https://docs.google.com/document/d/1XIZVj97Kjwc3g1ib7fZh6Zbnx0fi9ZDjBy6BlFJOHT0/edit
+![Ninja Assassin](https://media3.giphy.com/media/ErdfMetILIMko/giphy-downsized.gif)
 
 
 # API's
