@@ -1,4 +1,4 @@
-# Lambda School Lectures & Brownbags: Arc Hive
+# Lambda School Streaming Content: Arc Hive
 - Collected notes for cs1 Group Capstone Project: Lois, Tyge, Evan, Ryan & Patrick
 - NOTE: click on the ▶︎ black ▶︎ triangles ▶︎ to expand a section
 
@@ -29,6 +29,14 @@
 # Minimum Viable Product
 - a teacher pastes a youtube link into Slack with a slash command `/arc youtu.be/jkh7S90udf`
 - a student retrieves chronological list of youtube vids `/hive`
+- post content with timestamp, instructor, lecture title, cohort & url
+
+### Additional targets:
+ - @channel notifications
+ - prevent non-YouTube links/posts
+ - Only instructors ans TA's may post content, Students constrained to retrieval
+ - tests
+ - documentation (incl. code comments)
 
 # Project Management
 ### User Flow Chart
