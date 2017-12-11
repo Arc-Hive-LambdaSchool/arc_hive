@@ -70,7 +70,7 @@ server.get('/', (req, res) => {
   console.log(url);
   const g = {
     method: 'GET',
-    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?sort%5B0%5D%5Bfield%5D=DATETIME_DIFF(CREATED_TIME()%2C+TODAY()+'seconds')&sort%5B0%5D%5Bdirection%5D=asc',
+    uri: "https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?sort%5B0%5D%5Bfield%5D=DATETIME_DIFF(CREATED_TIME()%2C+TODAY()+'seconds')&sort%5B0%5D%5Bdirection%5D=asc",
     headers: {
       Authorization: process.env.AIR_TABLE_KEY,
       'content-type': 'application/json',
