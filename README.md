@@ -25,9 +25,10 @@
 #### Weekly presentations to cs1
 - https://docs.google.com/document/d/1biRjYRykSJU09Gel4Fd4TqAkyadMNcMZcnVcGJ5lAW8/edit
 - [First Week CS1 Demos](https://youtu.be/0FH5zC0tg-Q)
+- [Second Week CS1 Demos](https://youtu.be/eWjym0ahi-4)
 
 # Minimum Viable Product
-- a teacher pastes a youtube link into Slack with a slash command `/arc youtu.be/jkh7S90udf`
+- a teacher pastes a youtube link into Slack with a slash command `arc` or `/arc https://youtu.be/ZihgMcrHOF4`
 - a student retrieves chronological list of youtube vids `/hive`
 - post content with timestamp, instructor, lecture title, cohort & url
 
