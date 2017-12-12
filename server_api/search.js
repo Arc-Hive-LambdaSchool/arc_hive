@@ -47,8 +47,6 @@ const arcConfirmation = (slackSearch) => {
      slackChannel.push(chanString.split(' '));
    }
    console.log(slackChannel);
-  for (let index = 0; index < slackChannel[0].length; index++) {
-    console.log(slackChannel[0][index]);
   axios.post('https://slack.com/api/chat.postMesage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     // response_type: "in_channel",
@@ -71,7 +69,7 @@ const arcConfirmation = (slackSearch) => {
     console.error(err);
   });
 };
-}
+
 
 const create = (userId, submission) => {
   const slackSearch = {};
