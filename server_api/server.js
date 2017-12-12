@@ -87,7 +87,10 @@ server.get('/', (req, res) => {
     }
     const sendToSlack = {
       Records: body.records,
-      userId: req.body.userId
+      userId: req.body.userId,
+      searchTags: tagVal,
+      searchCohort: cohortVal,
+      searchBB: brownBagVal
     };
     slackSearch.sendConfirmation(sendToSlack);
     res.send(body);
