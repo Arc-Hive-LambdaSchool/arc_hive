@@ -72,6 +72,7 @@ const create = (userId, submission) => {
     slackSearch.tags = submission.tags;
     slackSearch.cohort = submission.cohort;
     slackSearch.brownbag = submission.brownbag;
+    slackSearch.sort = submission.sort;
     slackSearch.arcLink = submission.arcLink;
     slackSearch.arcTitle = submission.arcTitle;
     if (slackSearch.arcLink) {
