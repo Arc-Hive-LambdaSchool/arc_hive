@@ -74,7 +74,7 @@ server.get('/', (req, res) => {
     url += 'AND(' + pathArray.join('%2C+') + ')';
   }
 
-  console.log(url);
+  // console.log(url);
   const g = {
     method: 'GET',
     uri: url + path.sort,
@@ -91,9 +91,12 @@ server.get('/', (req, res) => {
     }
     const sendToSlack = {
       Records: body.records,
-      userId: req.body.userId
+      userId: req.body.userId,
+      tags: tagVal,
+      cohort: cohortVal,
+      brownbag: brownBagVal
     };
-    console.log(sendToSlack);
+    // console.log(sendToSlack);
     slackSearch.sendConfirmation(sendToSlack);
     res.send(body);
   });
