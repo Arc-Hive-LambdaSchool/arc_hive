@@ -6,7 +6,7 @@ const request = require('request');
 
 
 const sendConfirmation = (slackSearch) => {
-  // console.log(slackSearch);
+  console.log(slackSearch);
   const field = [];
   for (let i = 0; i < slackSearch.Records.length; i++) {
     field.push({

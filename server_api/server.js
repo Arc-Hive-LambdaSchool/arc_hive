@@ -45,13 +45,17 @@ server.get('/', (req, res) => {
   const tagVal = req.body.tags;
   const cohortVal = req.body.cohort;
   const brownBagVal = req.body.brownbag;
+  let sortParam = 'asc'
+  if (req.body.sort) {
+    sortParam = req.body.sort;
+  }
   const path = {
     allRec: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=',
     onlyBrownBags: 'IF(Brownbag%2C+Link)',
     noBrownBags: 'IF(NOT(Brownbag)%2C+Link)',
     cohort: 'OR(IF(FIND(%22' + req.body.cohort + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))',
     tags: 'IF(FIND(%22' + req.body.tags + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)',
-    sort: '&sort%5B0%5D%5Bfield%5D=Created&sort%5B0%5D%5Bdirection%5D=' + req.body.sort
+    sort: '&sort%5B0%5D%5Bfield%5D=Created&sort%5B0%5D%5Bdirection%5D=' + sortParam
   };
   const pathArray = [];
   let url = path.allRec;
@@ -89,6 +93,7 @@ server.get('/', (req, res) => {
       Records: body.records,
       userId: req.body.userId
     };
+    console.log(sendToSlack);
     slackSearch.sendConfirmation(sendToSlack);
     res.send(body);
   });
