@@ -7,11 +7,9 @@ const request = require('request');
 
 const sendConfirmation = (slackSearch) => {
   // console.log(slackSearch);
-  console.log('Before: ' + JSON.stringify(slackSearch.Records));
-  slackSearch.Records.sort((a, b) => {
+  /*slackSearch.Records.sort((a, b) => {
     return new Date(a.createdTime) - new Date(b.createdTime);
-  });
-  console.log('After: ' + JSON.stringify(slackSearch.Records));
+  }); */
   const field = [];
   for (let i = 0; i < slackSearch.Records.length; i++) {
     field.push({

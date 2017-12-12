@@ -38,6 +38,8 @@ server.use(bodyParser.urlencoded({extended: true}));
 
 /*************************************************************************
 * =============AIRTABLE QUERY-GET ROUTE==============
+* -This route is triggered when the 'create' function in search.js sends
+* an HTTP request containing the search parameters
 **************************************************************************/
 server.get('/', (req, res) => {
   const tagVal = req.body.tags;
@@ -70,7 +72,7 @@ server.get('/', (req, res) => {
   console.log(url);
   const g = {
     method: 'GET',
-    uri: url, // + "&sort%5B0%5D%5Bfield%5D=Title&sort%5B0%5D%5Bdirection%5D=asc",
+    uri: url + "&sort%5B0%5D%5Bfield%5D=Created&sort%5B0%5D%5Bdirection%5D=asc",
     headers: {
       Authorization: process.env.AIR_TABLE_KEY,
       'content-type': 'application/json',
