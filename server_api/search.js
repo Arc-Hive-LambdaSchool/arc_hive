@@ -44,7 +44,7 @@ const arcConfirmation = (slackSearch) => {
   if (slackSearch.cohort.toUpperCase() === 'ALL') {
     slackChan = chanList;
   } else {
-    slackChan.push(slackSearch.cohort.toUpperCase());
+    slackChan = [slackSearch.cohort.toUpperCase()];
   }
   console.log(slackChan[0]);
   for (let i = 0; i < slackChan.length; i++) {
