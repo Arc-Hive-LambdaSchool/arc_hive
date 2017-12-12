@@ -201,7 +201,7 @@ server.post('/commands', (req, res) => {
             optional: true,
             type: 'select',
             name: 'Sorted By',
-            value: 'asc'
+            value: 'asc',
             options: [
               { label: 'Newest First', value: 'desc' },
               { label: 'Oldest First', value: 'asc' },
