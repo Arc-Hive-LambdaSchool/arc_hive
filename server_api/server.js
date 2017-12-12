@@ -115,6 +115,14 @@ server.get('/', (req, res) => {
 server.post('/', (req, res) => {
   console.log(JSON.stringify(req.body));
   let brownbag = null;
+  let cohort = null;
+  let tags = null;
+  if (req.body.cohort) {
+    cohort = req.body.cohort.toUpperCase();
+  }
+  if (req.body.tags) {
+    tags = req.body.tags.toUpperCase();
+  }
   if (req.body.brownbag) {
     brownbag = true;
   }
@@ -129,8 +137,8 @@ server.post('/', (req, res) => {
       "fields": {
         Link: req.body.arcLink,
         Title: req.body.arcTitle,
-        Cohort: [req.body.cohort.toUpperCase()],
-        Tags: [req.body.tags.toUpperCase()],
+        Cohort: [cohort],
+        Tags: [tags],
         Brownbag: brownbag
       }
     },
