@@ -77,7 +77,7 @@ const create = (userId, submission) => {
     slackSearch.userId = userId;
     slackSearch.userEmail = result;
     slackSearch.tags = submission.tags;
-    slackSearch.cohort = submission.cohort;
+    slackSearch.cohort = submission.cohort.toUpperCase();
     slackSearch.brownbag = submission.brownbag;
     slackSearch.sort = submission.sort;
     slackSearch.arcLink = submission.arcLink;
