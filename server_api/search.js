@@ -48,6 +48,7 @@ const arcConfirmation = (slackSearch) => {
        'CS10', 'CS11', 'CS12', 'CS13', 'CS14', 'CS15', 'CS16', 'CS17', 'CS18', 'CS19', 'CS20', 'CS21',
       'CS22', 'CS23', 'CS24'];
    }
+   console.log(slackChannel);
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     // response_type: "in_channel",
