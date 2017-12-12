@@ -41,7 +41,7 @@ const arcConfirmation = (slackSearch) => {
   // console.log(slackSearch);
   const slackChannel = [[slackSearch.cohort]];
    if (slackChannel[0][0] === 'ALL') {
-     const chanString = 'CS1 CS2 CS3 CS4 CS5 CS6 CS7 CS8 CS9 CS10 CS11 CS12 CS13 CS14 CS15 CS16 CS17 CS18 CS19 CS20 CS21 CS22 CS23 CS24';
+     const chanString = '#CS1 #CS2 #CS3 #CS4 #CS5 #CS6 #CS7 #CS8 #CS9 #CS10 #CS11 #CS12 #CS13 #CS14 #CS15 #CS16 #CS17 #CS18 #CS19 #CS20 #CS21 #CS22 #CS23 #CS24';
      slackChannel.pop();
      slackChannel.push(chanString.split(' '));
    }
@@ -51,7 +51,7 @@ const arcConfirmation = (slackSearch) => {
   axios.post('https://slack.com/api/chat.postMesage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     // response_type: "in_channel",
-    channel: `#${slackChannel[0][index]}`,
+    channel: slackChannel[0][index],
     text: '@channel video has been successfully inserted to Airable',
     attachments: JSON.stringify([
       {
