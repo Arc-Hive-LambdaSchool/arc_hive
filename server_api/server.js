@@ -115,8 +115,8 @@ server.get('/', (req, res) => {
 server.post('/', (req, res) => {
   console.log(JSON.stringify(req.body));
   let brownbag = null;
-  let cohort = null;
-  let tags = null;
+  let cohort = 'N/A';
+  let tags = 'N/A';
   if (req.body.cohort) {
     cohort = req.body.cohort.toUpperCase();
   }
