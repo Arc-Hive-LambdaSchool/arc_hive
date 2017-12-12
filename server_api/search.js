@@ -39,8 +39,14 @@ const sendConfirmation = (slackSearch) => {
 
 const arcConfirmation = (slackSearch) => {
   // console.log(slackSearch);
-  const slackChan = ['CS1', 'CS2', 'CS3', 'CS4'];
-  for (let i = 0; i < 3; i++) {
+  let slackChan;
+  const chanList = ['CS1', 'CS2', 'CS3', 'CS4', 'CS5', 'CS6', 'CS7', 'CS8', 'CS9', 'CS10', 'CS11', 'CS12'];
+  if (slackSearch.cohort.toUpperCase() === 'ALL') {
+    slackChan = chanList;
+  } else {
+    slackChan.push(slackSearch.cohort.toUpperCase());
+  }
+  for (let i = 0; i < slackChan.length; i++) {
     axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
       token: process.env.SLACK_ACCESS_TOKEN,
       // response_type: "in_channel",
