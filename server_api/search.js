@@ -17,7 +17,7 @@ const sendConfirmation = (slackSearch) => {
   if (field.length === 0) {
     field.push({
       title: `No records matched your search for Tags: ${slackSearch.searchTags}, Cohort: ${slackSearch.searchCohort}, BrownBag: ${slackSearch.searchBB}`,
-      value: 'Try a more general search'
+      value: 'Make sure search parameters are correct and/or try a more general search'
     });
   }
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
