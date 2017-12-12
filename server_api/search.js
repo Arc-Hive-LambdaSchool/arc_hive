@@ -46,11 +46,12 @@ const arcConfirmation = (slackSearch) => {
      slackChannel.push(chanString.split(' '));
    }
    console.log(slackChannel);
-  for (let i = 0; i < slackChannel.length; i++) {
+  for (let index = 0; index < slackChannel.length; index++) {
+    console.log(slackChannel[0][index]);
   axios.post('https://slack.com/api/chat.postMesage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     // response_type: "in_channel",
-    channel: `#${slackChannel[0][i]}`,
+    channel: `#${slackChannel[0][index]}`,
     text: '@channel video has been successfully inserted to Airable',
     attachments: JSON.stringify([
       {
