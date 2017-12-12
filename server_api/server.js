@@ -171,9 +171,9 @@ server.post('/commands', (req, res) => {
         elements: [
           {
             label: 'Tags',
-            type: 'select',
+            type: 'text',
             name: 'tags',
-            optional: true,
+            /* optional: true,
             options: [
               { label: 'JS', value: 'JS' },
               { label: 'React', value: 'React' },
@@ -181,7 +181,7 @@ server.post('/commands', (req, res) => {
               { label: 'Auth', value: 'Auth' },
               { label: 'C', value: 'C' },
               { label: 'Testing', value: 'Testing' },
-            ],
+            ], */
           },
           {
             label: 'Cohort',
