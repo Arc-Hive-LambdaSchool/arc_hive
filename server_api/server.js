@@ -195,7 +195,18 @@ server.post('/commands', (req, res) => {
               { label: 'Only Brownbags', value: 'onlyBrownBags' },
               { label: 'No Brownbags', value: 'noBrownBags' },
             ]
-          }
+          },
+          {
+            label: 'Sorted By',
+            optional: true,
+            type: 'select',
+            name: 'Sorted By',
+            value: 'asc'
+            options: [
+              { label: 'Newest First', value: 'desc' },
+              { label: 'Oldest First', value: 'asc' },
+            ]
+          },
         ],
       }),
     };
