@@ -41,9 +41,7 @@ const arcConfirmation = (slackSearch) => {
   // console.log(slackSearch);
   let slackChannel = slackSearch.cohort;
    if (slackChannel === 'ALL') {
-     slackChannel = ['CS1', 'CS2', 'CS3', 'CS4', 'CS5', 'CS6', 'CS7', 'CS8', 'CS9',
-       'CS10', 'CS11', 'CS12', 'CS13', 'CS14', 'CS15', 'CS16', 'CS17', 'CS18', 'CS19', 'CS20', 'CS21',
-      'CS22', 'CS23', 'CS24'];
+     slackChannel = 'CS1, #CS2, #CS3, #CS4, #CS5, #CS6, #CS7, #CS8, #CS9, #CS10, #CS11, #CS12, #CS13, #CS14, #CS15, #CS16, #CS17, #CS18, #CS19, #CS20, #CS21, #CS22, #CS23, #CS24';
    }
    console.log(slackChannel);
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
