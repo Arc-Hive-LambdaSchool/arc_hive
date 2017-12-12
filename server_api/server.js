@@ -121,7 +121,7 @@ server.post('/', (req, res) => {
     cohort = req.body.cohort.toUpperCase();
   }
   if (req.body.tags) {
-    tags = req.body.tags.toUpperCase();
+    tags = req.body.tags.toUpperCase().split(', ');
   }
   if (req.body.brownbag) {
     brownbag = true;
@@ -138,7 +138,7 @@ server.post('/', (req, res) => {
         Link: req.body.arcLink,
         Title: req.body.arcTitle,
         Cohort: [cohort],
-        Tags: [tags],
+        Tags: tags,
         Brownbag: brownbag
       }
     },
