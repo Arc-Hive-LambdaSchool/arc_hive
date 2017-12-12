@@ -122,8 +122,8 @@ server.post('/', (req, res) => {
       "fields": {
         Link: req.body.arcLink,
         Title: req.body.arcTitle,
-        Cohort: [req.body.cohort],
-        Tags: [req.body.tags],
+        Cohort: [req.body.cohort.toUpperCase()],
+        Tags: [req.body.tags.toUpperCase()],
         Brownbag: brownbag
       }
     },
