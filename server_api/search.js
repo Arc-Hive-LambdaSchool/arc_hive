@@ -14,12 +14,6 @@ const sendConfirmation = (slackSearch) => {
       value: slackSearch.Records[i].fields.Link,
     })
   }
-  if (field.length === 0) {
-    field.push({
-      title: `No records matched your search for Tags: ${slackSearch.searchTags}, Cohort: ${slackSearch.searchCohort}, BrownBag: ${slackSearch.searchBB}`,
-      value: 'Make sure search parameters are correct and/or try a more general search'
-    });
-  }
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     channel: slackSearch.userId,
@@ -38,12 +32,12 @@ const sendConfirmation = (slackSearch) => {
 };
 
 const arcConfirmation = (slackSearch) => {
-  console.log(slackSearch);
-  axios.post('https://slack.com/api/chat.postMesage', qs.stringify({
+  // console.log(slackSearch);
+  axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     // response_type: "in_channel",
     channel: `#${slackSearch.cohort}`,
-    text: '@channel video has been successfully inserted to Airable',
+    text: '@channel video has been successfully inserted to Airtable',
     attachments: JSON.stringify([
       {
         fields: [
@@ -62,7 +56,6 @@ const arcConfirmation = (slackSearch) => {
   });
 };
 
-
 const create = (userId, submission) => {
   const slackSearch = {};
 
@@ -77,7 +70,7 @@ const create = (userId, submission) => {
     slackSearch.userId = userId;
     slackSearch.userEmail = result;
     slackSearch.tags = submission.tags;
-    slackSearch.cohort = submission.cohort.toUpperCase();
+    slackSearch.cohort = submission.cohort;
     slackSearch.brownbag = submission.brownbag;
     slackSearch.sort = submission.sort;
     slackSearch.arcLink = submission.arcLink;
