@@ -37,32 +37,9 @@ server.use(bodyParser.urlencoded({extended: true}));
 ========================================================================*/
 
 /*************************************************************************
-* =============AIRTABLE GET ROUTE=============
-**************************************************************************
-server.get('/', (req, res) => {
-  const g = {
-    method: 'GET',
-    uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx',
-    headers: {
-      Authorization: 'Bearer keySPG804go0FXK3F',
-      'content-type': 'application/json',
-      'id': 'recDVfMW2yBtY0Cxi'
-    }
-  };
-  console.log(g.uri);
-  request(g, (error, response, body) => {
-    if (error) {
-      console.log(error);
-      return;
-    }
-    // console.log('Response: ' + JSON.stringify(response));
-    // console.log('Body: ' + body);
-    res.send(body);
-  });
-});
-*/
-/*************************************************************************
 * =============AIRTABLE QUERY-GET ROUTE==============
+* -This route is triggered when the 'create' function in search.js sends
+* an HTTP request containing the search parameters
 **************************************************************************/
 server.get('/', (req, res) => {
   const tagVal = req.body.tags;
@@ -73,7 +50,8 @@ server.get('/', (req, res) => {
     onlyBrownBags: 'IF(Brownbag%2C+Link)',
     noBrownBags: 'IF(NOT(Brownbag)%2C+Link)',
     cohort: 'OR(IF(FIND(%22' + req.body.cohort + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))',
-    tags: 'IF(FIND(%22' + req.body.tags + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)'
+    tags: 'IF(FIND(%22' + req.body.tags + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)',
+    sort: '&sort%5B0%5D%5Bfield%5D=Created&sort%5B0%5D%5Bdirection%5D=' + req.body.sort
   };
   const pathArray = [];
   let url = path.allRec;
@@ -95,9 +73,9 @@ server.get('/', (req, res) => {
   console.log(url);
   const g = {
     method: 'GET',
-    uri: url,
+    uri: url + path.sort,
     headers: {
-      Authorization: 'Bearer keySPG804go0FXK3F',
+      Authorization: process.env.AIR_TABLE_KEY,
       'content-type': 'application/json',
     },
     json: true
@@ -129,7 +107,7 @@ server.post('/', (req, res) => {
     method: 'POST',
     uri: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
     headers: {
-      Authorization: 'Bearer keySPG804go0FXK3F',
+      Authorization: process.env.AIR_TABLE_KEY,
       'content-type': 'application/json',
     },
     body: {
@@ -218,7 +196,18 @@ server.post('/commands', (req, res) => {
               { label: 'Only Brownbags', value: 'onlyBrownBags' },
               { label: 'No Brownbags', value: 'noBrownBags' },
             ]
-          }
+          },
+          {
+            label: 'Sorted By',
+            optional: true,
+            type: 'select',
+            name: 'sort',
+            value: 'asc',
+            options: [
+              { label: 'Newest First', value: 'desc' },
+              { label: 'Oldest First', value: 'asc' },
+            ]
+          },
         ],
       }),
     };
