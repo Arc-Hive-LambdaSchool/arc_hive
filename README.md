@@ -174,7 +174,7 @@
 ![1) Recording](art/1_Recording.png)
 2. While transcoding:
 ![2) Transcoding](art/2_Transcoding.png)
-3. When finished:  
+3. When finished:
 ![3) Finished .mp4](art/3_Fin.png)
 
 ### macOS default recording directory
@@ -195,6 +195,11 @@ I think it might be enough for a daemon to keep an eye on any subfolder within t
 2. Should the daemon register `.mp4` files which have already been uploaded?
 3. Should the daemon delete `.mp4` files which have already been uploaded? Wait a week?
 4. Can the daemon ask for confirmation before uploading? Send a system notification when it sees something to send?
+
+#### sub-directory search with `find`
+1. `find` looks into subfolders
+2. relative `./` path: `$  find ./Documents/Zoom -name "*.mp4"`
+3. relative `~` path to $HOME directory: `find ~/Documents/Zoom -name "*.mp4"`
 
 </p></details>
 
