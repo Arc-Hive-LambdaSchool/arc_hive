@@ -188,8 +188,8 @@ server.post('/commands', (req, res) => {
             label: 'Tags',
             type: 'text',
             name: 'tags',
-            /* optional: true,
-            options: [
+            optional: true,
+            /* options: [
               { label: 'JS', value: 'JS' },
               { label: 'React', value: 'React' },
               { label: 'Redux', value: 'Redux' },
