@@ -170,6 +170,8 @@
 
 <details><summary>Notes on Recording Zoom Meetings Locally</summary><p>
 
+# Local Zoom Recording File Sequence
+
 1. While recording:  
 ![1) Recording](art/1_Recording.png)
 2. While transcoding:  
