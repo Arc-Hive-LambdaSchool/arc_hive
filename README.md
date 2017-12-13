@@ -170,15 +170,18 @@
 
 <details><summary>Notes on Recording Zoom Meetings Locally</summary><p>
 
+1. While recording:
 ![1) Recording](art/1_Recording.png)
+2. While transcoding:
 ![2) Transcoding](art/2_Transcoding.png)
+3. When finished:
 ![3) Finished .mp4](art/3_Fin.png)
 
 ### macOS default recording directory
 - /Users/<USERNAME>/Documents/Zoom/YYYY-MM-DD HH.MM.SS <USERNAME>'s Zoom Meeting <9_Digit_Number>
 - i.e. ~/Documents/Zoom/YYYY-MM-DD HH.MM.SS <USERNAME>'s Zoom Meeting <9_Digit_Number>
 - e.g. /Users/mixelpix/Documents/Zoom/2017-12-12 11.23.03 Patrick Kennedy's Zoom Meeting 901264977
-#### Questions
+#### QUESTIONS
 1. is the 9 digit number just a random number, or does it have some significance? I think it is random. Why is it needed?
 
 ### Zoom recording flow
