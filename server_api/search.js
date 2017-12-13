@@ -6,13 +6,19 @@ const request = require('request');
 
 
 const sendConfirmation = (slackSearch) => {
-  // console.log(slackSearch);
+  console.log(slackSearch);
   const field = [];
   for (let i = 0; i < slackSearch.Records.length; i++) {
     field.push({
       title: `${slackSearch.Records[i].fields.Title}`,
       value: slackSearch.Records[i].fields.Link,
     })
+  }
+  if (field.length === 0) {
+    field.push({
+      title: `No records match your search for Tags: ${slackSearch.tags}, Cohort: ${slackSearch.cohort}, Brownbag: ${slackSearch.brownbag}`,
+      value: 'Please make sure your input is correct and/or try a less specific search'
+    });
   }
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
@@ -33,27 +39,41 @@ const sendConfirmation = (slackSearch) => {
 
 const arcConfirmation = (slackSearch) => {
   // console.log(slackSearch);
-  axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
-    token: process.env.SLACK_ACCESS_TOKEN,
-    // response_type: "in_channel",
-    channel: `#${slackSearch.cohort}`,
-    text: '@channel video has been successfully inserted to Airtable',
-    attachments: JSON.stringify([
-      {
-        fields: [
-          {
-            title: `${slackSearch.arcTitle}`,
-            value: slackSearch.arcLink
-          }
-        ],
-      },
-    ]),
-  })).then((result) => {
-    debug('arcConfirmation: %o', result.data);
-  }).catch((err) => {
-    debug('arcConfirmation error: %o', err);
-    console.error(err);
-  });
+  let slackChan;
+  const chanList = ['#CS1', '#CS2', '#CS3', '#CS4', '#CS5', '#CS6', '#CS7', '#CS8', '#CS9', '#CS10', '#CS11', '#CS12'];
+  if (slackSearch.cohort === null) {
+    slackChan = [slackSearch.userId];
+  } else if (slackSearch.cohort.toUpperCase() === 'ALL') {
+    slackChan = chanList;
+  } else {
+    slackChan = [`#${slackSearch.cohort.toUpperCase()}`];
+  }
+  console.log(slackChan[0]);
+  for (let i = 0; i < slackChan.length; i++) {
+    console.log(`length: ${slackChan.length}`);
+    console.log(slackChan[0]);
+    axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+      token: process.env.SLACK_ACCESS_TOKEN,
+      response_type: "in_channel",
+      channel: `${slackChan[i]}`,
+      text: `<!channel>`,
+      attachments: JSON.stringify([
+        {
+          fields: [
+            {
+              title: `${slackSearch.arcTitle}`,
+              value: slackSearch.arcLink
+            }
+          ],
+        },
+      ]),
+    })).then((result) => {
+      debug('arcConfirmation: %o', result.data);
+    }).catch((err) => {
+      debug('arcConfirmation error: %o', err);
+      console.error(err);
+    });
+  }
 };
 
 const create = (userId, submission) => {

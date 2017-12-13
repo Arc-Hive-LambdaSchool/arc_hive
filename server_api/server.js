@@ -42,16 +42,26 @@ server.use(bodyParser.urlencoded({extended: true}));
 * an HTTP request containing the search parameters
 **************************************************************************/
 server.get('/', (req, res) => {
-  const tagVal = req.body.tags;
-  const cohortVal = req.body.cohort;
+  let tagVal = req.body.tags;
+  let cohortVal = req.body.cohort;
   const brownBagVal = req.body.brownbag;
+  let sortParam = 'asc'
+  if (req.body.sort) {
+    sortParam = req.body.sort;
+  }
+  if (tagVal) {
+    tagVal = tagVal.toUpperCase();
+  }
+  if(cohortVal) {
+    cohortVal = cohortVal.toUpperCase();
+  }
   const path = {
     allRec: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/tblWIvD0du6JQqdlx?filterByFormula=',
     onlyBrownBags: 'IF(Brownbag%2C+Link)',
     noBrownBags: 'IF(NOT(Brownbag)%2C+Link)',
-    cohort: 'OR(IF(FIND(%22' + req.body.cohort + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))',
-    tags: 'IF(FIND(%22' + req.body.tags + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)',
-    sort: '&sort%5B0%5D%5Bfield%5D=Created&sort%5B0%5D%5Bdirection%5D=' + req.body.sort
+    cohort: 'OR(IF(FIND(%22' + cohortVal + '%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link)%2C+IF(FIND(%22all%22%2C+ARRAYJOIN(Cohort%2C+%22+%22))%2C+Link))',
+    tags: 'IF(FIND(%22' + tagVal + '%22%2C+ARRAYJOIN(Tags%2C+%22+%22))%2C+Link)',
+    sort: '&sort%5B0%5D%5Bfield%5D=Created&sort%5B0%5D%5Bdirection%5D=' + sortParam
   };
   const pathArray = [];
   let url = path.allRec;
@@ -59,6 +69,7 @@ server.get('/', (req, res) => {
     pathArray.push(path.tags);
   }
   if (cohortVal) {
+    console.log(cohortVal);
     pathArray.push(path.cohort);
   }
   if (brownBagVal) {
@@ -70,7 +81,7 @@ server.get('/', (req, res) => {
     url += 'AND(' + pathArray.join('%2C+') + ')';
   }
 
-  console.log(url);
+  // console.log(url);
   const g = {
     method: 'GET',
     uri: url + path.sort,
@@ -87,8 +98,12 @@ server.get('/', (req, res) => {
     }
     const sendToSlack = {
       Records: body.records,
-      userId: req.body.userId
+      userId: req.body.userId,
+      tags: tagVal,
+      cohort: cohortVal,
+      brownbag: brownBagVal
     };
+    // console.log(sendToSlack);
     slackSearch.sendConfirmation(sendToSlack);
     res.send(body);
   });
@@ -100,6 +115,14 @@ server.get('/', (req, res) => {
 server.post('/', (req, res) => {
   console.log(JSON.stringify(req.body));
   let brownbag = null;
+  let cohort = 'N/A';
+  let tags = 'N/A';
+  if (req.body.cohort) {
+    cohort = req.body.cohort.toUpperCase();
+  }
+  if (req.body.tags) {
+    tags = req.body.tags.toUpperCase().split(', ');
+  }
   if (req.body.brownbag) {
     brownbag = true;
   }
@@ -114,8 +137,8 @@ server.post('/', (req, res) => {
       "fields": {
         Link: req.body.arcLink,
         Title: req.body.arcTitle,
-        Cohort: [req.body.cohort],
-        Tags: [req.body.tags],
+        Cohort: [cohort],
+        Tags: tags,
         Brownbag: brownbag
       }
     },
@@ -163,29 +186,29 @@ server.post('/commands', (req, res) => {
         elements: [
           {
             label: 'Tags',
-            type: 'select',
+            type: 'text',
             name: 'tags',
             optional: true,
-            options: [
+            /* options: [
               { label: 'JS', value: 'JS' },
               { label: 'React', value: 'React' },
               { label: 'Redux', value: 'Redux' },
               { label: 'Auth', value: 'Auth' },
               { label: 'C', value: 'C' },
               { label: 'Testing', value: 'Testing' },
-            ],
+            ], */
           },
           {
             label: 'Cohort',
             optional: true,
-            type: 'select',
+            type: 'text',
             name: 'cohort',
-            options: [
+            /* options: [
               { label: 'CS1', value: 'CS1' },
               { label: 'CS2', value: 'CS2' },
               { label: 'CS3', value: 'CS3' },
               { label: 'CS4', value: 'CS4' },
-            ],
+            ], */
           },
           {
             label: 'Brownbag?',
@@ -282,29 +305,29 @@ server.post('/arcCommands', (req, res) => {
           },
           {
             label: 'Tags',
-            type: 'select',
+            type: 'text',
             name: 'tags',
             optional: true,
-            options: [
+            /* options: [
               { label: 'JS', value: 'JS' },
               { label: 'React', value: 'React' },
               { label: 'Redux', value: 'Redux' },
               { label: 'Auth', value: 'Auth' },
               { label: 'C', value: 'C' },
               { label: 'Testing', value: 'Testing' },
-            ],
+            ], */
           },
           {
             label: 'Cohort',
-            type: 'select',
+            type: 'text',
             name: 'cohort',
             optional: true,
-            options: [
+            /* options: [
               { label: 'CS1', value: 'CS1' },
               { label: 'CS2', value: 'CS2' },
               { label: 'CS3', value: 'CS3' },
               { label: 'CS4', value: 'CS4' },
-            ],
+            ], */
           },
           {
             label: 'Brownbag?',
