@@ -185,7 +185,7 @@
 1. is the 9 digit number just a random number, or does it have some significance? I think it is random. Why is it needed?
 
 ### Zoom recording flow
-1. `.zoom` wile recording
+1. `.zoom` wile recording (Zoom waits until meeting is ended to start converting)
 2. `.tmp` while converting
 3. `.mp4` when done
 #### QUESTIONS
