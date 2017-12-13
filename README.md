@@ -170,17 +170,17 @@
 
 <details><summary>Notes on Recording Zoom Meetings Locally</summary><p>
 
-1. While recording:  
+1. While recording:
 ![1) Recording](art/1_Recording.png)
-2. While transcoding:  
+2. While transcoding:
 ![2) Transcoding](art/2_Transcoding.png)
-3. When finished:  
+3. When finished:
 ![3) Finished .mp4](art/3_Fin.png)
 
 ### macOS default recording directory
-- /Users/<USERNAME>/Documents/Zoom/YYYY-MM-DD HH.MM.SS <USERNAME>'s Zoom Meeting <9_Digit_Number>
-- i.e. ~/Documents/Zoom/YYYY-MM-DD HH.MM.SS <USERNAME>'s Zoom Meeting <9_Digit_Number>
-- e.g. /Users/mixelpix/Documents/Zoom/2017-12-12 11.23.03 Patrick Kennedy's Zoom Meeting 901264977
+- `/Users/<USERNAME>/Documents/Zoom/YYYY-MM-DD HH.MM.SS <USERNAME>'s Zoom Meeting <9_Digit_Number>`
+- i.e. `~/Documents/Zoom/YYYY-MM-DD HH.MM.SS <USERNAME>'s Zoom Meeting <9_Digit_Number>`
+- e.g. `/Users/mixelpix/Documents/Zoom/2017-12-12 11.23.03 Patrick Kennedy's Zoom Meeting 901264977`
 #### QUESTIONS
 1. is the 9 digit number just a random number, or does it have some significance? I think it is random. Why is it needed?
 
@@ -199,9 +199,9 @@ I think it might be enough for a daemon to keep an eye on any subfolder within t
 </p></details>
 
 ***
-**2. Expanded content management to include extensive tags per lecture content**
-  - e.g. React, Redux, React-Native, ES6, MongoDB, etc.
-  - timecode links to lecture video sections.
+**2. Expanded content management**
+  - Extensive tags per lecture contente.g. React, Redux, React-Native, ES6, MongoDB, etc.
+  - Timecode links to lecture video sections, e.g. https://youtu.be/ZihgMcrHOF4 is the Git FU lecture video, and having it prepended with `h`our, `m`inute, `s`econds timecode stamps makes the link load at a specific time, e.g. https://youtu.be/ZihgMcrHOF4?t=13m46s loads to 13 minutes and 47 seconds where Ryan starts talking about using the `git status` command.
 ***
 **3. Custom/Propritary Lambda School video/audio file hosting for all lectures, brownbags and in-house generated streaming content.**
   - https://ourcodeworld.com/articles/read/496/how-to-create-a-videochat-with-webrtc-using-peerjs-and-node-js
