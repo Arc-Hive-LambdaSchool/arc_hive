@@ -54,7 +54,7 @@ const arcConfirmation = (slackSearch) => {
       token: process.env.SLACK_ACCESS_TOKEN,
       // response_type: "in_channel",
       channel: `${slackChan[i]}`,
-      text: `${<!channel>} video has been successfully inserted to Airtable`,
+      text: `${!channel} video has been successfully inserted to Airtable`,
       attachments: JSON.stringify([
         {
           fields: [
