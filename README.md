@@ -166,7 +166,9 @@
   - https://developers.google.com/youtube/v3/
   - https://github.com/tokland/youtube-upload/blob/master/setup.py
 
-<details><summary>Recording Zoom Meetings Locally</summary><p>
+***
+
+<details><summary>Notes on Recording Zoom Meetings Locally</summary><p>
 
 ![1) Recording](art/1_Recording.png)
 ![2) Transcoding](art/2_Transcoding.png)
@@ -176,13 +178,28 @@
 - /Users/<USERNAME>/Documents/Zoom/YYYY-MM-DD HH.MM.SS <USERNAME>'s Zoom Meeting <9_Digit_Number>
 - i.e. ~/Documents/Zoom/YYYY-MM-DD HH.MM.SS <USERNAME>'s Zoom Meeting <9_Digit_Number>
 - e.g. /Users/mixelpix/Documents/Zoom/2017-12-12 11.23.03 Patrick Kennedy's Zoom Meeting 901264977
+#### Questions
+1. is the 9 digit number just a random number, or does it have some significance? I think it is random. Why is it needed?
+
+### Zoom recording flow
+1. `.zoom` wile recording
+2. `.tmp` while converting
+3. `.mp4` when done
+#### QUESTIONS
+I think it might be enough for a daemon to keep an eye on any subfolder within the ~/Documents/Zoom directory. Specifically, looking for `.mp4` files.
+
+1. How to handle _when_ to upload `.mp4` files? Condition met when "Date Modified" or file "Size" has not changed for a given duration of time?
+2. Should the daemon register `.mp4` files which have already been uploaded?
+3. Should the daemon delete `.mp4` files which have already been uploaded? Wait a week?
+4. Can the daemon ask for confirmation before uploading? Send a system notification when it sees something to send?
 
 </p></details>
 
+***
 2. Expanded content management to include extensive tags per lecture content
   - e.g. React, Redux, React-Native, ES6, MongoDB, etc.
   - timecode links to lecture video sections.
-
+***
 3. Custom/Propritary Lambda School video/audio file hosting for all lectures, brownbags and in-house generated streaming content.
   - https://ourcodeworld.com/articles/read/496/how-to-create-a-videochat-with-webrtc-using-peerjs-and-node-js
   - http://doc-kurento.readthedocs.io/en/latest/what_is_kurento.html
