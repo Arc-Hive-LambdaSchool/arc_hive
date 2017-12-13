@@ -165,7 +165,20 @@
   - https://developers.google.com/youtube/v3/getting-started
   - https://developers.google.com/youtube/v3/
   - https://github.com/tokland/youtube-upload/blob/master/setup.py
- 
+
+<details><summary>Recording Zoom Meetings Locally</summary><p>
+
+![1) Recording](art/1_Recording.png)
+![2) Transcoding](art/2_Transcoding.png)
+![3) Finished .mp4](art/3_Fin.png)
+
+### macOS default recording directory
+- /Users/<USERNAME>/Documents/Zoom/YYYY-MM-DD HH.MM.SS <USERNAME>'s Zoom Meeting <9_Digit_Number>
+- i.e. ~/Documents/Zoom/YYYY-MM-DD HH.MM.SS <USERNAME>'s Zoom Meeting <9_Digit_Number>
+- e.g. /Users/mixelpix/Documents/Zoom/2017-12-12 11.23.03 Patrick Kennedy's Zoom Meeting 901264977
+
+</p></details>
+
 2. Expanded content management to include extensive tags per lecture content
   - e.g. React, Redux, React-Native, ES6, MongoDB, etc.
   - timecode links to lecture video sections.
