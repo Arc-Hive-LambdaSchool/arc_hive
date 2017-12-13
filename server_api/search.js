@@ -50,6 +50,8 @@ const arcConfirmation = (slackSearch) => {
   }
   console.log(slackChan[0]);
   for (let i = 0; i < slackChan.length; i++) {
+    console.log(`length: ${slackChan.length}`);
+    console.log(slackChan[0]);
     axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
       token: process.env.SLACK_ACCESS_TOKEN,
       response_type: "in_channel",
