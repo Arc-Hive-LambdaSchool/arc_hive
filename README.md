@@ -174,7 +174,7 @@
 ![1) Recording](art/1_Recording.png)
 2. While transcoding:
 ![2) Transcoding](art/2_Transcoding.png)
-3. When finished:
+3. When finished:  
 ![3) Finished .mp4](art/3_Fin.png)
 
 ### macOS default recording directory
