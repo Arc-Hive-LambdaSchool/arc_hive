@@ -40,7 +40,7 @@ const sendConfirmation = (slackSearch) => {
 const arcConfirmation = (slackSearch) => {
   // console.log(slackSearch);
   let slackChan;
-  const chanList = ['CS1', 'CS2', 'CS3', 'CS4', 'CS5', 'CS6', 'CS7', 'CS8', 'CS9', 'CS10', 'CS11', 'CS12'];
+  const chanList = ['#CS1', '#CS2', '#CS3', '#CS4', '#CS5', '#CS6', '#CS7', '#CS8', '#CS9', '#CS10', '#CS11', '#CS12'];
   if (slackSearch.cohort === null) {
     slackChan = [slackSearch.userId];
   } else if (slackSearch.cohort.toUpperCase() === 'ALL') {
@@ -53,7 +53,7 @@ const arcConfirmation = (slackSearch) => {
     axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
       token: process.env.SLACK_ACCESS_TOKEN,
       // response_type: "in_channel",
-      channel: `#${slackChan[i]}`,
+      channel: `${slackChan[i]}`,
       text: '@channel video has been successfully inserted to Airtable',
       attachments: JSON.stringify([
         {
