@@ -33,10 +33,10 @@
 - post content with timestamp, instructor, lecture title, cohort & url
 
 ### Additional targets:
- - @channel notifications
+ - @channel notifications √ `<!channel>`
  - prevent non-YouTube links/posts
  - Only instructors ans TA's may post content, Students constrained to retrieval
- - tests
+ - unit tests
  - documentation (incl. code comments)
 
 # Project Management
@@ -170,9 +170,9 @@
 
 <details><summary>Notes on Recording Zoom Meetings Locally</summary><p>
 
-1. While recording:
+1. While recording:  
 ![1) Recording](art/1_Recording.png)
-2. While transcoding:
+2. While transcoding:  
 ![2) Transcoding](art/2_Transcoding.png)
 3. When finished:
 ![3) Finished .mp4](art/3_Fin.png)
@@ -185,9 +185,9 @@
 1. is the 9 digit number just a random number, or does it have some significance? I think it is random. Why is it needed?
 
 ### Zoom recording flow
-1. `.zoom` wile recording
+1. `.zoom` wile recording (Zoom waits until meeting is ended to start converting)
 2. `.tmp` while converting
-3. `.mp4` when done
+3. `.mp4` when done (.zoom and .tmp are deleted, when conversion is finished, the folder containing the converted files is loaded up in the Finder)
 #### QUESTIONS
 I think it might be enough for a daemon to keep an eye on any subfolder within the ~/Documents/Zoom directory. Specifically, looking for `.mp4` files.
 
