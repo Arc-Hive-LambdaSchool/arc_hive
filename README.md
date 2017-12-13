@@ -33,10 +33,10 @@
 - post content with timestamp, instructor, lecture title, cohort & url
 
 ### Additional targets:
- - @channel notifications
+ - @channel notifications √ `<!channel>`
  - prevent non-YouTube links/posts
  - Only instructors ans TA's may post content, Students constrained to retrieval
- - tests
+ - unit tests
  - documentation (incl. code comments)
 
 # Project Management
@@ -187,7 +187,7 @@
 ### Zoom recording flow
 1. `.zoom` wile recording (Zoom waits until meeting is ended to start converting)
 2. `.tmp` while converting
-3. `.mp4` when done
+3. `.mp4` when done (.zoom and .tmp are deleted, when conversion is finished, the folder containing the converted files is loaded up in the Finder)
 #### QUESTIONS
 I think it might be enough for a daemon to keep an eye on any subfolder within the ~/Documents/Zoom directory. Specifically, looking for `.mp4` files.
 
