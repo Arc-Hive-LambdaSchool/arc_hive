@@ -41,10 +41,10 @@ const arcConfirmation = (slackSearch) => {
   // console.log(slackSearch);
   let slackChan;
   const chanList = ['CS1', 'CS2', 'CS3', 'CS4', 'CS5', 'CS6', 'CS7', 'CS8', 'CS9', 'CS10', 'CS11', 'CS12'];
-  if (slackSearch.cohort.toUpperCase() === 'ALL') {
-    slackChan = chanList;
-  } else if (slackSearch.cohort === null) {
+  if (slackSearch.cohort === null) {
     slackChan = [slackSearch.userId];
+  } else if (slackSearch.cohort.toUpperCase() === 'ALL') {
+    slackChan = chanList;
   } else {
     slackChan = [slackSearch.cohort.toUpperCase()];
   }
