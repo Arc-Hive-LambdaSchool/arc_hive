@@ -165,7 +165,7 @@ server.post('/', (req, res) => {
      console.log('server 159 Body: ' + JSON.stringify(body));
 
     if (body.error) {
-      const errorData {
+      const errorData = {
         error: body.error,
         user: req.body.userId
       }
