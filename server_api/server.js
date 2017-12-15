@@ -169,8 +169,9 @@ server.post('/', (req, res) => {
         user: req.body.userId
       }
       slackSearch.airTableError(errorData);
+    } else {
+      slackSearch.arcConfirmation(req.body);
     }
-    slackSearch.arcConfirmation(req.body);
     res.send(JSON.stringify(body));
   });
 });
