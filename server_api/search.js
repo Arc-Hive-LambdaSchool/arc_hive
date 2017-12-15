@@ -227,4 +227,4 @@ const create = (userId, submission) => {
   }).catch((err) => { console.error(err); });
 };
 
-module.exports = { create, sendConfirmation, arcConfirmation };
+module.exports = { create, sendConfirmation, arcConfirmation, airTableError };
