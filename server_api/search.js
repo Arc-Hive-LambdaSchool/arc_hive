@@ -100,6 +100,43 @@ const arcError = (slackSearch) => {
   });
 };
 
+const timestampConfirmation = (slackSearch) => {
+  const newLink = slackSearch.arcLink + '?t=' + slackSearch.arcTime;
+  axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+    token: process.env.SLACK_ACCESS_TOKEN,
+    channel: slackSearch.userId,
+    text: '@channel',
+    attachments: JSON.stringify([
+      {
+        title: 'timestamp test',
+        fields: [
+          {
+            title: 'Title',
+            value: slackSearch.arcTitle,
+          },
+          // {
+          //   title: 'Instructor',
+          //   value: slackSearch.arcInstructor,
+          // },
+          {
+            title: 'new link',
+            value: newLink,
+          },
+          {
+            title: 'Tags',
+            value: slackSearch.tags,
+          }
+        ],
+      },
+    ]),
+  })).then((result) => {
+    debug('sendConfirmation: %o', result.data);
+  }).catch((err) => {
+    debug('sendConfirmation error: %o', err);
+    console.error(err);
+  });
+};
+
 const create = (userId, submission) => {
   const slackSearch = {};
 
@@ -119,6 +156,8 @@ const create = (userId, submission) => {
     slackSearch.sort = submission.sort;
     slackSearch.arcLink = submission.arcLink;
     slackSearch.arcTitle = submission.arcTitle;
+    slackSearch.arcTime = submission.arcTime;
+
     if (slackSearch.arcLink) {
       if (submission.keyword === process.env.KEYWORD) {
         // console.log('99 search: ' + JSON.stringify(slackSearch));

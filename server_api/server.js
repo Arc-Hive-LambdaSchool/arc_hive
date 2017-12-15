@@ -118,8 +118,12 @@ server.post('/', (req, res) => {
   let brownbag = null;
   let cohort = 'N/A';
   let tags = 'N/A';
+  let link = req.body.arcLink;
   if (req.body.cohort) {
-    cohort = req.body.cohort.toUpperCase();
+    cohort = req.body.cohort.toUpperCase().split(', ');
+  }
+  if (req.body.arcTime) {
+    link += '?t=' + req.body.arcTime;
   }
   if (req.body.tags) {
     tags = req.body.tags.toUpperCase().split(', ');
@@ -136,11 +140,11 @@ server.post('/', (req, res) => {
     },
     body: {
       "fields": {
-        Link: req.body.arcLink,
+        Link: link,
         Title: req.body.arcTitle,
-        Cohort: [cohort],
+        Cohort: cohort,
         Tags: tags,
-        Brownbag: brownbag
+        Brownbag: brownbag,
       }
     },
     json: true
@@ -383,6 +387,85 @@ server.post('/arcCommands', (req, res) => {
   }
 });
 
+/*************************************************************************
+* ==============SLACK ARCCOMMANDS-POST ROUTE==============
+**************************************************************************/
+server.post('/timestamp', (req, res) => {
+  const { token, text, trigger_id, user_id } = req.body;
+
+  const findUser = (userId) => {
+
+    const fetchUserName = new Promise((resolve, reject) => {
+      users.find(userId).then((result) => {
+        debug(`Find user: ${userId}`);
+        resolve(result.data.user.profile.real_name);
+      }).catch((err) => { reject(err); });
+    });
+
+    fetchUserName.then((result) => {
+      openDialog(result);
+      return;
+    }).catch((err) => { console.error(err); });
+  };
+
+  findUser(user_id);
+
+  const openDialog = (userName) => {
+    if (token === process.env.SLACK_VERIFICATION_TOKEN) {
+      const dialog = {
+        token: process.env.SLACK_ACCESS_TOKEN,
+        trigger_id,
+        dialog: JSON.stringify({
+          title: 'add a timestamp',
+          callback_id: 'submit-search',
+          submit_label: 'Submit',
+          elements: [
+            {
+              label: 'Video Link',
+              type: 'text',
+              name: 'arcLink',
+              value: text,
+            },
+            {
+              label: 'Video Title',
+              type: 'text',
+              name: 'arcTitle',
+            },
+            // {
+            //   label: 'Instructor',
+            //   type: 'text',
+            //   name: 'arcInstructor',
+            //   value: userName,
+            // },
+            {
+              label: 'Enter time',
+              type: 'text',
+              name: 'arcTime',
+              hint: 'e.g. 1h2m35s'
+            },
+            {
+              label: 'Tags',
+              type: 'text',
+              name: 'tags',
+            },
+          ],
+        }),
+      };
+
+      axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
+        .then((result) => {
+          debug('dialog.open: %o', result.data);
+          res.send('');
+        }).catch((err) => {
+          debug('dialog.open call failed: %o', err);
+          res.sendStatus(500);
+        });
+    } else {
+      debug('Verification token mismatch');
+      res.sendStatus(500);
+    }
+  };
+});
 
 
 
