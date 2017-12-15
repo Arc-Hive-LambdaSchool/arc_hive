@@ -307,6 +307,7 @@ server.post('/arcCommands', (req, res) => {
             label: 'Keyword',
             type: 'text',
             name: 'keyword',
+            subtype: 'password',
           },
           {
             label: 'Tags',

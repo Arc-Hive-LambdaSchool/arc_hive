@@ -81,7 +81,7 @@ const arcError = (slackSearch) => {
     token: process.env.SLACK_ACCESS_TOKEN,
     response_type: "in_channel",
     channel: `${slackSearch.userId}`,
-    text: `You entered an invalid keyword`,
+    text: `Error! Upload unsuccessful. You entered an invalid keyword`,
     /* attachments: JSON.stringify([
       {
         fields: [
