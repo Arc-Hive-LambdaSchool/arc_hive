@@ -38,10 +38,8 @@ const sendConfirmation = (slackSearch) => {
 };
 
 const arcConfirmation = (slackSearch) => {
-  // console.log(slackSearch);
+  console.log(slackSearch);
   const cohorts = [];
-  let slackChan;
-  // const chanList = ['#CS1', '#CS2', '#CS3', '#CS4', '#CS5', '#CS6', '#CS7', '#CS8', '#CS9', '#CS10', '#CS11', '#CS12'];
   if (slackSearch.cohort === null) {
     cohorts.push(slackSearch.userId);
   } else if (slackSearch.cohort.toUpperCase() === 'ALL') {
@@ -49,8 +47,9 @@ const arcConfirmation = (slackSearch) => {
       cohorts.push('#CS' + [i]);
     }
   } else {
-    for (let i = 0; i < slackSearch.cohort.length; i++) {
-      cohorts.push(`#${slackSearch.cohort[i]}`);
+    const slackCohorts = slackSearch.cohort.toUpperCase().split(', ');
+    for (let i = 0; i < slackCohorts.length; i++) {
+      cohorts.push(`#${slackCohorts[i]}`);
     }
   }
   console.log(cohorts);
