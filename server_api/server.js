@@ -15,6 +15,7 @@ const slackSearch = require('./search');
 const axios = require('axios');
 const qs = require('querystring');
 const debug = require('debug')('slash-command-template:index');
+const users = require('./users.js');
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
