@@ -37,6 +37,25 @@ const sendConfirmation = (slackSearch) => {
   });
 };
 
+const airTableError = (slackSearch) => {
+  // console.log(slackSearch);
+  axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+    token: process.env.SLACK_ACCESS_TOKEN,
+    channel: slackSearch.user,
+    text: `Could not upload video`,
+    attachments: JSON.stringify([
+      {
+        fields: slackSearch.error.message
+      },
+    ]),
+  })).then((result) => {
+    debug('sendConfirmation: %o', result.data);
+  }).catch((err) => {
+    debug('sendConfirmation error: %o', err);
+    console.error(err);
+  });
+};
+
 const arcConfirmation = (slackSearch) => {
   console.log(slackSearch);
   const cohorts = [];

@@ -163,8 +163,13 @@ server.post('/', (req, res) => {
     }
      console.log('server 158 Response: ' + JSON.stringify(response));
      console.log('server 159 Body: ' + JSON.stringify(body));
+
     if (body.error) {
-      console.log('ERROR');
+      const errorData {
+        error: body.error,
+        user: req.body.userId
+      }
+      slackSearch.airTableError(errorData);
     }
     slackSearch.arcConfirmation(req.body);
     res.send(JSON.stringify(body));
