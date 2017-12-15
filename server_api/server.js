@@ -163,7 +163,9 @@ server.post('/', (req, res) => {
     }
      console.log('server 158 Response: ' + JSON.stringify(response));
      console.log('server 159 Body: ' + JSON.stringify(body));
-    // console.log(req.body);
+    if (body.error) {
+      console.log('ERROR');
+    }
     slackSearch.arcConfirmation(req.body);
     res.send(JSON.stringify(body));
   });
