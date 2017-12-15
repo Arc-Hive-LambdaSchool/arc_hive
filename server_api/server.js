@@ -207,12 +207,14 @@ server.post('/commands', (req, res) => {
             type: 'text',
             name: 'tags',
             optional: true,
+            hint: 'Enter a single tag e.g. brownbag, code challenge, js, auth, react ...'
           },
           {
             label: 'Cohort',
             optional: true,
             type: 'text',
             name: 'cohort',
+            hint: 'Enter a single cohort e.g. CS1, all, CS2'
           },
           /* {
             label: 'Brownbag?',
