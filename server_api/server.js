@@ -214,7 +214,7 @@ server.post('/commands', (req, res) => {
             type: 'text',
             name: 'cohort',
           },
-          {
+          /* {
             label: 'Brownbag?',
             optional: true,
             type: 'select',
@@ -223,7 +223,7 @@ server.post('/commands', (req, res) => {
               { label: 'Only Brownbags', value: 'onlyBrownBags' },
               { label: 'No Brownbags', value: 'noBrownBags' },
             ]
-          },
+          }, */
           {
             label: 'Sorted By',
             optional: true,
