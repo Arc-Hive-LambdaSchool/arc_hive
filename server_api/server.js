@@ -98,9 +98,9 @@ server.get('/', (req, res) => {
       return;
     }
     if (sortParam === 'asc') {
-      sortParam = 'Oldest to Newest';
+      sortParam = 'oldest to newest';
     } else {
-      sortParam = 'Newest to Oldest'
+      sortParam = 'newest to oldest'
     }
     const sendToSlack = {
       Records: body.records,
@@ -334,9 +334,9 @@ server.post('/arcCommands', (req, res) => {
               hint: 'Replace "[Title]" with your title',
             },
             {
-              label: 'Keyword',
+              label: 'Password',
               type: 'text',
-              name: 'keyword',
+              name: 'password',
             },
             {
               label: 'Tags',
@@ -438,9 +438,9 @@ server.post('/timestamp', (req, res) => {
               name: 'arcTitle',
             },
             {
-              label: 'Keyword',
+              label: 'Password',
               type: 'text',
-              name: 'keyword'
+              name: 'password'
             },
             // {
             //   label: 'Instructor',

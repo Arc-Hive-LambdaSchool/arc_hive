@@ -85,7 +85,7 @@ const arcError = (slackSearch) => {
     token: process.env.SLACK_ACCESS_TOKEN,
     response_type: "in_channel",
     channel: `${slackSearch.userId}`,
-    text: `Error! Upload unsuccessful. You entered an invalid keyword`,
+    text: `Error! Upload unsuccessful. You entered an invalid password`,
     /* attachments: JSON.stringify([
       {
         fields: [
@@ -163,7 +163,7 @@ const create = (userId, submission) => {
     slackSearch.arcTime = submission.arcTime;
 
     if (slackSearch.arcLink) {
-      if (submission.keyword === process.env.KEYWORD) {
+      if (submission.password === process.env.PASSWORD) {
         // console.log('99 search: ' + JSON.stringify(slackSearch));
         const p = {
           method: 'POST',
