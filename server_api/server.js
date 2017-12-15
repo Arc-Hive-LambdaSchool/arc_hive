@@ -278,87 +278,107 @@ server.post('/interactive-component', (req, res) => {
 server.post('/arcCommands', (req, res) => {
   // extract the verification token, slash command text,
   // and trigger ID from payload
-  const { token, text, trigger_id } = req.body;
+  const { token, text, trigger_id, user_id } = req.body;
 
+  const findUser = (userId) => {
+
+    const fetchUserName = new Promise((resolve, reject) => {
+      users.find(userId).then((result) => {
+        debug(`Find user: ${userId}`);
+        resolve(result.data.user.profile.real_name);
+      }).catch((err) => { reject(err); });
+    });
+
+    fetchUserName.then((result) => {
+      openDialog(result);
+      return;
+    }).catch((err) => { console.error(err); });
+  };
+
+  findUser(user_id);
   // check that the verification token matches expected value
-  if (token === process.env.SLACK_VERIFICATION_TOKEN) {
-    // create the dialog payload - includes the dialog structure, Slack API token,
-    // and trigger ID
-    const dialog = {
-      token: process.env.SLACK_ACCESS_TOKEN,
-      trigger_id,
-      dialog: JSON.stringify({
-        title: 'LS Videos',
-        callback_id: 'submit-search',
-        submit_label: 'Submit',
-        elements: [
-          {
-            label: 'Enter video link here',
-            type: 'text',
-            name: 'arcLink',
-            value: text,
-          },
-          {
-            label: 'Enter video title',
-            type: 'text',
-            name: 'arcTitle',
-          },
-          {
-            label: 'Keyword',
-            type: 'text',
-            name: 'keyword',
-          },
-          {
-            label: 'Tags',
-            type: 'text',
-            name: 'tags',
-            optional: true,
-            hint: 'add tags separated by a comma. Ex: React, Redux, Brownbag'
-            /* options: [
-              { label: 'JS', value: 'JS' },
-              { label: 'React', value: 'React' },
-              { label: 'Redux', value: 'Redux' },
-              { label: 'Auth', value: 'Auth' },
-              { label: 'C', value: 'C' },
-              { label: 'Testing', value: 'Testing' },
-            ], */
-          },
-          {
-            label: 'Cohort',
-            type: 'text',
-            name: 'cohort',
-            optional: true,
-            /* options: [
-              { label: 'CS1', value: 'CS1' },
-              { label: 'CS2', value: 'CS2' },
-              { label: 'CS3', value: 'CS3' },
-              { label: 'CS4', value: 'CS4' },
-            ], */
-          },
-          // {
-          //   label: 'Brownbag?',
-          //   optional: true,
-          //   type: 'select',
-          //   name: 'brownbag',
-          //   options: [
-          //     { label: 'Yes', value: true },
-          //   ]
-          // }
-        ],
-      }),
-    };
+  const openDialog = (userName) => {
+    if (token === process.env.SLACK_VERIFICATION_TOKEN) {
+      // create the dialog payload - includes the dialog structure, Slack API token,
+      // and trigger ID
+      const dialog = {
+        token: process.env.SLACK_ACCESS_TOKEN,
+        trigger_id,
+        dialog: JSON.stringify({
+          title: 'LS Videos',
+          callback_id: 'submit-search',
+          submit_label: 'Submit',
+          elements: [
+            {
+              label: 'Enter video link here',
+              type: 'text',
+              name: 'arcLink',
+              value: text,
+            },
+            {
+              label: 'Enter video title',
+              type: 'text',
+              name: 'arcTitle',
+              value: `[Title] by ${userName}`,
+              hint: 'Replace "[Title]" with your title',
+            },
+            {
+              label: 'Keyword',
+              type: 'text',
+              name: 'keyword',
+            },
+            {
+              label: 'Tags',
+              type: 'text',
+              name: 'tags',
+              optional: true,
+              hint: 'add tags separated by a comma. Ex: React, Redux, Brownbag'
+              /* options: [
+                { label: 'JS', value: 'JS' },
+                { label: 'React', value: 'React' },
+                { label: 'Redux', value: 'Redux' },
+                { label: 'Auth', value: 'Auth' },
+                { label: 'C', value: 'C' },
+                { label: 'Testing', value: 'Testing' },
+              ], */
+            },
+            {
+              label: 'Cohort',
+              type: 'text',
+              name: 'cohort',
+              optional: true,
+              /* options: [
+                { label: 'CS1', value: 'CS1' },
+                { label: 'CS2', value: 'CS2' },
+                { label: 'CS3', value: 'CS3' },
+                { label: 'CS4', value: 'CS4' },
+              ], */
+            },
+            // {
+            //   label: 'Brownbag?',
+            //   optional: true,
+            //   type: 'select',
+            //   name: 'brownbag',
+            //   options: [
+            //     { label: 'Yes', value: true },
+            //   ]
+            // }
+          ],
+        }),
+      };
 
-    axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
-      .then((result) => {
-        debug('dialog.open: %o', result.data);
-        res.send('');
-      }).catch((err) => {
-        debug('dialog.open call failed: %o', err);
-        res.sendStatus(500);
-      });
-  } else {
-    debug('Verification token mismatch');
-    res.sendStatus(500);
+      axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
+        .then((result) => {
+          debug('dialog.open: %o', result.data);
+          res.send('');
+        }).catch((err) => {
+          debug('dialog.open call failed: %o', err);
+          res.sendStatus(500);
+        });
+    } else {
+      debug('Verification token mismatch');
+      res.sendStatus(500);
+    }
   }
 });
 
