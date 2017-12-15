@@ -39,23 +39,26 @@ const sendConfirmation = (slackSearch) => {
 
 const arcConfirmation = (slackSearch) => {
   // console.log(slackSearch);
+  const cohorts = [];
   let slackChan;
-  const chanList = ['#CS1', '#CS2', '#CS3', '#CS4', '#CS5', '#CS6', '#CS7', '#CS8', '#CS9', '#CS10', '#CS11', '#CS12'];
+  // const chanList = ['#CS1', '#CS2', '#CS3', '#CS4', '#CS5', '#CS6', '#CS7', '#CS8', '#CS9', '#CS10', '#CS11', '#CS12'];
   if (slackSearch.cohort === null) {
-    slackChan = [slackSearch.userId];
+    cohorts.push(slackSearch.userId);
   } else if (slackSearch.cohort.toUpperCase() === 'ALL') {
-    slackChan = chanList;
+    for (let i = 1; i <= 12; i++) {
+      cohorts.push('#CS' + [i]);
+    }
   } else {
-    slackChan = [`#${slackSearch.cohort.toUpperCase()}`];
+    cohorts.push(`#${slackSearch.cohort.toUpperCase()}`);
   }
-  console.log(slackChan[0]);
-  for (let i = 0; i < slackChan.length; i++) {
-    console.log(`length: ${slackChan.length}`);
-    console.log(slackChan[0]);
+  // console.log(slackChan[0]);
+  for (let i = 0; i < cohorts.length; i++) {
+    // console.log(`length: ${slackChan.length}`);
+    // console.log(slackChan[0]);
     axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
       token: process.env.SLACK_ACCESS_TOKEN,
       response_type: "in_channel",
-      channel: `${slackChan[i]}`,
+      channel: `${cohorts[i]}`,
       text: `<!channel> Video has been successfully uploaded`,
       attachments: JSON.stringify([
         {
