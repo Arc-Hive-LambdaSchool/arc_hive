@@ -49,7 +49,7 @@ const arcConfirmation = (slackSearch) => {
       cohorts.push('#CS' + [i]);
     }
   } else {
-    cohorts.push(`#${slackSearch.cohort.toUpperCase()}`);
+    cohorts.push(`#${slackSearch.cohort}`);
   }
   // console.log(slackChan[0]);
   for (let i = 0; i < cohorts.length; i++) {
