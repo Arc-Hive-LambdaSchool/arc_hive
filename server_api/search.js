@@ -53,7 +53,7 @@ const arcConfirmation = (slackSearch) => {
       cohorts.push(`#${slackSearch.cohort[i]}`);
     }
   }
-  // console.log(slackChan[0]);
+  console.log(cohorts);
   for (let i = 0; i < cohorts.length; i++) {
     // console.log(`length: ${slackChan.length}`);
     // console.log(slackChan[0]);
