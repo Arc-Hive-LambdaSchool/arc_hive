@@ -150,7 +150,6 @@ server.post('/', (req, res) => {
         Title: req.body.arcTitle,
         Cohort: cohort,
         Tags: tags,
-        Brownbag: brownbag,
       }
     },
     json: true
