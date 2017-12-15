@@ -313,6 +313,7 @@ server.post('/arcCommands', (req, res) => {
             type: 'text',
             name: 'tags',
             optional: true,
+            hint: 'add tags separated by a comma. Ex: React, Redux, Brownbag'
             /* options: [
               { label: 'JS', value: 'JS' },
               { label: 'React', value: 'React' },
