@@ -56,7 +56,7 @@ const arcConfirmation = (slackSearch) => {
       token: process.env.SLACK_ACCESS_TOKEN,
       response_type: "in_channel",
       channel: `${slackChan[i]}`,
-      text: `<!channel>`,
+      text: `<!channel> Video has been successfully uploaded`,
       attachments: JSON.stringify([
         {
           fields: [
@@ -74,6 +74,67 @@ const arcConfirmation = (slackSearch) => {
       console.error(err);
     });
   }
+};
+
+const arcError = (slackSearch) => {
+  axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+    token: process.env.SLACK_ACCESS_TOKEN,
+    response_type: "in_channel",
+    channel: `${slackSearch.userId}`,
+    text: `Error! Upload unsuccessful. You entered an invalid keyword`,
+    /* attachments: JSON.stringify([
+      {
+        fields: [
+          {
+            title: `${slackSearch.arcTitle}`,
+            value: slackSearch.arcLink
+          }
+        ],
+      },
+    ]), */
+  })).then((result) => {
+    debug('arcConfirmation: %o', result.data);
+  }).catch((err) => {
+    debug('arcConfirmation error: %o', err);
+    console.error(err);
+  });
+};
+
+const timestampConfirmation = (slackSearch) => {
+  const newLink = slackSearch.arcLink + '?t=' + slackSearch.arcTime;
+  axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+    token: process.env.SLACK_ACCESS_TOKEN,
+    channel: slackSearch.userId,
+    text: '@channel',
+    attachments: JSON.stringify([
+      {
+        title: 'timestamp test',
+        fields: [
+          {
+            title: 'Title',
+            value: slackSearch.arcTitle,
+          },
+          // {
+          //   title: 'Instructor',
+          //   value: slackSearch.arcInstructor,
+          // },
+          {
+            title: 'new link',
+            value: newLink,
+          },
+          {
+            title: 'Tags',
+            value: slackSearch.tags,
+          }
+        ],
+      },
+    ]),
+  })).then((result) => {
+    debug('sendConfirmation: %o', result.data);
+  }).catch((err) => {
+    debug('sendConfirmation error: %o', err);
+    console.error(err);
+  });
 };
 
 const create = (userId, submission) => {
@@ -95,24 +156,30 @@ const create = (userId, submission) => {
     slackSearch.sort = submission.sort;
     slackSearch.arcLink = submission.arcLink;
     slackSearch.arcTitle = submission.arcTitle;
+    slackSearch.arcTime = submission.arcTime;
+
     if (slackSearch.arcLink) {
-      console.log('99 search: ' + JSON.stringify(slackSearch));
-      const p = {
-        method: 'POST',
-        uri: 'https://pacific-waters-60975.herokuapp.com/',
-        headers: {
-          Authorization: process.env.AIR_TABLE_KEY,
-          'content-type': 'application/json',
-        },
-        body: slackSearch,
-        json: true
-      };
-      request(p, (error, response, body) => {
-        if (error) {
-          console.log(error);
-          return;
-        }
-      });
+      if (submission.keyword === process.env.KEYWORD) {
+        // console.log('99 search: ' + JSON.stringify(slackSearch));
+        const p = {
+          method: 'POST',
+          uri: 'https://pacific-waters-60975.herokuapp.com/',
+          headers: {
+            Authorization: process.env.AIR_TABLE_KEY,
+            'content-type': 'application/json',
+          },
+          body: slackSearch,
+          json: true
+        };
+        request(p, (error, response, body) => {
+          if (error) {
+            console.log(error);
+            return;
+          }
+        });
+      } else {
+        arcError(slackSearch);
+      }
     } else {
       const g = {
         method: 'GET',
