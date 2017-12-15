@@ -97,12 +97,18 @@ server.get('/', (req, res) => {
       console.log(error);
       return;
     }
+    if (sortParam === 'asc') {
+      sortParam = 'oldest to newest';
+    } else {
+      sortParam = 'newest to oldest'
+    }
     const sendToSlack = {
       Records: body.records,
       userId: req.body.userId,
       tags: tagVal,
       cohort: cohortVal,
-      brownbag: brownBagVal
+      brownbag: brownBagVal,
+      sortParam: sortParam
     };
     // console.log(sendToSlack);
     slackSearch.sendConfirmation(sendToSlack);
@@ -116,8 +122,8 @@ server.get('/', (req, res) => {
 server.post('/', (req, res) => {
   console.log(JSON.stringify(req.body));
   let brownbag = null;
-  let cohort = 'N/A';
-  let tags = 'N/A';
+  let cohort = ['N/A'];
+  let tags = ['N/A'];
   let link = req.body.arcLink;
   if (req.body.cohort) {
     cohort = req.body.cohort.toUpperCase().split(', ');
@@ -155,9 +161,16 @@ server.post('/', (req, res) => {
       console.log(error);
       return;
     }
-    // console.log('server 148 Response: ' + JSON.stringify(response));
-    // console.log('server 149 Body: ' + JSON.stringify(body));
-    // console.log(req.body);
+     console.log('server 158 Response: ' + JSON.stringify(response));
+     console.log('server 159 Body: ' + JSON.stringify(body));
+
+    if (body.error) {
+      const errorData = {
+        error: body.error,
+        user: req.body.userId
+      }
+      slackSearch.airTableError(errorData);
+    }
     slackSearch.arcConfirmation(req.body);
     res.send(JSON.stringify(body));
   });
@@ -328,9 +341,9 @@ server.post('/arcCommands', (req, res) => {
               hint: 'Replace "[Title]" with your title',
             },
             {
-              label: 'Keyword',
+              label: 'Password',
               type: 'text',
-              name: 'keyword',
+              name: 'password',
             },
             {
               label: 'Tags',
@@ -430,6 +443,11 @@ server.post('/timestamp', (req, res) => {
               label: 'Video Title',
               type: 'text',
               name: 'arcTitle',
+            },
+            {
+              label: 'Password',
+              type: 'text',
+              name: 'password'
             },
             // {
             //   label: 'Instructor',
