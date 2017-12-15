@@ -431,6 +431,11 @@ server.post('/timestamp', (req, res) => {
               type: 'text',
               name: 'arcTitle',
             },
+            {
+              label: 'Keyword',
+              type: 'text',
+              name: 'keyword'
+            },
             // {
             //   label: 'Instructor',
             //   type: 'text',
