@@ -334,15 +334,15 @@ server.post('/arcCommands', (req, res) => {
               { label: 'CS4', value: 'CS4' },
             ], */
           },
-          {
-            label: 'Brownbag?',
-            optional: true,
-            type: 'select',
-            name: 'brownbag',
-            options: [
-              { label: 'Yes', value: true },
-            ]
-          }
+          // {
+          //   label: 'Brownbag?',
+          //   optional: true,
+          //   type: 'select',
+          //   name: 'brownbag',
+          //   options: [
+          //     { label: 'Yes', value: true },
+          //   ]
+          // }
         ],
       }),
     };
