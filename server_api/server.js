@@ -116,8 +116,8 @@ server.get('/', (req, res) => {
 server.post('/', (req, res) => {
   console.log(JSON.stringify(req.body));
   let brownbag = null;
-  let cohort = 'N/A';
-  let tags = 'N/A';
+  let cohort = ['N/A'];
+  let tags = ['N/A'];
   let link = req.body.arcLink;
   if (req.body.cohort) {
     cohort = req.body.cohort.toUpperCase().split(', ');
