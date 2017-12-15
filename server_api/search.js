@@ -45,7 +45,10 @@ const airTableError = (slackSearch) => {
     text: `Could not upload video`,
     attachments: JSON.stringify([
       {
-        fields: slackSearch.error.message
+        fields: [{
+          title: 'ERROR:',
+          value: slackSearch.error.message
+        }]
       },
     ]),
   })).then((result) => {
