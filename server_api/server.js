@@ -304,6 +304,11 @@ server.post('/arcCommands', (req, res) => {
             name: 'arcTitle',
           },
           {
+            label: 'Keyword',
+            type: 'text',
+            name: 'keyword',
+          },
+          {
             label: 'Tags',
             type: 'text',
             name: 'tags',
