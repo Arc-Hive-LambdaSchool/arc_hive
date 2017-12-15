@@ -23,7 +23,7 @@ const sendConfirmation = (slackSearch) => {
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     channel: slackSearch.userId,
-    text: 'View links below',
+    text: `All records matching Tags: ${slackSearch.tags}, Cohort: ${slackSearch.cohort}, and Brownbag: ${slackSearch.brownbag}. Sorted from ${slackSearch.sortParam}`,
     attachments: JSON.stringify([
       {
         fields: field,

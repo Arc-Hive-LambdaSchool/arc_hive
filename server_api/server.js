@@ -102,7 +102,8 @@ server.get('/', (req, res) => {
       userId: req.body.userId,
       tags: tagVal,
       cohort: cohortVal,
-      brownbag: brownBagVal
+      brownbag: brownBagVal,
+      sortParam: sortParam
     };
     // console.log(sendToSlack);
     slackSearch.sendConfirmation(sendToSlack);
