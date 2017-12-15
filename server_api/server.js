@@ -97,6 +97,11 @@ server.get('/', (req, res) => {
       console.log(error);
       return;
     }
+    if (sortParam === 'asc') {
+      sortParam = 'Oldest to Newest';
+    } else {
+      sortParam = 'Newest to Oldest'
+    }
     const sendToSlack = {
       Records: body.records,
       userId: req.body.userId,
