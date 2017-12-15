@@ -214,7 +214,7 @@ server.post('/commands', (req, res) => {
             optional: true,
             type: 'text',
             name: 'cohort',
-            hint: 'Enter a single cohort e.g. CS1, all, CS2'
+            hint: 'Enter a single cohort e.g. CS1 or CS2. To get all videos regardless of cohort leave this field blank.'
           },
           /* {
             label: 'Brownbag?',
