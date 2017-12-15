@@ -38,7 +38,6 @@ const sendConfirmation = (slackSearch) => {
 };
 
 const airTableError = (slackSearch) => {
-  // console.log(slackSearch);
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     channel: slackSearch.user,
@@ -76,8 +75,6 @@ const arcConfirmation = (slackSearch) => {
   }
   console.log(cohorts);
   for (let i = 0; i < cohorts.length; i++) {
-    // console.log(`length: ${slackChan.length}`);
-    // console.log(slackChan[0]);
     axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
       token: process.env.SLACK_ACCESS_TOKEN,
       response_type: "in_channel",
@@ -108,16 +105,6 @@ const arcError = (slackSearch) => {
     response_type: "in_channel",
     channel: `${slackSearch.userId}`,
     text: `Error! Upload unsuccessful. You entered an invalid password`,
-    /* attachments: JSON.stringify([
-      {
-        fields: [
-          {
-            title: `${slackSearch.arcTitle}`,
-            value: slackSearch.arcLink
-          }
-        ],
-      },
-    ]), */
   })).then((result) => {
     debug('arcConfirmation: %o', result.data);
   }).catch((err) => {

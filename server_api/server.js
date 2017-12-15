@@ -207,26 +207,12 @@ server.post('/commands', (req, res) => {
             type: 'text',
             name: 'tags',
             optional: true,
-            /* options: [
-              { label: 'JS', value: 'JS' },
-              { label: 'React', value: 'React' },
-              { label: 'Redux', value: 'Redux' },
-              { label: 'Auth', value: 'Auth' },
-              { label: 'C', value: 'C' },
-              { label: 'Testing', value: 'Testing' },
-            ], */
           },
           {
             label: 'Cohort',
             optional: true,
             type: 'text',
             name: 'cohort',
-            /* options: [
-              { label: 'CS1', value: 'CS1' },
-              { label: 'CS2', value: 'CS2' },
-              { label: 'CS3', value: 'CS3' },
-              { label: 'CS4', value: 'CS4' },
-            ], */
           },
           {
             label: 'Brownbag?',
@@ -350,27 +336,14 @@ server.post('/arcCommands', (req, res) => {
               type: 'text',
               name: 'tags',
               optional: true,
-              hint: 'add tags separated by a comma. Ex: React, Redux, Brownbag'
-              /* options: [
-                { label: 'JS', value: 'JS' },
-                { label: 'React', value: 'React' },
-                { label: 'Redux', value: 'Redux' },
-                { label: 'Auth', value: 'Auth' },
-                { label: 'C', value: 'C' },
-                { label: 'Testing', value: 'Testing' },
-              ], */
+              hint: 'Add tags separated by a comma. Ex: React, Redux, Brownbag',
             },
             {
               label: 'Cohort',
               type: 'text',
               name: 'cohort',
               optional: true,
-              /* options: [
-                { label: 'CS1', value: 'CS1' },
-                { label: 'CS2', value: 'CS2' },
-                { label: 'CS3', value: 'CS3' },
-                { label: 'CS4', value: 'CS4' },
-              ], */
+              hint: 'Entering multiple cohorts is the same as entering multiple tags. To add all cohorts enter "all".'
             },
             // {
             //   label: 'Brownbag?',
