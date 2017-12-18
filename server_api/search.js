@@ -23,7 +23,7 @@ const sendConfirmation = (slackSearch) => {
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     channel: slackSearch.userId,
-    text: 'View links below',
+    text: `All records matching Tags: ${slackSearch.tags}, Cohort: ${slackSearch.cohort}, and Brownbag: ${slackSearch.brownbag}. Sorted from ${slackSearch.sortParam}`,
     attachments: JSON.stringify([
       {
         fields: field,
@@ -37,26 +37,52 @@ const sendConfirmation = (slackSearch) => {
   });
 };
 
-const arcConfirmation = (slackSearch) => {
+const airTableError = (slackSearch) => {
   // console.log(slackSearch);
-  let slackChan;
-  const chanList = ['#CS1', '#CS2', '#CS3', '#CS4', '#CS5', '#CS6', '#CS7', '#CS8', '#CS9', '#CS10', '#CS11', '#CS12'];
+  axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+    token: process.env.SLACK_ACCESS_TOKEN,
+    channel: slackSearch.user,
+    text: `Could not upload video`,
+    attachments: JSON.stringify([
+      {
+        fields: [{
+          title: 'ERROR:',
+          value: slackSearch.error.message
+        }]
+      },
+    ]),
+  })).then((result) => {
+    debug('sendConfirmation: %o', result.data);
+  }).catch((err) => {
+    debug('sendConfirmation error: %o', err);
+    console.error(err);
+  });
+};
+
+const arcConfirmation = (slackSearch) => {
+  console.log(slackSearch);
+  const cohorts = [];
   if (slackSearch.cohort === null) {
-    slackChan = [slackSearch.userId];
+    cohorts.push(slackSearch.userId);
   } else if (slackSearch.cohort.toUpperCase() === 'ALL') {
-    slackChan = chanList;
+    for (let i = 1; i <= 12; i++) {
+      cohorts.push('#CS' + [i]);
+    }
   } else {
-    slackChan = [`#${slackSearch.cohort.toUpperCase()}`];
+    const slackCohorts = slackSearch.cohort.toUpperCase().split(', ');
+    for (let i = 0; i < slackCohorts.length; i++) {
+      cohorts.push(`#${slackCohorts[i]}`);
+    }
   }
-  console.log(slackChan[0]);
-  for (let i = 0; i < slackChan.length; i++) {
-    console.log(`length: ${slackChan.length}`);
-    console.log(slackChan[0]);
+  console.log(cohorts);
+  for (let i = 0; i < cohorts.length; i++) {
+    // console.log(`length: ${slackChan.length}`);
+    // console.log(slackChan[0]);
     axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
       token: process.env.SLACK_ACCESS_TOKEN,
       response_type: "in_channel",
-      channel: `${slackChan[i]}`,
-      text: `<!channel>`,
+      channel: `${cohorts[i]}`,
+      text: `<!channel> Video has been successfully uploaded`,
       attachments: JSON.stringify([
         {
           fields: [
@@ -74,6 +100,67 @@ const arcConfirmation = (slackSearch) => {
       console.error(err);
     });
   }
+};
+
+const arcError = (slackSearch) => {
+  axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+    token: process.env.SLACK_ACCESS_TOKEN,
+    response_type: "in_channel",
+    channel: `${slackSearch.userId}`,
+    text: `Error! Upload unsuccessful. You entered an invalid password`,
+    /* attachments: JSON.stringify([
+      {
+        fields: [
+          {
+            title: `${slackSearch.arcTitle}`,
+            value: slackSearch.arcLink
+          }
+        ],
+      },
+    ]), */
+  })).then((result) => {
+    debug('arcConfirmation: %o', result.data);
+  }).catch((err) => {
+    debug('arcConfirmation error: %o', err);
+    console.error(err);
+  });
+};
+
+const timestampConfirmation = (slackSearch) => {
+  const newLink = slackSearch.arcLink + '?t=' + slackSearch.arcTime;
+  axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+    token: process.env.SLACK_ACCESS_TOKEN,
+    channel: slackSearch.userId,
+    text: '@channel',
+    attachments: JSON.stringify([
+      {
+        title: 'timestamp test',
+        fields: [
+          {
+            title: 'Title',
+            value: slackSearch.arcTitle,
+          },
+          // {
+          //   title: 'Instructor',
+          //   value: slackSearch.arcInstructor,
+          // },
+          {
+            title: 'new link',
+            value: newLink,
+          },
+          {
+            title: 'Tags',
+            value: slackSearch.tags,
+          }
+        ],
+      },
+    ]),
+  })).then((result) => {
+    debug('sendConfirmation: %o', result.data);
+  }).catch((err) => {
+    debug('sendConfirmation error: %o', err);
+    console.error(err);
+  });
 };
 
 const create = (userId, submission) => {
@@ -95,24 +182,30 @@ const create = (userId, submission) => {
     slackSearch.sort = submission.sort;
     slackSearch.arcLink = submission.arcLink;
     slackSearch.arcTitle = submission.arcTitle;
+    slackSearch.arcTime = submission.arcTime;
+
     if (slackSearch.arcLink) {
-      console.log('99 search: ' + JSON.stringify(slackSearch));
-      const p = {
-        method: 'POST',
-        uri: 'https://pacific-waters-60975.herokuapp.com/',
-        headers: {
-          Authorization: process.env.AIR_TABLE_KEY,
-          'content-type': 'application/json',
-        },
-        body: slackSearch,
-        json: true
-      };
-      request(p, (error, response, body) => {
-        if (error) {
-          console.log(error);
-          return;
-        }
-      });
+      if (submission.password === process.env.PASSWORD) {
+        // console.log('99 search: ' + JSON.stringify(slackSearch));
+        const p = {
+          method: 'POST',
+          uri: 'https://pacific-waters-60975.herokuapp.com/',
+          headers: {
+            Authorization: process.env.AIR_TABLE_KEY,
+            'content-type': 'application/json',
+          },
+          body: slackSearch,
+          json: true
+        };
+        request(p, (error, response, body) => {
+          if (error) {
+            console.log(error);
+            return;
+          }
+        });
+      } else {
+        arcError(slackSearch);
+      }
     } else {
       const g = {
         method: 'GET',
@@ -134,4 +227,4 @@ const create = (userId, submission) => {
   }).catch((err) => { console.error(err); });
 };
 
-module.exports = { create, sendConfirmation, arcConfirmation };
+module.exports = { create, sendConfirmation, arcConfirmation, airTableError };
