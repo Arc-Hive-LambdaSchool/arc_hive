@@ -485,12 +485,12 @@ server.get('/zoom', (req, res) => {
       Authorization: 'Bearer' + token,
       "alg": 'HS256',
       "typ": 'JWT',
-      "expires": Math.floor(Date.now() / 1000) + (60 * 60),
     },
     body: {
       "topic": "Lambda Test",
       "type": 1,
-      "host_id": "268933"
+      "host_id": "268933",
+      "expires": Math.floor(Date.now() / 1000) + (60 * 60),
     },
     json: true
   };
