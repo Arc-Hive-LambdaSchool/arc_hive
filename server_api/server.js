@@ -469,10 +469,10 @@ server.post('/timestamp', (req, res) => {
 ========================================================================*/
 
 /*************************************************************************
-* ==============ZOOM ARCCOMMANDS-POST ROUTE==============
+* ==============ZOOM CREATE ROUTE==============
 **************************************************************************/
 
-server.get('/zoom', (req, res) => {
+server.post('/zoom', (req, res) => { // Changed get to post
   const payload = {
     "iss": process.env.ZOOM_KEY,
     "exp": Math.floor(Date.now() / 1000) + (60 * 60)
@@ -480,16 +480,19 @@ server.get('/zoom', (req, res) => {
   const token = jwt.sign(payload, process.env.ZOOM_SECRET);
   const z = {
     method: 'POST',
-    uri: 'https://api.zoom.us/v2/users/ta@lambdaschool.com/meetings',
+    uri: 'https://api.zoom.us/v2/users/' + req.body.zoomEmail + '/meetings',
     headers: {
       Authorization: 'Bearer' + token,
       "alg": 'HS256',
       "typ": 'JWT',
     },
     body: {
-      "topic": "Lambda Test",
+      "topic": req.body.topic,
       "type": 1,
       "host_id": "268933",
+      "settings": {
+        "auto_recording": "cloud",
+      },
     },
     json: true
   };
@@ -498,9 +501,75 @@ server.get('/zoom', (req, res) => {
       console.log(error);
       return;
     }
+    const zoomData = {
+      cohort: req.body.cohort,
+      zoomLink: body.join_url
+    }
+    slackSearch.startZoom(zoomData);
     res.send(response);
   });
   // res.send('ZOOM ZOOM');
+});
+
+/*************************************************************************
+* ==============ZOOM-SLACK ROUTE==============
+**************************************************************************/
+
+server.post('/slackzoom', (req, res) => {
+  const { token, text, trigger_id } = req.body;
+
+  if (token === process.env.SLACK_VERIFICATION_TOKEN) {
+    const dialog = {
+      token: process.env.SLACK_ACCESS_TOKEN,
+      trigger_id,
+      dialog: JSON.stringify({
+        title: 'Start a zoom meeting',
+        callback_id: 'submit-search',
+        submit_label: 'Submit',
+        elements: [
+          {
+            label: 'Title of lecture',
+            type: 'text',
+            name: 'topic',
+            value: text,
+          },
+          {
+            label: 'Zoom email address',
+            type: 'text',
+            name: 'zoomEmail',
+          },
+          {
+            label: 'Password',
+            type: 'text',
+            name: 'password',
+          },
+          {
+            label: 'Cohort',
+            type: 'text',
+            name: 'cohort',
+          },
+          {
+            label: 'Tags',
+            optional: true,
+            type: 'text',
+            name: 'tags',
+          },
+        ],
+      }),
+    };
+
+    axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
+      .then((result) => {
+        debug('dialog.open: %o', result.data);
+        res.send('');
+      }).catch((err) => {
+        debug('dialog.open call failed: %o', err);
+        res.sendStatus(500);
+      });
+  } else {
+    debug('Verification token mismatch');
+    res.sendStatus(500);
+  }
 });
 
 server.listen(port, () => {
