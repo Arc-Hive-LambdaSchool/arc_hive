@@ -572,6 +572,15 @@ server.post('/slackzoom', (req, res) => {
   }
 });
 
+/*************************************************************************
+* ==============ZOOM-RECORDING ROUTE==============
+**************************************************************************/
+
+server.post('/recordings', (req, res) => {
+  console.log(req.body);
+  res.send(req.body);
+});
+
 server.listen(port, () => {
   console.log(`Servs up dude ${port}`);
 });
