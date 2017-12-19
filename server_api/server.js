@@ -490,7 +490,7 @@ server.get('/zoom', (req, res) => {
       "topic": "Lambda Test",
       "type": 1,
       "host_id": "268933",
-      "expires": Math.floor(Date.now() / 1000) + (60 * 60),
+      "expires": Math.floor(Date.now() / 1000) + (600000 * 600000),
     },
     json: true
   };
