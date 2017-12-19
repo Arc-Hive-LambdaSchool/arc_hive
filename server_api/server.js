@@ -16,6 +16,8 @@ const axios = require('axios');
 const qs = require('querystring');
 const debug = require('debug')('slash-command-template:index');
 const users = require('./users.js');
+const jwt = require('jsonwebtoken');
+
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
@@ -460,7 +462,46 @@ server.post('/timestamp', (req, res) => {
   };
 });
 
+/*=======================================================================
+=========================================================================
+* ZOOM ROUTES
+=========================================================================
+========================================================================*/
 
+/*************************************************************************
+* ==============ZOOM ARCCOMMANDS-POST ROUTE==============
+**************************************************************************/
+
+server.get('/zoom', (req, res) => {
+  const payload = {
+    "iss": process.env.ZOOM_KEY,
+    "exp": Math.floor(Date.now() / 1000) + (60 * 60)
+  };
+  const token = jwt.sign(payload, process.env.ZOOM_SECRET);
+  const z = {
+    method: 'POST',
+    uri: 'https://api.zoom.us/v2/users/ta@lambdaschool.com/meetings',
+    headers: {
+      Authorization: 'Bearer' + token,
+      "alg": 'HS256',
+      "typ": 'JWT',
+    },
+    body: {
+      "topic": "Lambda Test",
+      "type": 1,
+      "host_id": "268933"
+    },
+    json: true
+  };
+  request(z, (error, response, body) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+    res.send(response);
+  });
+  // res.send('ZOOM ZOOM');
+});
 
 server.listen(port, () => {
   console.log(`Servs up dude ${port}`);
