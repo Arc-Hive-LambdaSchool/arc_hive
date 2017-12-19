@@ -225,7 +225,7 @@ const create = (userId, submission) => {
           body: slackSearch,
           json: true
         };
-        request(p, (error, response, body) => {
+        request(z, (error, response, body) => {
           if (error) {
             console.log(error);
             return;
