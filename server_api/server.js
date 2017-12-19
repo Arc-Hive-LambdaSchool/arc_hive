@@ -475,7 +475,7 @@ server.post('/timestamp', (req, res) => {
 server.get('/zoom', (req, res) => {
   const payload = {
     "iss": process.env.ZOOM_KEY,
-    "exp": Math.floor(Date.now() / 1000) + (600000 * 600000)
+    "exp": Math.floor(Date.now() / 1000) + (60 * 60)
   };
   const token = jwt.sign(payload, process.env.ZOOM_SECRET);
   const z = {
@@ -490,7 +490,6 @@ server.get('/zoom', (req, res) => {
       "topic": "Lambda Test",
       "type": 1,
       "host_id": "268933",
-      "expires": Math.floor(Date.now() / 1000) + (600000 * 600000),
     },
     json: true
   };
