@@ -475,7 +475,7 @@ server.post('/timestamp', (req, res) => {
 server.get('/zoom', (req, res) => {
   const payload = {
     "iss": process.env.ZOOM_KEY,
-    "exp": Math.floor(Date.now() / 1000) + (60 * 60)
+    "exp": Math.floor(Date.now() / 1000) + (600000 * 600000)
   };
   const token = jwt.sign(payload, process.env.ZOOM_SECRET);
   const z = {
