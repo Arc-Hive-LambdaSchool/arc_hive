@@ -46,6 +46,7 @@ server.use(bodyParser.urlencoded({extended: true}));
 * an HTTP request containing the search parameters
 **************************************************************************/
 server.get('/', (req, res) => {
+  console.log('49: ' + yt_token);
   let tagVal = req.body.tags;
   let cohortVal = req.body.cohort;
   const brownBagVal = req.body.brownbag;
@@ -576,14 +577,15 @@ server.post('/slackzoom', (req, res) => {
 /*************************************************************************
 * ==============ZOOM-RECORDING ROUTE==============
 **************************************************************************/
+let yt_token = process.env.YOUTUBE_TOKEN;
 
 server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
   let storedToken;
-  console.log('584: ' + process.env.YOUTUBE_TOKEN);
-  process.env.YOUTUBE_TOKEN = 'refreshed token';
-  console.log('586: ' + process.env.YOUTUBE_TOKEN);
+  console.log('584: ' + yt_token);
+  yt_token = 'refreshed token';
+  console.log('586: ' + yt_token);
   const authorize = (credentials, requestData, callback) => {
     const clientSecret = credentials.client_secret;
     const clientId = credentials.client_id;
