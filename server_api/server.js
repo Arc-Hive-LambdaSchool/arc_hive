@@ -18,6 +18,7 @@ const readline = require('readline');
 const google = require('googleapis');
 const util = require('util');
 const googleAuth = require('google-auth-library');
+const opn = require('opn');
 
 
 Airtable.configure({
@@ -620,14 +621,14 @@ server.post('/recordings', (req, res) => {
       access_type: 'offline',
       scope: SCOPES
     });
-
+    opn(authUrl);
     console.log('Authorize this app by visiting this url: ', authUrl);
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout
     });
       console.log('629: ' + JSON.stringify(rl.input));
-      console.log('630: ' + JSON.stringify(rl.output));
+      // console.log('630: ' + JSON.stringify(rl.output));
     rl.question('Enter the code from that page here: ', function(code) {
       console.log('631: ' + code);
       rl.close();
