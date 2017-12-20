@@ -581,6 +581,8 @@ let yt_token = process.env.YOUTUBE_TOKEN;
 
 server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
+  console.log(req.params);
+  console.log(req.query);
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
   let storedToken;
   console.log('584: ' + yt_token);
@@ -672,6 +674,9 @@ server.post('/recordings', (req, res) => {
 });
 
 server.get('/recordings', (req, res) => {
+  console.log('GET');
+  console.log(req.params);
+  console.log(req.query);
   res.send(req.params);
 });
 
