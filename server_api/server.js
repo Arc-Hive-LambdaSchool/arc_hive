@@ -626,10 +626,9 @@ server.post('/recordings?code=:', (req, res) => {
       input: process.stdin,
       output: process.stdout
     });
-      console.log('629: ' + rl.input);
-      console.log('630: ' + rl.output);
+      console.log('629: ' + rl);
     rl.question('Enter the code from that page here: ', function(code) {
-      console.log('631: ' + code);
+      // console.log('631: ' + code);
       rl.close();
       oauth2Client.getToken(code, function(err, token) {
         if (err) {
