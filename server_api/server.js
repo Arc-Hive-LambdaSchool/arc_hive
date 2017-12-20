@@ -581,9 +581,9 @@ server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
   let storedToken;
-  console.log('584: ' process.env.YOUTUBE_TOKEN);
+  console.log('584: ' + process.env.YOUTUBE_TOKEN);
   process.env.YOUTUBE_TOKEN = 'refreshed token';
-  console.log('586: ' process.env.YOUTUBE_TOKEN);
+  console.log('586: ' + process.env.YOUTUBE_TOKEN);
   const authorize = (credentials, requestData, callback) => {
     const clientSecret = credentials.client_secret;
     const clientId = credentials.client_id;
