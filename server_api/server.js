@@ -626,8 +626,8 @@ server.post('/recordings', (req, res) => {
       input: process.stdin,
       output: process.stdout
     });
-      console.log('629: ' + rl.input);
-      console.log('630: ' + rl.output);
+      console.log('629: ' + JSON.stringify(rl.input));
+      console.log('630: ' + JSON.stringify(rl.output));
     rl.question('Enter the code from that page here: ', function(code) {
       console.log('631: ' + code);
       rl.close();
