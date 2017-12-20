@@ -638,7 +638,7 @@ server.post('/recordings', (req, res) => {
   const creds = {
     client_secret: process.env.YOUTUBE_CLIENT_SECRET,
     client_id: process.env.YOUTUBE_CLIENT_ID,
-    redirect_uri: 'https://pacific-waters-60975.herokuapp.com',
+    redirect_uri: 'https://pacific-waters-60975.herokuapp.com/recordings',
   };
 
   const params = {
