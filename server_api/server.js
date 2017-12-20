@@ -6,10 +6,6 @@ const request = require('request');
 const mongodb = require('mongodb');
 const port = process.env.PORT || 5001;
 const Airtable = require('airtable');
-// const thePrecious = process.env.AIR_TABLE_KEY;
-const thePrecious = 'Bearer keySPG804go0FXK3F'
-//console.log(thePrecious);
-//console.log(process.env);
 const slackModel = require('./slackModel');
 const slackSearch = require('./search');
 const axios = require('axios');
@@ -17,11 +13,16 @@ const qs = require('querystring');
 const debug = require('debug')('slash-command-template:index');
 const users = require('./users.js');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const readline = require('readline');
+const google = require('googleapis');
+const util = require('util');
+const googleAuth = require('google-auth-library');
 
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
-  apiKey: thePrecious
+  apiKey: process.env.AIR_TABLE_KEY
 });
 let base = Airtable.base('appMs812ZOuhtf8Un');
 
@@ -577,7 +578,92 @@ server.post('/slackzoom', (req, res) => {
 **************************************************************************/
 
 server.post('/recordings', (req, res) => {
-  console.log(req.body);
+  // Sample nodejs code for videos.insert
+  const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
+  let storedToken;
+
+  const authorize = (credentials, requestData, callback) => {
+    const clientSecret = credentials.client_secret;
+    const clientId = credentials.client_id;
+    const redirectUrl = credentials.redirect_uri;
+    const auth = new googleAuth();
+    const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+
+    getNewToken(oauth2Client, requestData, callback);
+  }
+
+  const videosInsert = (auth, requestData) => {
+    console.log('596 RequestData: ' + requestData);
+    const service = google.youtube('v3');
+    const parameters = requestData['params'];
+    parameters['auth'] = auth;
+    parameters['media'] = { body: fs.createReadStream(requestData['mediaFilename']) };
+    parameters['notifySubscribers'] = false;
+    parameters['resource'] = requestData['properties'];
+    const req = service.videos.insert(parameters, function(err, data) {
+      if (err) {
+        console.log('The API returned an error: ' + err);
+      }
+      if (data) {
+        console.log(util.inspect(data, false, null));
+      }
+      process.exit();
+    });
+  };
+
+  const getNewToken = (oauth2Client, requestData, callback) => {
+    const authUrl = oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: SCOPES
+    });
+    console.log('Authorize this app by visiting this url: ', authUrl);
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+    rl.question('Enter the code from that page here: ', function(code) {
+      rl.close();
+      oauth2Client.getToken(code, function(err, token) {
+        if (err) {
+          console.log('Error while trying to retrieve access token', err);
+          return;
+        }
+        oauth2Client.credentials = token;
+        storedToken = token;
+        callback(oauth2Client, requestData);
+      });
+    });
+  }
+
+  const creds = {
+    client_secret: process.env.YOUTUBE_CLIENT_SECRET,
+    client_id: process.env.YOUTUBE_CLIENT_ID,
+    redirect_uri: 'https://pacific-waters-60975.herokuapp.com',
+  };
+
+  const params = {
+    'params': {
+      'part': 'snippet,status'
+    },
+    'properties': {
+      'snippet.categoryId': '22',
+      // 'snippet.defaultLanguage': '',
+      'snippet.description': 'Lambda School Lecture',
+      // 'snippet.tags[]': '',
+      'snippet.title': 'Mongo III',
+      // 'status.embeddable': '',
+      // 'status.license': '',
+      'status.privacyStatus': 'unlisted',
+      // 'status.publicStatsViewable': ''
+      },
+      'mediaFilename': 's3://zoom-cmr/cmr/replay/2017/12/19/205210934/58B0368B-32C1-4B2C-AC2A-0DD163AB9FC0/GMT20171219-194245_JSON-V_1280x800.mp4',
+    };
+
+  authorize(creds, params, videosInsert);
+
+});
+
+server.get('/recordings', (req, res) => {
   res.send(req.body);
 });
 
