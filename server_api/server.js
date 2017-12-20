@@ -621,7 +621,6 @@ server.post('/recordings', (req, res) => {
       access_type: 'offline',
       scope: SCOPES
     });
-    opn(authUrl);
     console.log('Authorize this app by visiting this url: ', authUrl);
     const rl = readline.createInterface({
       input: process.stdin,
