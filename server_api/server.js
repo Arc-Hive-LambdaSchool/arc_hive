@@ -74,7 +74,6 @@ server.get('/', (req, res) => {
     pathArray.push(path.tags);
   }
   if (cohortVal) {
-    console.log(cohortVal);
     pathArray.push(path.cohort);
   }
   if (brownBagVal) {
@@ -579,7 +578,7 @@ server.post('/slackzoom', (req, res) => {
 **************************************************************************/
 let yt_token = process.env.YOUTUBE_TOKEN;
 
-server.post('/recordings', (req, res) => {
+server.post('/recordings?code=:', (req, res) => {
   // Sample nodejs code for videos.insert
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
   let storedToken;
@@ -621,12 +620,15 @@ server.post('/recordings', (req, res) => {
       access_type: 'offline',
       scope: SCOPES
     });
+
     console.log('Authorize this app by visiting this url: ', authUrl);
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout
+      console.log('628: ' + process.stdout);
     });
     rl.question('Enter the code from that page here: ', function(code) {
+      console.log('631: ' + code);
       rl.close();
       oauth2Client.getToken(code, function(err, token) {
         if (err) {
