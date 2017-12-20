@@ -578,7 +578,7 @@ server.post('/slackzoom', (req, res) => {
 **************************************************************************/
 let yt_token = process.env.YOUTUBE_TOKEN;
 
-server.post('/recordings?code=:', (req, res) => {
+server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
   let storedToken;
@@ -626,9 +626,10 @@ server.post('/recordings?code=:', (req, res) => {
       input: process.stdin,
       output: process.stdout
     });
-      console.log('629: ' + rl);
+      console.log('629: ' + rl.input);
+      console.log('630: ' + rl.output);
     rl.question('Enter the code from that page here: ', function(code) {
-      // console.log('631: ' + code);
+      console.log('631: ' + code);
       rl.close();
       oauth2Client.getToken(code, function(err, token) {
         if (err) {
