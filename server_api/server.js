@@ -625,8 +625,9 @@ server.post('/recordings?code=:', (req, res) => {
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout
-      console.log('628: ' + process.stdout);
     });
+      console.log('629: ' + rl.input);
+      console.log('630: ' + rl.output);
     rl.question('Enter the code from that page here: ', function(code) {
       console.log('631: ' + code);
       rl.close();
