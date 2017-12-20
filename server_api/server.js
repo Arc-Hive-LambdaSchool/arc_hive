@@ -674,9 +674,9 @@ server.post('/recordings', (req, res) => {
 });
 
 server.get('/recordings', (req, res) => {
-  console.log('GET');
-  console.log(req.params);
-  console.log(req.query);
+  // console.log('GET');
+  // console.log(req.params);
+  console.log(req.query.code);
   res.send(req.params);
 });
 
