@@ -708,8 +708,9 @@ server.get('/auth', (req, res) => {
       access_type: 'offline',
       scope: SCOPES
     });
+    opn(authUrl, {app: 'google chrome'});
+    res.redirect(authUrl);
   };
-  res.redirect(authUrl);
 });
 
 server.get('/auth-confirmation', (req, res) => {
