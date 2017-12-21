@@ -582,33 +582,19 @@ let yt_token;
 
 server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
-  console.log(req.params);
-  console.log(req.query);
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
-  let storedToken;
-  console.log('584: ' + yt_token);
-  yt_token = 'refreshed token';
   console.log('586: ' + yt_token);
-  const authorize = (credentials, requestData, callback) => {
-    const clientSecret = credentials.client_secret;
-    const clientId = credentials.client_id;
-    const redirectUrl = credentials.redirect_uri;
-    const auth = new googleAuth();
-    const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-
-    getNewToken(oauth2Client, requestData, callback);
-  }
 
 
-  const videosInsert = (auth, requestData) => {
+  const videosInsert = (oAuthTravler, requestData) => {
     console.log('596 RequestData: ' + requestData);
     const service = google.youtube('v3');
     const parameters = requestData['params'];
-    parameters['auth'] = auth;
+    parameters['auth'] = oAuthTravler;
     parameters['media'] = { body: fs.createReadStream(requestData['mediaFilename']) };
     parameters['notifySubscribers'] = false;
     parameters['resource'] = requestData['properties'];
-    const req = service.videos.insert(parameters, function(err, data) {
+    const req = service.videos.insert(parameters, ((err, data) => {
       if (err) {
         console.log('The API returned an error: ' + err);
       }
@@ -616,40 +602,7 @@ server.post('/recordings', (req, res) => {
         console.log(util.inspect(data, false, null));
       }
       process.exit();
-    });
-  };
-
-  const getNewToken = (oauth2Client, requestData, callback) => {
-    const authUrl = oauth2Client.generateAuthUrl({
-      access_type: 'offline',
-      scope: SCOPES
-    });
-     console.log('Authorize this app by visiting this url: ', authUrl);
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-      console.log('629: ' + JSON.stringify(rl.input));
-      // console.log('630: ' + JSON.stringify(rl.output));
-    rl.question('Enter the code from that page here: ', ((code) => {
-      console.log('631: ' + code);
-      rl.close();
-      oauth2Client.getToken(code, ((err, token) => {
-        if (err) {
-          console.log('Error while trying to retrieve access token', err);
-          return;
-        }
-        oauth2Client.credentials = token;
-        storedToken = token;
-        callback(oauth2Client, requestData);
-      }));
     }));
-  }
-
-  const creds = {
-    client_secret: process.env.YOUTUBE_CLIENT_SECRET,
-    client_id: process.env.YOUTUBE_CLIENT_ID,
-    redirect_uri: 'https://pacific-waters-60975.herokuapp.com/recordings',
   };
 
   const params = {
@@ -670,8 +623,8 @@ server.post('/recordings', (req, res) => {
       'mediaFilename': 's3://zoom-cmr/cmr/replay/2017/12/19/205210934/58B0368B-32C1-4B2C-AC2A-0DD163AB9FC0/GMT20171219-194245_JSON-V_1280x800.mp4',
     };
 
-  authorize(creds, params, videosInsert);
-
+  videosInsert(oAuthTravler, params);
+  res.send('It probably worked');
 });
 
 server.get('/recordings', (req, res) => {
