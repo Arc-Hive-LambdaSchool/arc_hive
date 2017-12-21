@@ -30,6 +30,9 @@
     "mongoose": "^4.13.5",
     "nodemon": "^1.12.1",
     "opn": "^5.1.0",
+    "passport": "^0.4.0",
+    "passport-google-oauth2": "^0.1.6",
+    "passport-google-oauth20": "^1.0.0",
     "querystring": "^0.2.0",
     "react": "^16.2.0",
     "request": "^2.83.0"

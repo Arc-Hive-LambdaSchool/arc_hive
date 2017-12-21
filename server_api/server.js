@@ -19,6 +19,21 @@ const google = require('googleapis');
 const util = require('util');
 const googleAuth = require('google-auth-library');
 const opn = require('opn');
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
+const passport = require('passport');
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.YOUTUBE_CLIENT_ID,
+  clientSecret: process.env.YOUTUBE_CLIENT_SECRET,
+  callbackURL: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
+  passReqToCallback: true
+},
+(request, accessToken, refreshToken, done) => {
+  process.nextTick(() => {
+    return done(null);
+  });
+}
+));
 
 
 Airtable.configure({
@@ -34,6 +49,8 @@ mongoose.Promise = global.Promise;
 
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
+server.use(passport.initialize());
+server.use(passport.session());
 
 /*=======================================================================
 =========================================================================
@@ -680,6 +697,30 @@ server.get('/recordings', (req, res) => {
   // youtube_code = req.query.code;
   res.send(req.query.code);
 });
+
+/*=======================================================================
+=========================================================================
+* AUTH ROUTES
+=========================================================================
+========================================================================*/
+
+/*************************************************************************
+* ==============INITIAL YOUTUBE AUTH ROUTE==============
+**************************************************************************/
+server.get('/auth', passport.authenticate('google'));
+
+server.get('/auth-confirmation', passport.authenticate('google', { failureRedirect: '/fail' }), (req, res) {
+  res.redirect('/success');
+});
+
+server.get('/success', (req, res) => {
+    res.send('YAAAAAAAAAAAAAAYYYYYYYYYYYYY');
+});
+
+server.get('/fail', (req, res) => {
+  res.send('FAIL FAIL FAIL');
+});
+
 
 server.listen(port, () => {
   console.log(`Servs up dude ${port}`);
