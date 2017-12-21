@@ -687,7 +687,7 @@ server.get('/recordings', (req, res) => {
 * AUTH ROUTES
 =========================================================================
 ========================================================================*/
-
+let oAuthTravler;
 /*************************************************************************
 * ==============INITIAL YOUTUBE AUTH ROUTE==============
 **************************************************************************/
@@ -704,12 +704,11 @@ server.get('/auth', (req, res) => {
     const clientId = credentials.client_id;
     const redirectUrl = credentials.redirect_uri;
     const auth = new googleAuth();
-    const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-
-    getNewToken(oauth2Client);
+    oAuthTraveler = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+    getNewToken(oAuthTraveler);
   };
-  const getNewToken = (oauth2Client) => {
-    const authUrl = oauth2Client.generateAuthUrl({
+  const getNewToken = (oAuthTraveler) => {
+    const authUrl = oAuthTraveler.generateAuthUrl({
       access_type: 'offline',
       scope: SCOPES
     });
@@ -723,13 +722,13 @@ server.get('/auth-confirmation', (req, res) => {
   const code = req.query.code;
 
   const receiveToken = (code) => {
-    oauth2Client.getToken(code, ((err, token) => {
+    oAuthTraveler.getToken(code, ((err, token) => {
       if (err) {
         console.log('Error while trying to retrieve access token', err);
         return;
       }
       console.log(token);
-      oauth2Client.credentials = token;
+      oAuthTraveler.credentials = token;
       yt_token = token;
     }));
   };
