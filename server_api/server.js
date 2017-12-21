@@ -22,28 +22,6 @@ const opn = require('opn');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const passport = require('passport');
 
-passport.use(new GoogleStrategy({
-  clientID: process.env.YOUTUBE_CLIENT_ID,
-  clientSecret: process.env.YOUTUBE_CLIENT_SECRET,
-  callbackURL: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
-  passReqToCallback: true
-},
-(request, accessToken, refreshToken, done) => {
-  process.nextTick(() => {
-    return done(null);
-  });
-}
-));
-
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser((obj, done) => {
-  done(null, obj);
-});
-
-
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
   apiKey: process.env.AIR_TABLE_KEY
@@ -57,8 +35,6 @@ mongoose.Promise = global.Promise;
 
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
-server.use(passport.initialize());
-server.use(passport.session());
 
 /*=======================================================================
 =========================================================================
@@ -711,16 +687,34 @@ server.get('/recordings', (req, res) => {
 * AUTH ROUTES
 =========================================================================
 ========================================================================*/
-const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
+
 /*************************************************************************
 * ==============INITIAL YOUTUBE AUTH ROUTE==============
 **************************************************************************/
-server.get('/auth', passport.authenticate('google', { scope: SCOPES }));
+server.get('/auth', (req, res) => {
+  const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
 
-server.get('/auth-confirmation', passport.authenticate('google', {
-  successRedirect: '/success',
-  failureRedirect: '/fail'
-}));
+  const authorize = (credentials, requestData, callback) => {
+    const clientSecret = credentials.client_secret;
+    const clientId = credentials.client_id;
+    const redirectUrl = credentials.redirect_uri;
+    const auth = new googleAuth();
+    const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+
+    getNewToken(oauth2Client, requestData, callback);
+  };
+  const getNewToken = (oauth2Client, requestData, callback) => {
+    const authUrl = oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: SCOPES
+    });
+  };
+  window.location = authUrl;
+});
+
+server.get('/auth-confirmation', (req, res) => {
+  res.send(req.query.code);
+});
 
 server.get('/success', (req, res) => {
     res.send('YAAAAAAAAAAAAAAYYYYYYYYYYYYY');
