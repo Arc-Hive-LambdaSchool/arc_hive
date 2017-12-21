@@ -578,7 +578,7 @@ server.post('/slackzoom', (req, res) => {
 /*************************************************************************
 * ==============ZOOM-RECORDING ROUTE==============
 **************************************************************************/
-let yt_token = process.env.YOUTUBE_TOKEN;
+let yt_token;
 
 server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
