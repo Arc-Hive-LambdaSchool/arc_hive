@@ -693,17 +693,22 @@ server.get('/recordings', (req, res) => {
 **************************************************************************/
 server.get('/auth', (req, res) => {
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
+  const creds = {
+    client_secret: process.env.YOUTUBE_CLIENT_SECRET,
+    client_id: process.env.YOUTUBE_CLIENT_ID,
+    redirect_uri: 'https://pacific-waters-60975.herokuapp.com/recordings',
+  };
 
-  const authorize = (credentials, requestData, callback) => {
+  const authorize = (credentials) => {
     const clientSecret = credentials.client_secret;
     const clientId = credentials.client_id;
     const redirectUrl = credentials.redirect_uri;
     const auth = new googleAuth();
     const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
-    getNewToken(oauth2Client, requestData, callback);
+    getNewToken(oauth2Client);
   };
-  const getNewToken = (oauth2Client, requestData, callback) => {
+  const getNewToken = (oauth2Client) => {
     const authUrl = oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: SCOPES
@@ -711,6 +716,7 @@ server.get('/auth', (req, res) => {
     opn(authUrl, {app: 'google chrome'});
     res.redirect(authUrl);
   };
+  authorize(creds);
 });
 
 server.get('/auth-confirmation', (req, res) => {
