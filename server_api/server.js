@@ -709,7 +709,7 @@ server.get('/auth', (req, res) => {
       scope: SCOPES
     });
   };
-  opn(authUrl, {app: 'google chrome'});
+  res.redirect(authUrl);
 });
 
 server.get('/auth-confirmation', (req, res) => {
