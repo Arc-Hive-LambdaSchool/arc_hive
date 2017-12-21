@@ -623,7 +623,7 @@ server.post('/recordings', (req, res) => {
       access_type: 'offline',
       scope: SCOPES
     });
-    console.log('Authorize this app by visiting this url: ', authUrl);
+     console.log('Authorize this app by visiting this url: ', authUrl);
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout
@@ -676,7 +676,8 @@ server.post('/recordings', (req, res) => {
 server.get('/recordings', (req, res) => {
   // console.log('GET');
   // console.log(req.params);
-  console.log(req.query.code);
+  // console.log(req.query.code);
+  // youtube_code = req.query.code;
   res.send(req.params);
 });
 
