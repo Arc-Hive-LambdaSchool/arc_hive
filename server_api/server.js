@@ -630,10 +630,10 @@ server.post('/recordings', (req, res) => {
     });
       console.log('629: ' + JSON.stringify(rl.input));
       // console.log('630: ' + JSON.stringify(rl.output));
-    rl.question('Enter the code from that page here: ', function(code) {
+    rl.question('Enter the code from that page here: ', ((code) => {
       console.log('631: ' + code);
       rl.close();
-      oauth2Client.getToken(code, function(err, token) {
+      oauth2Client.getToken(code, ((err, token) => {
         if (err) {
           console.log('Error while trying to retrieve access token', err);
           return;
@@ -641,8 +641,8 @@ server.post('/recordings', (req, res) => {
         oauth2Client.credentials = token;
         storedToken = token;
         callback(oauth2Client, requestData);
-      });
-    });
+      }));
+    }));
   }
 
   const creds = {
