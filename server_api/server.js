@@ -709,7 +709,7 @@ server.get('/recordings', (req, res) => {
 **************************************************************************/
 server.get('/auth', passport.authenticate('google'));
 
-server.get('/auth-confirmation', passport.authenticate('google', { failureRedirect: '/fail' }), (req, res) {
+server.get('/auth-confirmation', passport.authenticate('google', { failureRedirect: '/fail' }), (req, res) => {
   res.redirect('/success');
 });
 
