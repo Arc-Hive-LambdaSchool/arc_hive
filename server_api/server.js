@@ -678,7 +678,7 @@ server.get('/recordings', (req, res) => {
   // console.log(req.params);
   // console.log(req.query.code);
   // youtube_code = req.query.code;
-  res.send(req.params);
+  res.send(req.query.code);
 });
 
 server.listen(port, () => {
