@@ -703,15 +703,16 @@ server.get('/recordings', (req, res) => {
 * AUTH ROUTES
 =========================================================================
 ========================================================================*/
-
+const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
 /*************************************************************************
 * ==============INITIAL YOUTUBE AUTH ROUTE==============
 **************************************************************************/
-server.get('/auth', passport.authenticate('google'));
+server.get('/auth', passport.authenticate('google', { scope: SCOPES }));
 
-server.get('/auth-confirmation', passport.authenticate('google', { failureRedirect: '/fail' }), (req, res) => {
-  res.redirect('/success');
-});
+server.get('/auth-confirmation', passport.authenticate('google', {
+  successRedirect: '/success',
+  failureRedirect: '/fail'
+}));
 
 server.get('/success', (req, res) => {
     res.send('YAAAAAAAAAAAAAAYYYYYYYYYYYYY');
