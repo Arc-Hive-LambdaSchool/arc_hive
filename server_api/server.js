@@ -720,7 +720,22 @@ server.get('/auth', (req, res) => {
 });
 
 server.get('/auth-confirmation', (req, res) => {
-  res.send(req.query.code);
+  const code = req.query.code;
+
+  const receiveToken = (code) => {
+    oauth2Client.getToken(code, ((err, token) => {
+      if (err) {
+        console.log('Error while trying to retrieve access token', err);
+        return;
+      }
+      console.log(token);
+      oauth2Client.credentials = token;
+      yt_token = token;
+    }));
+  };
+
+  receiveToken(code);
+  res.send(yt_token);
 });
 
 server.get('/success', (req, res) => {
