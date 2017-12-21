@@ -696,7 +696,7 @@ server.get('/auth', (req, res) => {
   const creds = {
     client_secret: process.env.YOUTUBE_CLIENT_SECRET,
     client_id: process.env.YOUTUBE_CLIENT_ID,
-    redirect_uri: 'https://pacific-waters-60975.herokuapp.com/recordings',
+    redirect_uri: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
   };
 
   const authorize = (credentials) => {
