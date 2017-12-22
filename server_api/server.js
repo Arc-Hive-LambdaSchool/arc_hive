@@ -42,6 +42,62 @@ server.use(bodyParser.urlencoded({extended: true}));
 
 /*=======================================================================
 =========================================================================
+* AUTH ROUTES
+=========================================================================
+========================================================================*/
+
+/*************************************************************************
+* ==============INITIAL YOUTUBE AUTH ROUTE==============
+**************************************************************************/
+server.get('/auth', (req, res) => {
+  const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
+  const creds = {
+    client_secret: process.env.YOUTUBE_CLIENT_SECRET,
+    client_id: process.env.YOUTUBE_CLIENT_ID,
+    redirect_uri: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
+  };
+
+  const authorize = (credentials) => {
+    const clientSecret = credentials.client_secret;
+    const clientId = credentials.client_id;
+    const redirectUrl = credentials.redirect_uri;
+    const auth = new googleAuth();
+    oAuthTraveler = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+    getNewToken(oAuthTraveler);
+  };
+  const getNewToken = (oAuthTraveler) => {
+    const authUrl = oAuthTraveler.generateAuthUrl({
+      access_type: 'offline',
+      scope: SCOPES
+    });
+    opn(authUrl, {app: 'google chrome'});
+    res.redirect(authUrl);
+  };
+  authorize(creds);
+  console.log('704: ' + JSON.stringify(oAuthTraveler));
+});
+
+server.get('/auth-confirmation', (req, res) => {
+  const code = req.query.code;
+
+  const receiveToken = (code) => {
+    oAuthTraveler.getToken(code, ((err, token) => {
+      if (err) {
+        console.log('Error while trying to retrieve access token', err);
+        return;
+      }
+      console.log('716: ' + JSON.stringify(oAuthTraveler));
+      oAuthTraveler.credentials = token;
+      console.log('718: ' + JSON.stringify(oAuthTraveler));
+      yt_token = token;
+    }));
+  };
+
+  receiveToken(code);
+});
+
+/*=======================================================================
+=========================================================================
 * AIRTABLE ROUTES
 =========================================================================
 ========================================================================*/
@@ -670,69 +726,7 @@ server.get('/recordings', (req, res) => {
   res.send(req.query.code);
 });
 */
-/*=======================================================================
-=========================================================================
-* AUTH ROUTES
-=========================================================================
-========================================================================*/
 
-/*************************************************************************
-* ==============INITIAL YOUTUBE AUTH ROUTE==============
-**************************************************************************/
-server.get('/auth', (req, res) => {
-  const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
-  const creds = {
-    client_secret: process.env.YOUTUBE_CLIENT_SECRET,
-    client_id: process.env.YOUTUBE_CLIENT_ID,
-    redirect_uri: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
-  };
-
-  const authorize = (credentials) => {
-    const clientSecret = credentials.client_secret;
-    const clientId = credentials.client_id;
-    const redirectUrl = credentials.redirect_uri;
-    const auth = new googleAuth();
-    oAuthTraveler = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-    getNewToken(oAuthTraveler);
-  };
-  const getNewToken = (oAuthTraveler) => {
-    const authUrl = oAuthTraveler.generateAuthUrl({
-      access_type: 'offline',
-      scope: SCOPES
-    });
-    opn(authUrl, {app: 'google chrome'});
-    res.redirect(authUrl);
-  };
-  authorize(creds);
-  console.log('704: ' + JSON.stringify(oAuthTraveler));
-});
-
-server.get('/auth-confirmation', (req, res) => {
-  const code = req.query.code;
-
-  const receiveToken = (code) => {
-    oAuthTraveler.getToken(code, ((err, token) => {
-      if (err) {
-        console.log('Error while trying to retrieve access token', err);
-        return;
-      }
-      console.log('716: ' + JSON.stringify(oAuthTraveler));
-      oAuthTraveler.credentials = token;
-      console.log('718: ' + JSON.stringify(oAuthTraveler));
-      yt_token = token;
-    }));
-  };
-
-  receiveToken(code);
-});
-
-server.get('/success', (req, res) => {
-    res.send('YAAAAAAAAAAAAAAYYYYYYYYYYYYY');
-});
-
-server.get('/fail', (req, res) => {
-  res.send('FAIL FAIL FAIL');
-});
 
 
 server.listen(port, () => {
