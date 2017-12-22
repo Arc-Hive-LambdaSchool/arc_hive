@@ -16,6 +16,7 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const readline = require('readline');
 const google = require('googleapis');
+const ytAPI = google.youtube('v3');
 const util = require('util');
 const googleAuth = require('google-auth-library');
 const opn = require('opn');
@@ -625,7 +626,7 @@ server.post('/recordings', (req, res) => {
     parameters['media'] = { body: fs.createReadStream(requestData['mediaFilename']) };
     parameters['notifySubscribers'] = false;
     parameters['resource'] = requestData['properties'];
-    const req = service.videos.insert(parameters, ((err, data) => {
+    ytAPI.videos.insert(parameters, ((err, data) => {
       if (err) {
         console.log('The API returned an error: ' + err);
       }
