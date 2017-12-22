@@ -603,8 +603,8 @@ server.post('/recordings', (req, res) => {
         console.log(error);
         return;
       }
-      console.log('601 RESPONSE: ' + response);
-      console.log('602 BODY: ' + body);
+      console.log('601 RESPONSE: ' + JSON.stringify(response));
+      console.log('602 BODY: ' + JSON.stringify(body));
     });
   }
 
