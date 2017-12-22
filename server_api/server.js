@@ -703,8 +703,8 @@ server.get('/auth', (req, res) => {
     opn(authUrl, {app: 'google chrome'});
     res.redirect(authUrl);
   };
-  console.log('704: ' + JSON.stringify(oAuthTraveler));
   authorize(creds);
+  console.log('704: ' + JSON.stringify(oAuthTraveler));
 });
 
 server.get('/auth-confirmation', (req, res) => {
