@@ -654,7 +654,7 @@ server.post('/recordings', (req, res) => {
       },
       'mediaFilename': 'https://api.zoom.us/recording/download/y4w1bI8gncUev0gbGW5WVXr3lA4hGoILp26JpY1qzq2Pzk1QHPKXeLkp_jTzlxon',
     };
-
+    console.log(JSON.parse(oAuthTravler));
   videosInsert(JSON.parse(oAuthTravler), params);
   res.send('It probably worked');
 });
