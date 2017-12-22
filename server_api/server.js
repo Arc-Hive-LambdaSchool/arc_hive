@@ -40,7 +40,7 @@ const creds = {
   redirect_uri: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
 };
 const auth = new googleAuth();
-oAuthTraveler = new auth.OAuth2(creds.clientId, creds.clientSecret, creds.redirectUrl);
+oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
