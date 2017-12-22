@@ -583,6 +583,11 @@ let yt_token;
 server.post('/recordings', (req, res) => {
   console.log(req.body);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
+    const payload = {
+      "iss": process.env.ZOOM_KEY,
+      "exp": Math.floor(Date.now() / 1000) + (60 * 60)
+    };
+    const token = jwt.sign(payload, process.env.ZOOM_SECRET);
     const g = {
       method: 'GET',
       uri: 'https://api.zoom.us/v2/meetings/' + req.body.content.uuid + '/recordings',
@@ -601,7 +606,7 @@ server.post('/recordings', (req, res) => {
       console.log('601 RESPONSE: ' + response);
       console.log('602 BODY: ' + body);
     });
-  } 
+  }
 
 });
 /*
