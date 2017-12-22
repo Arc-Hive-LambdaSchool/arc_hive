@@ -32,6 +32,8 @@ let base = Airtable.base('appMs812ZOuhtf8Un');
 
 const server = express();
 
+let oAuthTravler;
+
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
 
@@ -673,7 +675,7 @@ server.get('/recordings', (req, res) => {
 * AUTH ROUTES
 =========================================================================
 ========================================================================*/
-let oAuthTravler;
+
 /*************************************************************************
 * ==============INITIAL YOUTUBE AUTH ROUTE==============
 **************************************************************************/
@@ -701,6 +703,7 @@ server.get('/auth', (req, res) => {
     opn(authUrl, {app: 'google chrome'});
     res.redirect(authUrl);
   };
+  console.log('704: ' + JSON.stringify(oAuthTraveler));
   authorize(creds);
 });
 
@@ -715,7 +718,7 @@ server.get('/auth-confirmation', (req, res) => {
       }
       console.log('716: ' + JSON.stringify(oAuthTraveler));
       oAuthTraveler.credentials = token;
-      console.log('718: ' + oAuthTraveler);
+      console.log('718: ' + JSON.stringify(oAuthTraveler));
       yt_token = token;
     }));
   };
