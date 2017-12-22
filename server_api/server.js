@@ -88,6 +88,7 @@ server.get('/auth-confirmation', (req, res) => {
 
   receiveToken(code);
   res.status(200);
+  res.send('Authorized');
 });
 
 /*=======================================================================
