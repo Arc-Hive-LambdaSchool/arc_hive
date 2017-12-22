@@ -580,6 +580,7 @@ server.post('/slackzoom', (req, res) => {
 * ==============ZOOM-RECORDING ROUTE==============
 **************************************************************************/
 let yt_token;
+/*
 server.post('/recordings', (req, res) => {
   console.log(req.body);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
@@ -609,13 +610,13 @@ server.post('/recordings', (req, res) => {
   }
 
 });
-/*
+*/
+
 server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
   console.log('586: ' + yt_token);
 
-  // s3://zoom-cmr/cmr/replay/2017/12/19/205210934/58B0368B-32C1-4B2C-AC2A-0DD163AB9FC0/GMT20171219-194245_JSON-V_1280x800.mp4
   const videosInsert = (oAuthTravler, requestData) => {
     console.log('596 RequestData: ' + requestData);
     const service = google.youtube('v3');
@@ -650,13 +651,13 @@ server.post('/recordings', (req, res) => {
       'status.privacyStatus': 'unlisted',
       // 'status.publicStatsViewable': ''
       },
-      'mediaFilename': 'https://zoom.us/recording/play/-Hgcxf8Oxs-XhGJAwCIFtIkf8COUP-DrzpHdoZoeS_yFH1u0rT8anFgj2vFbNucS',
+      'mediaFilename': 'https://api.zoom.us/recording/download/y4w1bI8gncUev0gbGW5WVXr3lA4hGoILp26JpY1qzq2Pzk1QHPKXeLkp_jTzlxon',
     };
 
   videosInsert(oAuthTravler, params);
   res.send('It probably worked');
 });
-
+/*
 server.get('/recordings', (req, res) => {
   // console.log('GET');
   // console.log(req.params);
@@ -717,7 +718,7 @@ server.get('/auth-confirmation', (req, res) => {
   };
 
   receiveToken(code);
-  res.send(yt_token);
+  res.redirect('https://pacific-waters-60975.herokuapp.com/recordings');
 });
 
 server.get('/success', (req, res) => {
