@@ -21,6 +21,7 @@ const googleAuth = require('google-auth-library');
 const opn = require('opn');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const passport = require('passport');
+const AWS = require('aws-sdk');
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
@@ -579,13 +580,16 @@ server.post('/slackzoom', (req, res) => {
 * ==============ZOOM-RECORDING ROUTE==============
 **************************************************************************/
 let yt_token;
-
+server.post('/recordings', (req, res) => {
+  console.log(req.body);
+});
+/*
 server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
   console.log('586: ' + yt_token);
 
-
+  // s3://zoom-cmr/cmr/replay/2017/12/19/205210934/58B0368B-32C1-4B2C-AC2A-0DD163AB9FC0/GMT20171219-194245_JSON-V_1280x800.mp4
   const videosInsert = (oAuthTravler, requestData) => {
     console.log('596 RequestData: ' + requestData);
     const service = google.youtube('v3');
@@ -620,7 +624,7 @@ server.post('/recordings', (req, res) => {
       'status.privacyStatus': 'unlisted',
       // 'status.publicStatsViewable': ''
       },
-      'mediaFilename': 's3://zoom-cmr/cmr/replay/2017/12/19/205210934/58B0368B-32C1-4B2C-AC2A-0DD163AB9FC0/GMT20171219-194245_JSON-V_1280x800.mp4',
+      'mediaFilename': 'https://zoom.us/recording/play/-Hgcxf8Oxs-XhGJAwCIFtIkf8COUP-DrzpHdoZoeS_yFH1u0rT8anFgj2vFbNucS',
     };
 
   videosInsert(oAuthTravler, params);
@@ -634,7 +638,7 @@ server.get('/recordings', (req, res) => {
   // youtube_code = req.query.code;
   res.send(req.query.code);
 });
-
+*/
 /*=======================================================================
 =========================================================================
 * AUTH ROUTES

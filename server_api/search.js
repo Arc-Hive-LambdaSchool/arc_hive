@@ -151,7 +151,7 @@ const timestampConfirmation = (slackSearch) => {
 };
 
 const startZoom = (slackSearch) => {
-  // console.log(slackSearch);
+  console.log(slackSearch);
   const cohorts = [];
   if (slackSearch.cohort.toUpperCase() === 'ALL') {
     for (let i = 1; i <= 12; i++) {
