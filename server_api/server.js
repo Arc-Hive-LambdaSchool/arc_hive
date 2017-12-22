@@ -83,11 +83,11 @@ server.get('/auth-confirmation', (req, res) => {
       console.log('716: ' + JSON.stringify(oAuthTraveler));
       oAuthTraveler.credentials = token;
       console.log('718: ' + JSON.stringify(oAuthTraveler));
-      yt_token = token;
     }));
   };
 
   receiveToken(code);
+  res.status(200);
 });
 
 /*=======================================================================
