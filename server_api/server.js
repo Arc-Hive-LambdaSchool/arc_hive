@@ -618,7 +618,7 @@ server.post('/recordings', (req, res) => {
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
   console.log('586: ' + yt_token);
 
-  const videosInsert = (oAuthTravler, requestData) => {
+  const videosInsert = (JSON.parse(oAuthTravler), requestData) => {
     console.log('596 RequestData: ' + requestData);
     const service = google.youtube('v3');
     const parameters = requestData['params'];
