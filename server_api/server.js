@@ -618,7 +618,7 @@ server.post('/recordings', (req, res) => {
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
   console.log('586: ' + yt_token);
 
-  const videosInsert = (JSON.parse(oAuthTravler), requestData) => {
+  const videosInsert = (oAuthTravler, requestData) => {
     console.log('596 RequestData: ' + requestData);
     const service = google.youtube('v3');
     const parameters = requestData['params'];
@@ -655,7 +655,7 @@ server.post('/recordings', (req, res) => {
       'mediaFilename': 'https://api.zoom.us/recording/download/y4w1bI8gncUev0gbGW5WVXr3lA4hGoILp26JpY1qzq2Pzk1QHPKXeLkp_jTzlxon',
     };
 
-  videosInsert(oAuthTravler, params);
+  videosInsert(JSON.parse(oAuthTravler), params);
   res.send('It probably worked');
 });
 /*
