@@ -33,6 +33,14 @@ let base = Airtable.base('appMs812ZOuhtf8Un');
 const server = express();
 
 let oAuthTravler;
+const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
+const creds = {
+  client_secret: process.env.YOUTUBE_CLIENT_SECRET,
+  client_id: process.env.YOUTUBE_CLIENT_ID,
+  redirect_uri: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
+};
+const auth = new googleAuth();
+oAuthTraveler = new auth.OAuth2(creds.clientId, creds.clientSecret, creds.redirectUrl);
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
@@ -50,21 +58,7 @@ server.use(bodyParser.urlencoded({extended: true}));
 * ==============INITIAL YOUTUBE AUTH ROUTE==============
 **************************************************************************/
 server.get('/auth', (req, res) => {
-  const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
-  const creds = {
-    client_secret: process.env.YOUTUBE_CLIENT_SECRET,
-    client_id: process.env.YOUTUBE_CLIENT_ID,
-    redirect_uri: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
-  };
 
-  const authorize = (credentials) => {
-    const clientSecret = credentials.client_secret;
-    const clientId = credentials.client_id;
-    const redirectUrl = credentials.redirect_uri;
-    const auth = new googleAuth();
-    oAuthTraveler = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-    getNewToken(oAuthTraveler);
-  };
   const getNewToken = (oAuthTraveler) => {
     const authUrl = oAuthTraveler.generateAuthUrl({
       access_type: 'offline',
@@ -73,7 +67,7 @@ server.get('/auth', (req, res) => {
     opn(authUrl, {app: 'google chrome'});
     res.redirect(authUrl);
   };
-  authorize(creds);
+  getNewToken(oAuthTraveler);
   console.log('704: ' + JSON.stringify(oAuthTraveler));
 });
 
@@ -673,7 +667,6 @@ server.post('/recordings', (req, res) => {
 
 server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
-  const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
   console.log('619: ' + JSON.stringify(oAuthTravler));
   // console.log(JSON.parse(oAuthTravler));
 
