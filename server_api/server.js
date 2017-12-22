@@ -582,24 +582,26 @@ server.post('/slackzoom', (req, res) => {
 let yt_token;
 server.post('/recordings', (req, res) => {
   console.log(req.body);
-  const g = {
-    method: 'GET',
-    uri: 'https://api.zoom.us/v2/meetings/' + req.body.content.uuid + '/recordings',
-    headers: {
-      Authorization: 'Bearer' + token,
-      "alg": 'HS256',
-      "typ": 'JWT',
-    },
-    json: true
-  };
-  request(g, (error, response, body) => {
-    if (error) {
-      console.log(error);
-      return;
-    }
-    console.log('600 RESPONSE: ' + response);
-    console.log('601 BODY: ' + body);
-  });
+  if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
+    const g = {
+      method: 'GET',
+      uri: 'https://api.zoom.us/v2/meetings/' + req.body.content.uuid + '/recordings',
+      headers: {
+        Authorization: 'Bearer' + token,
+        "alg": 'HS256',
+        "typ": 'JWT',
+      },
+      json: true
+    };
+    request(g, (error, response, body) => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+      console.log('601 RESPONSE: ' + response);
+      console.log('602 BODY: ' + body);
+    });
+  } 
 
 });
 /*
