@@ -32,7 +32,7 @@ let base = Airtable.base('appMs812ZOuhtf8Un');
 
 const server = express();
 
-let oAuthTravler;
+
 const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
 const creds = {
   client_secret: process.env.YOUTUBE_CLIENT_SECRET,
@@ -40,7 +40,7 @@ const creds = {
   redirect_uri: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
 };
 const auth = new googleAuth();
-oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
+let oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
