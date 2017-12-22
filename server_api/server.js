@@ -616,7 +616,7 @@ server.post('/recordings', (req, res) => {
 server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
   const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
-  console.log('586: ' + JSON.stringify(oAuthTravler));
+  console.log('619: ' + JSON.stringify(oAuthTravler));
   // console.log(JSON.parse(oAuthTravler));
 
   const videosInsert = (oAuthTravler, requestData) => {
@@ -713,14 +713,14 @@ server.get('/auth-confirmation', (req, res) => {
         console.log('Error while trying to retrieve access token', err);
         return;
       }
-      console.log(token);
+      console.log('716: ' + JSON.stringify(oAuthTraveler));
       oAuthTraveler.credentials = token;
+      console.log('718: ' + oAuthTraveler);
       yt_token = token;
     }));
   };
 
   receiveToken(code);
-  res.redirect('https://pacific-waters-60975.herokuapp.com/recordings');
 });
 
 server.get('/success', (req, res) => {
