@@ -652,9 +652,9 @@ server.post('/recordings', (req, res) => {
   console.log(`651: ${JSON.stringify(et)}`);
   console.log(`653: ${JSON.stringify(req.body)}`);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
-    const p = JSON.parse(req.body.content);
-    console.log(`655: ${p.uuid}`);
-    console.log(`656: ${JSON.stringify(p.uuid)}`);
+    // const p = JSON.parse(req.body.content);
+    // console.log(`655: ${p.uuid}`);
+    // console.log(`656: ${JSON.stringify(p.uuid)}`);
     const payload = {
       "iss": process.env.ZOOM_KEY,
       "exp": Math.floor(Date.now() / 1000) + (60 * 60)
