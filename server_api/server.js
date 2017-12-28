@@ -662,7 +662,7 @@ server.post('/recordings', (req, res) => {
     const token = jwt.sign(payload, process.env.ZOOM_SECRET);
     const g = {
       method: 'GET',
-      uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings',
+      uri: 'https://api.zoom.us/v2/meetings/' + 'RJGPXYwUT++KfMQuN7kmxw==' + '/recordings',
       headers: {
         Authorization: 'Bearer' + token,
         "alg": 'HS256',
