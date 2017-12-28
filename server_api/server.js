@@ -44,7 +44,7 @@ const creds = {
 
 const auth = new googleAuth();
 const oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
-const tokePath = path.join(__dirname, 'creds');
+const tokePath = path.join(__dirname, 'creds.json');
 let toke;
 
 mongoose.Promise = global.Promise;
@@ -99,7 +99,7 @@ server.get('/auth-confirmation', (req, res) => {
 
   receiveToken(code);
   toke = fs.readFileSync(tokePath, 'utf8');
-  console.log(toke.credentials.access_token);
+  console.log(`Toke: ${toke.credentials.access_token}`);
   console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   res.status(200);
   res.send('Authorized');
