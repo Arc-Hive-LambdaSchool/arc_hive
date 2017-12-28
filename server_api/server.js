@@ -99,6 +99,7 @@ server.get('/auth-confirmation', (req, res) => {
 
   receiveToken(code);
   toke = fs.readFileSync(tokePath, 'utf8');
+  console.log(toke.credentials.access_token);
   console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   res.status(200);
   res.send('Authorized');
@@ -116,7 +117,6 @@ server.get('/auth-confirmation', (req, res) => {
 * an HTTP request containing the search parameters
 **************************************************************************/
 server.get('/', (req, res) => {
-  console.log('49: ' + yt_token);
   let tagVal = req.body.tags;
   let cohortVal = req.body.cohort;
   const brownBagVal = req.body.brownbag;
