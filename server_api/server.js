@@ -681,10 +681,10 @@ server.post('/recordings', (req, res) => {
 
 server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
-  console.log('619: ' + JSON.stringify(oAuthTravler));
+  // console.log('619: ' + JSON.stringify(oAuthTravler));
   // console.log(JSON.parse(oAuthTravler));
 
-  const videosInsert = (oAuthTravler, requestData) => {
+  const videosInsert = (requestData) => {
     console.log('596 RequestData: ' + requestData);
     oAuthtraveler = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
     const service = google.youtube('v3');
@@ -722,7 +722,7 @@ server.post('/recordings', (req, res) => {
       'mediaFilename': 'https://api.zoom.us/recording/download/y4w1bI8gncUev0gbGW5WVXr3lA4hGoILp26JpY1qzq2Pzk1QHPKXeLkp_jTzlxon',
     };
 
-  videosInsert(oAuthTravler, params);
+  videosInsert(params);
   res.send('It probably worked');
 });
 
