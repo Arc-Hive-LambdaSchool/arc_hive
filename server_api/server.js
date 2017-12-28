@@ -44,7 +44,7 @@ const creds = {
 
 const auth = new googleAuth();
 const oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
-const tokePath = path.join(_dirname, './creds.json');
+const tokePath = path.join(__dirname, './creds.json');
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
