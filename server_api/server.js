@@ -675,17 +675,20 @@ server.post('/recordings', (req, res) => {
         console.log(error);
         return;
       }
-      const videosInsert = (requestData) => {
+      const videosInsert = (requestData, creds) => {
         console.log('596 RequestData: ' + JSON.stringify(requestData));
         const gAuth = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+        const auth = new googleAuth();
+        const oauth2Client = new auth.OAuth2(creds.clientId, creds.clientSecret, creds.redirectUrl);
+        oauth2Client.credentials = gAuth;
         const service = google.youtube('v3');
         const parameters = requestData['params'];
-        parameters['auth'] = gAuth;
+        parameters['auth'] = oauth2Client;
         parameters['media'] = { "body": requestData.mediaFilename };
         parameters['notifySubscribers'] = false;
         parameters['resource'] = requestData['properties'];
         console.log(`687: ${JSON.stringify(parameters)}`);
-        ytAPI.videos.insert(parameters, ((err, data) => {
+        service.videos.insert(parameters, ((err, data) => {
           if (err) {
             console.log('The API returned an error: ' + err);
           }
@@ -714,7 +717,7 @@ server.post('/recordings', (req, res) => {
           'mediaFilename': body.recording_files[0].download_url,
         };
 
-      videosInsert(params);
+      videosInsert(params, creds);
       res.send('It probably worked');
       console.log('673 RESPONSE: ' + JSON.stringify(response));
       console.log('674 BODY: ' + JSON.stringify(body));
