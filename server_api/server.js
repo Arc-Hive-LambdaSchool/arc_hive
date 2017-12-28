@@ -680,7 +680,7 @@ server.post('/recordings', (req, res) => {
         const gAuth = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
         const auth = new googleAuth();
         const oauth2Client = new auth.OAuth2(creds.clientId, creds.clientSecret, creds.redirectUrl);
-        oauth2Client.setCredential({
+        oauth2Client.setCredentials({
           access_token: gAuth.credentials.access_token,
           refresh_token: gAuth.credentials.refresh_token,
           token_type: gAuth.credentials.token_type,
