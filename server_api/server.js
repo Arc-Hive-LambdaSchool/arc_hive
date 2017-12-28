@@ -96,13 +96,8 @@ server.get('/auth-confirmation', (req, res) => {
   };
 
   receiveToken(code);
-  fs.readFile('creds.json', (err, token) => {
-    if (err) {
-      console.log(`99: ${err}`);
-    } else {
-      console.log(`Token: ${JSON.stringify(token)}`);
-    }
-  });
+  const toke = fs.readFileSync('creds.json', 'utf8');
+  console.log(toke);
   console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   res.status(200);
   res.send('Authorized');
