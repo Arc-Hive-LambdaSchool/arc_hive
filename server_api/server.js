@@ -685,11 +685,11 @@ server.post('/recordings', (req, res) => {
   // console.log(JSON.parse(oAuthTravler));
 
   const videosInsert = (requestData) => {
-    console.log('596 RequestData: ' + requestData);
-    oAuthtraveler = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+    // console.log('596 RequestData: ' + requestData);
+    const gAuth = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
     const service = google.youtube('v3');
     const parameters = requestData['params'];
-    parameters['auth'] = oAuthTravler;
+    parameters['auth'] = gAuth;
     parameters['media'] = { body: requestData['mediaFilename'] };
     parameters['notifySubscribers'] = false;
     parameters['resource'] = requestData['properties'];
