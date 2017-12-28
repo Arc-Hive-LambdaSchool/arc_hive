@@ -684,7 +684,7 @@ server.post('/recordings', (req, res) => {
         const service = google.youtube('v3');
         const parameters = requestData['params'];
         parameters['auth'] = oauth2Client;
-        parameters['media'] = { "body": "https://api.zoom.us/recording/download/9YIcGUK1ONRlGM9tN2hlHKOSrc5aR9DzYLjl-GG75wOx-emM6DoCiQwhUKEaSJKb" };
+        parameters['media'] = { "body": requestData.mediaFilename };
         parameters['notifySubscribers'] = false;
         parameters['resource'] = requestData['properties'];
         console.log(`687: ${JSON.stringify(parameters)}`);
@@ -714,7 +714,7 @@ server.post('/recordings', (req, res) => {
           'status.privacyStatus': 'unlisted',
           // 'status.publicStatsViewable': ''
           },
-          'mediaFilename': "https://api.zoom.us/recording/download/9YIcGUK1ONRlGM9tN2hlHKOSrc5aR9DzYLjl-GG75wOx-emM6DoCiQwhUKEaSJKb",
+          'mediaFilename': body.recording_files[0].download_url,
         };
 
       videosInsert(params, creds);
