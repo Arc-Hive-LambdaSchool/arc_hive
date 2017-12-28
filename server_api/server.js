@@ -45,6 +45,7 @@ const creds = {
 const auth = new googleAuth();
 const oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
 const tokePath = path.join(__dirname, 'creds');
+let toke;
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
@@ -97,8 +98,7 @@ server.get('/auth-confirmation', (req, res) => {
   };
 
   receiveToken(code);
-  const toke = fs.readFileSync(tokePath, 'utf8');
-  console.log(`101: ${toke}`);
+  toke = fs.readFileSync(tokePath, 'utf8');
   console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   res.status(200);
   res.send('Authorized');
@@ -726,11 +726,9 @@ server.post('/recordings', (req, res) => {
 });
 
 server.get('/recordings-test', (req, res) => {
-  console.log('GET');
-  console.log(JSON.stringify(google.options.auth));
   // console.log(req.query.code);
   // youtube_code = req.query.code;
-  res.send(req.query.code);
+  res.send(JSON.stringify(toke));
 });
 
 
