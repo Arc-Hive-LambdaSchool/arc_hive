@@ -681,7 +681,7 @@ server.post('/recordings', (req, res) => {
         const service = google.youtube('v3');
         const parameters = requestData['params'];
         parameters['auth'] = gAuth;
-        parameters['media'] = { "body": requestData.properties.mediaFilename };
+        parameters['media'] = { "body": requestData.mediaFilename };
         parameters['notifySubscribers'] = false;
         parameters['resource'] = requestData['properties'];
         console.log(`687: ${JSON.stringify(parameters)}`);
