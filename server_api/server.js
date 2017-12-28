@@ -680,7 +680,7 @@ server.post('/recordings', (req, res) => {
         const gAuth = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
         const auth = new googleAuth();
         const oauth2Client = new auth.OAuth2(creds.clientId, creds.clientSecret, creds.redirectUrl);
-        oauth2Client.setCredentials({
+        oauth2Client.setCredential({
           access_token: gAuth.credentials.access_token,
           refresh_token: gAuth.credentials.refresh_token,
           token_type: gAuth.credentials.token_type,
@@ -689,7 +689,7 @@ server.post('/recordings', (req, res) => {
         const service = google.youtube('v3');
         const parameters = requestData['params'];
         parameters['auth'] = oauth2Client;
-        parameters['media'] = { "body": requestData.mediaFilename };
+        parameters['media'] = { "body": "https://api.zoom.us/recording/download/9YIcGUK1ONRlGM9tN2hlHKOSrc5aR9DzYLjl-GG75wOx-emM6DoCiQwhUKEaSJKb" };
         parameters['notifySubscribers'] = false;
         parameters['resource'] = requestData['properties'];
         console.log(`687: ${JSON.stringify(parameters)}`);
@@ -713,13 +713,13 @@ server.post('/recordings', (req, res) => {
           // 'snippet.defaultLanguage': '',
           'snippet.description': 'Lambda School Lecture',
           // 'snippet.tags[]': '',
-          'snippet.title': body.topic,
+          'snippet.title': "Trouble Shooting GoogleAPI",
           // 'status.embeddable': '',
           // 'status.license': '',
           'status.privacyStatus': 'unlisted',
           // 'status.publicStatsViewable': ''
           },
-          'mediaFilename': body.recording_files[0].download_url,
+          'mediaFilename': "https://api.zoom.us/recording/download/9YIcGUK1ONRlGM9tN2hlHKOSrc5aR9DzYLjl-GG75wOx-emM6DoCiQwhUKEaSJKb",
         };
 
       videosInsert(params, creds);
