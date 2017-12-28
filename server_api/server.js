@@ -691,7 +691,7 @@ server.post('/recordings', (req, res) => {
         console.log(`687: ${JSON.stringify(parameters)}`);
         service.videos.insert(parameters, ((err, data) => {
           if (err) {
-            console.log('The API returned an error: ' + err);
+            console.log('The API returned an error: ' + err + err.stack);
           }
           if (data) {
             console.log(util.inspect(data, false, null));
