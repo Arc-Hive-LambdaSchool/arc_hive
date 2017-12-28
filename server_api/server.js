@@ -675,6 +675,46 @@ server.post('/recordings', (req, res) => {
         console.log(error);
         return;
       }
+      const videosInsert = (requestData) => {
+        console.log('596 RequestData: ' + JSON.stringify(requestData));
+        const gAuth = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+        const service = google.youtube('v3');
+        const parameters = requestData['params'];
+        parameters['auth'] = gAuth;
+        parameters['media'] = { body: requestData['mediaFilename'] };
+        parameters['notifySubscribers'] = false;
+        parameters['resource'] = requestData['properties'];
+        ytAPI.videos.insert(parameters, ((err, data) => {
+          if (err) {
+            console.log('The API returned an error: ' + err);
+          }
+          if (data) {
+            console.log(util.inspect(data, false, null));
+          }
+          process.exit();
+        }));
+      };
+
+      const params = {
+        'params': {
+          'part': 'snippet,status'
+        },
+        'properties': {
+          'snippet.categoryId': '22',
+          // 'snippet.defaultLanguage': '',
+          'snippet.description': 'Lambda School Lecture',
+          // 'snippet.tags[]': '',
+          'snippet.title': body.topic,
+          // 'status.embeddable': '',
+          // 'status.license': '',
+          'status.privacyStatus': 'unlisted',
+          // 'status.publicStatsViewable': ''
+          },
+          'mediaFilename': body.recording_files[0].download_url,
+        };
+
+      videosInsert(params);
+      res.send('It probably worked');
       console.log('673 RESPONSE: ' + JSON.stringify(response));
       console.log('674 BODY: ' + JSON.stringify(body));
     });
@@ -691,46 +731,7 @@ server.post('/recordings', (req, res) => {
   console.log('684: ' + JSON.stringify(req.body));
   // console.log(JSON.parse(oAuthTravler));
 
-  const videosInsert = (requestData) => {
-    console.log('596 RequestData: ' + JSON.stringify(requestData));
-    const gAuth = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
-    const service = google.youtube('v3');
-    const parameters = requestData['params'];
-    parameters['auth'] = gAuth;
-    parameters['media'] = { body: requestData['mediaFilename'] };
-    parameters['notifySubscribers'] = false;
-    parameters['resource'] = requestData['properties'];
-    ytAPI.videos.insert(parameters, ((err, data) => {
-      if (err) {
-        console.log('The API returned an error: ' + err);
-      }
-      if (data) {
-        console.log(util.inspect(data, false, null));
-      }
-      process.exit();
-    }));
-  };
 
-  const params = {
-    'params': {
-      'part': 'snippet,status'
-    },
-    'properties': {
-      'snippet.categoryId': '22',
-      // 'snippet.defaultLanguage': '',
-      'snippet.description': 'Lambda School Lecture',
-      // 'snippet.tags[]': '',
-      'snippet.title': req.body.content.topic,
-      // 'status.embeddable': '',
-      // 'status.license': '',
-      'status.privacyStatus': 'unlisted',
-      // 'status.publicStatsViewable': ''
-      },
-      'mediaFilename': req.body.content.recording_files[0].file_path,
-    };
-
-  videosInsert(params);
-  res.send('It probably worked');
 });
 */
 server.get('/recordings-test', (req, res) => {
