@@ -646,8 +646,7 @@ server.post('/slackzoom', (req, res) => {
 /*************************************************************************
 * ==============ZOOM-RECORDING ROUTE==============
 **************************************************************************/
-let yt_token;
-/*
+
 server.post('/recordings', (req, res) => {
   console.log(req.body);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
@@ -671,14 +670,17 @@ server.post('/recordings', (req, res) => {
         console.log(error);
         return;
       }
-      console.log('601 RESPONSE: ' + JSON.stringify(response));
-      console.log('602 BODY: ' + JSON.stringify(body));
+      console.log('673 RESPONSE: ' + JSON.stringify(response));
+      console.log('674 BODY: ' + JSON.stringify(body));
     });
+  } else {
+    res.status(200);
+    res.send(req.body.type);
   }
 
 });
-*/
 
+/*
 server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
   console.log('684: ' + JSON.stringify(req.body));
@@ -713,19 +715,19 @@ server.post('/recordings', (req, res) => {
       // 'snippet.defaultLanguage': '',
       'snippet.description': 'Lambda School Lecture',
       // 'snippet.tags[]': '',
-      'snippet.title': 'Mongo III',
+      'snippet.title': req.body.content.topic,
       // 'status.embeddable': '',
       // 'status.license': '',
       'status.privacyStatus': 'unlisted',
       // 'status.publicStatsViewable': ''
       },
-      'mediaFilename': 'https://api.zoom.us/recording/download/y4w1bI8gncUev0gbGW5WVXr3lA4hGoILp26JpY1qzq2Pzk1QHPKXeLkp_jTzlxon',
+      'mediaFilename': req.body.content.recording_files[0].file_path,
     };
 
   videosInsert(params);
   res.send('It probably worked');
 });
-
+*/
 server.get('/recordings-test', (req, res) => {
   // console.log(req.query.code);
   // youtube_code = req.query.code;
