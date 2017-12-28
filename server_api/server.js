@@ -98,8 +98,8 @@ server.get('/auth-confirmation', (req, res) => {
   };
 
   receiveToken(code);
-  toke = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
-  console.log(`Toke: ${JSON.stringify(toke.credentials.access_token)}`);
+  // toke = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+  // console.log(`Toke: ${JSON.stringify(toke.credentials.access_token)}`);
   console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   res.status(200);
   res.send('Authorized');
@@ -681,11 +681,11 @@ server.post('/recordings', (req, res) => {
 
 server.post('/recordings', (req, res) => {
   // Sample nodejs code for videos.insert
-  // console.log('619: ' + JSON.stringify(oAuthTravler));
+  console.log('684: ' + JSON.stringify(req.body));
   // console.log(JSON.parse(oAuthTravler));
 
   const videosInsert = (requestData) => {
-    // console.log('596 RequestData: ' + requestData);
+    console.log('596 RequestData: ' + JSON.stringify(requestData));
     const gAuth = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
     const service = google.youtube('v3');
     const parameters = requestData['params'];
