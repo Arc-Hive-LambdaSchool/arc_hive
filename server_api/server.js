@@ -651,10 +651,10 @@ server.post('/recordings', (req, res) => {
   const et = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
   console.log(`651: ${JSON.stringify(et)}`);
   console.log(`653: ${JSON.stringify(req.body)}`);
-  const p = req.body.content.uuid;
-  console.log(`655: ${p}`);
-  console.log(`656: ${JSON.stringify(req.body.content.uuid)}`);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
+    const p = req.body.content.uuid;
+    console.log(`655: ${p}`);
+    console.log(`656: ${JSON.stringify(req.body.content.uuid)}`);
     const payload = {
       "iss": process.env.ZOOM_KEY,
       "exp": Math.floor(Date.now() / 1000) + (60 * 60)
