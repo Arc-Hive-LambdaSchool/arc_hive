@@ -83,6 +83,9 @@ server.get('/auth-confirmation', (req, res) => {
       console.log('716: ' + JSON.stringify(oAuthTraveler));
       oAuthTraveler.credentials = token;
       console.log('718: ' + JSON.stringify(oAuthTraveler));
+      google.options({
+        auth: oAuthTraveler
+      });
     }));
   };
 
@@ -711,15 +714,15 @@ server.post('/recordings', (req, res) => {
   videosInsert(oAuthTravler, params);
   res.send('It probably worked');
 });
-/*
-server.get('/recordings', (req, res) => {
-  // console.log('GET');
-  // console.log(req.params);
+
+server.get('/recordings-test', (req, res) => {
+  console.log('GET');
+  console.log(JSON.stringify(google.options.auth));
   // console.log(req.query.code);
   // youtube_code = req.query.code;
   res.send(req.query.code);
 });
-*/
+
 
 
 
