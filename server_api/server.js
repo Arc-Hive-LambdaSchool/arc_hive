@@ -648,7 +648,8 @@ server.post('/slackzoom', (req, res) => {
 **************************************************************************/
 
 server.post('/recordings', (req, res) => {
-  console.log(req.body);
+  const et = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+  console.log(`651: ${JSON.stringify(et)}`);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
     const payload = {
       "iss": process.env.ZOOM_KEY,
