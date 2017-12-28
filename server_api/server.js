@@ -23,6 +23,7 @@ const opn = require('opn');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const passport = require('passport');
 const AWS = require('aws-sdk');
+const path = require('path');
 
 
 Airtable.configure({
@@ -43,7 +44,7 @@ const creds = {
 
 const auth = new googleAuth();
 const oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
-
+const tokePath = path.join(_dirname, './creds.json');
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
@@ -86,7 +87,7 @@ server.get('/auth-confirmation', (req, res) => {
       console.log('716: ' + JSON.stringify(oAuthTraveler));
       oAuthTraveler.credentials = token;
       console.log('718: ' + JSON.stringify(oAuthTraveler));
-      fs.writeFile('creds.json', JSON.stringify(oAuthTraveler), (err) => {
+      fs.writeFile(tokePath, JSON.stringify(oAuthTraveler), (err) => {
         if (err) {
           console.log(`91: ${err}`);
         }
@@ -96,7 +97,7 @@ server.get('/auth-confirmation', (req, res) => {
   };
 
   receiveToken(code);
-  const toke = fs.readFileSync('creds.json', 'utf8');
+  const toke = fs.readFileSync(tokePath, 'utf8');
   console.log(toke);
   console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   res.status(200);
