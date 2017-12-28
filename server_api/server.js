@@ -83,14 +83,15 @@ server.get('/auth-confirmation', (req, res) => {
       console.log('716: ' + JSON.stringify(oAuthTraveler));
       oAuthTraveler.credentials = token;
       console.log('718: ' + JSON.stringify(oAuthTraveler));
-      google.options({
-        auth: oAuthTraveler
-      });
     }));
+    google.options({
+      auth: oAuthTraveler
+    });
+    console.log(`718.5: ${JSON.stringify(google.options)}`);
   };
 
   receiveToken(code);
-  console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
+  console.log(`719: ${JSON.stringify(google.options)}`);
   res.status(200);
   res.send('Authorized');
 });
