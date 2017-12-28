@@ -98,7 +98,7 @@ server.get('/auth-confirmation', (req, res) => {
 
   receiveToken(code);
   const toke = fs.readFileSync(tokePath, 'utf8');
-  console.log(toke);
+  console.log(`101: ${toke}`);
   console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   res.status(200);
   res.send('Authorized');
