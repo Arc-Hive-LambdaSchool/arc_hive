@@ -35,7 +35,7 @@ let base = Airtable.base('appMs812ZOuhtf8Un');
 const server = express();
 
 
-const SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl', 'https://www.googleapis.com/auth/youtube.upload'];
+const SCOPES = ['https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/youtube.upload'];
 const creds = {
   client_secret: process.env.YOUTUBE_CLIENT_SECRET,
   client_id: process.env.YOUTUBE_CLIENT_ID,
