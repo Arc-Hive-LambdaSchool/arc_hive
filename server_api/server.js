@@ -39,8 +39,12 @@ const creds = {
   client_id: process.env.YOUTUBE_CLIENT_ID,
   redirect_uri: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
 };
+/*
 const auth = new googleAuth();
 const oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
+*/
+const OAuth2 = google.auth.OAuth2;
+const oAuthTraveler = new OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
@@ -88,7 +92,7 @@ server.get('/auth-confirmation', (req, res) => {
       auth: oAuthTraveler
     });
     console.log(`718.5: ${JSON.stringify(oAuthTraveler)}`);
-    console.log(`718.5: ${JSON.stringify(google.options)}`);
+    console.log(`718.5.1: ${JSON.stringify(google.options)}`);
   };
 
   receiveToken(code);
