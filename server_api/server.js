@@ -87,7 +87,9 @@ server.get('/auth-confirmation', (req, res) => {
       oAuthTraveler.credentials = token;
       console.log('718: ' + JSON.stringify(oAuthTraveler));
       fs.writeFile('creds.json', JSON.stringify(oAuthTraveler), (err) => {
-        if (err) throw err;
+        if (err) {
+          console.log(`91: ${err}`);
+        }
         console.log('SAVED');
       });
     }));
@@ -96,7 +98,7 @@ server.get('/auth-confirmation', (req, res) => {
   receiveToken(code);
   fs.readFile('creds.json', (err, token) => {
     if (err) {
-      console.log(err);
+      console.log(`99: ${err}`);
     } else {
       console.log(`Token: ${JSON.stringify(token)}`);
     }
