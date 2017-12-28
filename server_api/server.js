@@ -90,6 +90,7 @@ server.get('/auth-confirmation', (req, res) => {
   };
 
   receiveToken(code);
+  console.log(`719: ${oAuthTraveler}`);
   res.status(200);
   res.send('Authorized');
 });
