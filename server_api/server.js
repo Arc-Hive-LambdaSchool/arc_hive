@@ -43,7 +43,7 @@ const creds = {
 };
 
 const auth = new googleAuth();
-const oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
+let oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
 const tokePath = path.join(__dirname, 'creds.json');
 let toke;
 
@@ -686,6 +686,7 @@ server.post('/recordings', (req, res) => {
 
   const videosInsert = (oAuthTravler, requestData) => {
     console.log('596 RequestData: ' + requestData);
+    oAuthtraveler = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
     const service = google.youtube('v3');
     const parameters = requestData['params'];
     parameters['auth'] = oAuthTravler;
