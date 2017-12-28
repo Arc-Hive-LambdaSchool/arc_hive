@@ -23,7 +23,7 @@ const opn = require('opn');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const passport = require('passport');
 const AWS = require('aws-sdk');
-const jc = require('./creds.json');
+
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
@@ -94,7 +94,7 @@ server.get('/auth-confirmation', (req, res) => {
   };
 
   receiveToken(code);
-  console.log(`719: ${JSON.stringify(jc)}`);
+  console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   res.status(200);
   res.send('Authorized');
 });
