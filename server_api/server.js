@@ -667,6 +667,7 @@ server.post('/recordings', (req, res) => {
         Authorization: 'Bearer' + token,
         "alg": 'HS256',
         "typ": 'JWT',
+        "content-type": "application/octet-stream"
       },
       json: true
     };
