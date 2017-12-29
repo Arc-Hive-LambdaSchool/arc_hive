@@ -652,7 +652,7 @@ server.post('/recordings', (req, res) => {
   console.log(`651: ${JSON.stringify(et)}`);
   console.log(`653: ${JSON.stringify(req.body)}`);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
-    // const p = JSON.parse(req.body.content);
+    const p = JSON.parse(req.body.content);
     // console.log(`655: ${p.uuid}`);
     // console.log(`656: ${JSON.stringify(p.uuid)}`);
     const payload = {
@@ -662,12 +662,11 @@ server.post('/recordings', (req, res) => {
     const token = jwt.sign(payload, process.env.ZOOM_SECRET);
     const g = {
       method: 'GET',
-      uri: 'https://api.zoom.us/v2/meetings/' + 'RJGPXYwUT++KfMQuN7kmxw==' + '/recordings',
+      uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings',
       headers: {
         Authorization: 'Bearer' + token,
         "alg": 'HS256',
         "typ": 'JWT',
-        "content-type": "application/octet-stream"
       },
       json: true
     };
