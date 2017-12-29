@@ -684,13 +684,16 @@ server.post('/recordings', (req, res) => {
         const service = google.youtube('v3');
         const parameters = requestData['params'];
         parameters['auth'] = oauth2Client;
-        parameters['media'] = { "body": fs.createReadStream(requestData.mediaFilename) };
+        parameters['media'] = {
+          "body": fs.createReadStream(requestData.mediaFilename),
+          "mimeType": "video/mp4"
+        };
         parameters['notifySubscribers'] = false;
         parameters['resource'] = requestData['properties'];
         console.log(`687: ${JSON.stringify(parameters)}`);
         service.videos.insert(parameters, ((err, data) => {
           if (err) {
-            console.log('The API returned an error: ' + err + err.stack);
+            console.log('The API returned an error: ' + err);
           }
           if (data) {
             console.log(util.inspect(data, false, null));
@@ -699,6 +702,13 @@ server.post('/recordings', (req, res) => {
         }));
       };
 
+      const readStream = fs.createReadStream(body.recording_files[0].download_url);
+      readStream.on('open', () => {
+        readStream.pipe(res);
+      });
+      readStream.on('error', (err) => {
+        res.end(err);
+      });
       const params = {
         'params': {
           'part': 'snippet,status'
@@ -714,7 +724,7 @@ server.post('/recordings', (req, res) => {
           'status.privacyStatus': 'unlisted',
           // 'status.publicStatsViewable': ''
           },
-          'mediaFilename': __dirname + body.recording_files[0].download_url,
+          'mediaFilename': readStream,
         };
 
       videosInsert(params, creds);
