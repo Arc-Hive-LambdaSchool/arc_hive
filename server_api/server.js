@@ -714,7 +714,7 @@ server.post('/recordings', (req, res) => {
           'status.privacyStatus': 'unlisted',
           // 'status.publicStatsViewable': ''
           },
-          'mediaFilename': body.recording_files[0].download_url,
+          'mediaFilename': __dirname + body.recording_files[0].download_url,
         };
 
       videosInsert(params, creds);
