@@ -703,12 +703,12 @@ server.post('/recordings', (req, res) => {
       };
 
       const readStream = fs.createReadStream(body.recording_files[0].download_url);
-      // readStream.on('open', () => {
-      //   readStream.pipe(res);
-      // });
-      // readStream.on('error', (err) => {
-      //   res.end(err);
-      // });
+      let data;
+      readStream.on('data', (chunk) => {
+        data += chunck;
+      }).on('end', () => {
+        console.log(data);
+      });
       const params = {
         'params': {
           'part': 'snippet,status'
