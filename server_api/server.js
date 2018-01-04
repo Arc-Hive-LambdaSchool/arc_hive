@@ -685,7 +685,7 @@ server.post('/recordings', (req, res) => {
         const parameters = requestData['params'];
         parameters['auth'] = oauth2Client;
         parameters['media'] = {
-          "body": fs.createReadStream(requestData.mediaFilename),
+          "body": requestData.mediaFilename,
           "mimeType": "video/mp4"
         };
         parameters['notifySubscribers'] = false;
