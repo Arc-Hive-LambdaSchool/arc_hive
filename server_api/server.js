@@ -702,13 +702,13 @@ server.post('/recordings', (req, res) => {
         }));
       };
 
-      const readStream = fs.createReadStream(body.recording_files[0].download_url); // body.recording_files[0].download_url
-      let data;
+      const readStream = fs.createReadStream(request(body.recording_files[0].download_url)); // body.recording_files[0].download_url
+      /* let data;
       readStream.on('data', (chunk) => {
         data += chunk;
       }).on('end', () => {
         console.log(data);
-      });
+      }); */
       const params = {
         'params': {
           'part': 'snippet,status'
