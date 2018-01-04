@@ -701,14 +701,14 @@ server.post('/recordings', (req, res) => {
           process.exit();
         }));
       };
-
+      /*
       const readStream = fs.createReadStream(body.recording_files[0].download_url); // body.recording_files[0].download_url  request('http://fromrussiawithlove.com/baby.mp3').pipe(fs.createWriteStream('song.mp3'))
        let data;
       readStream.on('data', (chunk) => {
         data += chunk;
       }).on('end', () => {
         console.log(data);
-      });
+      }); */
       const params = {
         'params': {
           'part': 'snippet,status'
@@ -724,7 +724,7 @@ server.post('/recordings', (req, res) => {
           'status.privacyStatus': 'unlisted',
           // 'status.publicStatsViewable': ''
           },
-          'mediaFilename': readStream,
+          'mediaFilename': 'https://api.zoom.us/recording/download/qtTlE6cR1GUA162Cq6RdlPbSbPbzmmPKpZeYgDSpAn8A36VyByBl0-U9nfRT7mtm',
         };
 
       videosInsert(params, creds);
