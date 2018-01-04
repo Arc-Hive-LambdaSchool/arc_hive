@@ -649,8 +649,8 @@ server.post('/slackzoom', (req, res) => {
 
 server.post('/recordings', (req, res) => {
   const et = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
-  console.log(`651: ${JSON.stringify(et)}`);
-  console.log(`653: ${JSON.stringify(req.body)}`);
+  // console.log(`651: ${JSON.stringify(et)}`);
+  // console.log(`653: ${JSON.stringify(req.body)}`);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
     const p = JSON.parse(req.body.content);
     // console.log(`655: ${p.uuid}`);
@@ -705,7 +705,7 @@ server.post('/recordings', (req, res) => {
       const readStream = fs.createReadStream(body.recording_files[0].download_url);
       let data;
       readStream.on('data', (chunk) => {
-        data += chunck;
+        data += chunk;
       }).on('end', () => {
         console.log(data);
       });
