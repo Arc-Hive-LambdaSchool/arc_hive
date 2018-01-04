@@ -724,7 +724,7 @@ server.post('/recordings', (req, res) => {
           'status.privacyStatus': 'unlisted',
           // 'status.publicStatsViewable': ''
           },
-          'mediaFilename': 'https://api.zoom.us/recording/download/qtTlE6cR1GUA162Cq6RdlPbSbPbzmmPKpZeYgDSpAn8A36VyByBl0-U9nfRT7mtm',
+          'mediaFilename': fs.createReadStream('https://api.zoom.us/recording/download/qtTlE6cR1GUA162Cq6RdlPbSbPbzmmPKpZeYgDSpAn8A36VyByBl0-U9nfRT7mtm'),
         };
 
       videosInsert(params, creds);
