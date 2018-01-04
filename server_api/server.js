@@ -703,12 +703,12 @@ server.post('/recordings', (req, res) => {
       };
 
       const readStream = fs.createReadStream(body.recording_files[0].download_url); // body.recording_files[0].download_url  request('http://fromrussiawithlove.com/baby.mp3').pipe(fs.createWriteStream('song.mp3'))
-      /* let data;
+       let data;
       readStream.on('data', (chunk) => {
         data += chunk;
       }).on('end', () => {
         console.log(data);
-      }); */
+      });
       const params = {
         'params': {
           'part': 'snippet,status'
