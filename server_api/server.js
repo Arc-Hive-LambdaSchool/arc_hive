@@ -702,7 +702,7 @@ server.post('/recordings', (req, res) => {
         }));
       };
 
-      const readStream = fs.createReadStream(request(body.recording_files[0].download_url).pipe(fs.createWriteStream('lecture.mp4'))); // body.recording_files[0].download_url
+      const readStream = fs.createReadStream(body.recording_files[0].download_url); // body.recording_files[0].download_url  request('http://fromrussiawithlove.com/baby.mp3').pipe(fs.createWriteStream('song.mp3'))
       /* let data;
       readStream.on('data', (chunk) => {
         data += chunk;
