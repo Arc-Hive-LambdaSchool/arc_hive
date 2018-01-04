@@ -648,11 +648,11 @@ server.post('/slackzoom', (req, res) => {
 **************************************************************************/
 
 server.post('/recordings', (req, res) => {
-  const et = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+  // const et = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
   // console.log(`651: ${JSON.stringify(et)}`);
   // console.log(`653: ${JSON.stringify(req.body)}`);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
-    const p = JSON.parse(req.body.content);
+    // const p = JSON.parse(req.body.content);
     // console.log(`655: ${p.uuid}`);
     // console.log(`656: ${JSON.stringify(p.uuid)}`);
     const payload = {
@@ -662,7 +662,7 @@ server.post('/recordings', (req, res) => {
     const token = jwt.sign(payload, process.env.ZOOM_SECRET);
     const g = {
       method: 'GET',
-      uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings',
+      uri: 'https://api.zoom.us/v2/meetings/' + 'P0HJjZ4BSWmSawtRnRKlKA==' + '/recordings',
       headers: {
         Authorization: 'Bearer' + token,
         "alg": 'HS256',
@@ -702,7 +702,7 @@ server.post('/recordings', (req, res) => {
         }));
       };
 
-      const readStream = fs.createReadStream(body.recording_files[0].download_url);
+      const readStream = fs.createReadStream(body.recording_files[0].download_url); // body.recording_files[0].download_url
       let data;
       readStream.on('data', (chunk) => {
         data += chunk;
