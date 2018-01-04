@@ -685,7 +685,7 @@ server.post('/recordings', (req, res) => {
         const parameters = requestData['params'];
         parameters['auth'] = oauth2Client;
         parameters['media'] = {
-          "body": requestData.mediaFilename,
+          "body": fs.createReadStream(requestData.mediaFilename),
           "mimeType": "video/mp4"
         };
         parameters['notifySubscribers'] = false;
@@ -724,7 +724,7 @@ server.post('/recordings', (req, res) => {
           'status.privacyStatus': 'unlisted',
           // 'status.publicStatsViewable': ''
           },
-          'mediaFilename': fs.createReadStream('https://api.zoom.us/recording/download/qtTlE6cR1GUA162Cq6RdlPbSbPbzmmPKpZeYgDSpAn8A36VyByBl0-U9nfRT7mtm'),
+          'mediaFilename': 'https://api.zoom.us/recording/download/qtTlE6cR1GUA162Cq6RdlPbSbPbzmmPKpZeYgDSpAn8A36VyByBl0-U9nfRT7mtm',
         };
 
       videosInsert(params, creds);
