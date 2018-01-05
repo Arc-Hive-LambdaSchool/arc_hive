@@ -697,8 +697,9 @@ server.post('/recordings', (req, res) => {
           }
           if (data) {
             console.log(util.inspect(data, false, null));
+            res.sendStatus(200);
           }
-          process.exit();
+
         }));
       };
       /*
