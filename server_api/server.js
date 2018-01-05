@@ -689,7 +689,7 @@ server.post('/recordings', (req, res) => {
           "mimeType": "video/mp4"
         };
         parameters['notifySubscribers'] = false;
-        parameters['resource'] = requestData['properties'];
+        parameters['resource'] = requestData.params.properties;
         console.log(`687: ${JSON.stringify(parameters)}`);
         service.videos.insert(parameters, ((err, data) => {
           if (err) {
