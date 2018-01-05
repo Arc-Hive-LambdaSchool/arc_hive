@@ -714,10 +714,10 @@ server.post('/recordings', (req, res) => {
           'part': 'snippet,status'
         },
         'properties': {
-          'categoryId': '22',
-          'description': 'Lambda School Lecture',
-          'title': "Trouble Shooting GoogleAPI",
-          'privacyStatus': 'unlisted',
+          'snippet.categoryId': '22',
+          'snippet.description': 'Lambda School Lecture',
+          'snippet.title': "Trouble Shooting GoogleAPI",
+          'snippet.privacyStatus': 'unlisted',
           // 'status.publicStatsViewable': ''
           // 'snippet.defaultLanguage': '',
           // 'snippet.tags[]': '',
