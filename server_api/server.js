@@ -685,7 +685,7 @@ server.post('/recordings', (req, res) => {
         const parameters = requestData['params'];
         parameters['auth'] = oauth2Client;
         parameters['media'] = {
-          "body": request(requestData.mediaFilename).pipe(fs.createWriteStream('video.mp4')),
+          "body": fs.createReadStream('Users/SurfShack/Desktop/LECTUREVIDEO.mp4'),                       // request(requestData.mediaFilename).pipe(fs.createWriteStream('video.mp4')),
           "mimeType": "video/mp4"
         };
         parameters['notifySubscribers'] = false;
