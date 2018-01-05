@@ -675,6 +675,36 @@ server.post('/recordings', (req, res) => {
         console.log(error);
         return;
       }
+      const createResource = (properties) => {
+        const resource = {};
+        const normalizedProps = properties;
+        for (let p in properties) {
+          const value = properties[p];
+          if (p && p.substr(-2, 2) == '[]') {
+            const adjustedName = p.replace('[]', '');
+            if (value) {
+              normalizedProps[adjustedName] = value.split(',');
+            }
+            delete normalizedProps[p];
+          }
+        }
+        for (let p in normalizedProps) {
+          if (normalizedProps.hasOwnProperty(p) && normalizedProps[p]) {
+            const propArray = p.split('.');
+            let ref = resource;
+            for (var pa = 0; pa < propArray.length; pa++) {
+              const key = propArray[pa];
+              if (pa == propArray.length - 1) {
+                ref[key] = normalizedProps[p];
+              } else {
+                ref = ref[key] = ref[key] || {};
+              }
+            }
+          };
+        }
+        return resource;
+      };
+
       const videosInsert = (requestData, creds) => {
         console.log('596 RequestData: ' + JSON.stringify(requestData));
         const gAuth = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
@@ -689,7 +719,7 @@ server.post('/recordings', (req, res) => {
           "mimeType": "video/mp4"
         };
         parameters['notifySubscribers'] = false;
-        parameters['resource'] = requestData.properties;
+        parameters['resource'] = createResource(requestData['properties']);
         console.log(`687: ${JSON.stringify(parameters)}`);
         service.videos.insert(parameters, ((err, data) => {
           if (err) {
@@ -717,12 +747,12 @@ server.post('/recordings', (req, res) => {
           'snippet.categoryId': '22',
           'snippet.description': 'Lambda School Lecture',
           'snippet.title': "Trouble Shooting GoogleAPI",
-          'snippet.privacyStatus': 'unlisted',
-          // 'status.publicStatsViewable': ''
-          // 'snippet.defaultLanguage': '',
-          // 'snippet.tags[]': '',
-          // 'status.embeddable': '',
-          // 'status.license': '',
+          'status.privacyStatus': 'unlisted',
+          'status.publicStatsViewable': '',
+          'snippet.defaultLanguage': '',
+          'snippet.tags[]': '',
+          'status.embeddable': '',
+          'status.license': '',
           },
           'mediaFilename': 'https://api.zoom.us/recording/download/qtTlE6cR1GUA162Cq6RdlPbSbPbzmmPKpZeYgDSpAn8A36VyByBl0-U9nfRT7mtm',
         };
