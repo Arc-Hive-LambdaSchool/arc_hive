@@ -714,15 +714,15 @@ server.post('/recordings', (req, res) => {
           'part': 'snippet,status'
         },
         'properties': {
-          'snippet.categoryId': '22',
+          'categoryId': '22',
+          'description': 'Lambda School Lecture',
+          'title': "Trouble Shooting GoogleAPI",
+          'privacyStatus': 'unlisted',
+          // 'status.publicStatsViewable': ''
           // 'snippet.defaultLanguage': '',
-          'snippet.description': 'Lambda School Lecture',
           // 'snippet.tags[]': '',
-          'snippet.title': "Trouble Shooting GoogleAPI",
           // 'status.embeddable': '',
           // 'status.license': '',
-          'status.privacyStatus': 'unlisted',
-          // 'status.publicStatsViewable': ''
           },
           'mediaFilename': 'https://api.zoom.us/recording/download/qtTlE6cR1GUA162Cq6RdlPbSbPbzmmPKpZeYgDSpAn8A36VyByBl0-U9nfRT7mtm',
         };
