@@ -667,7 +667,7 @@ server.post('/recordings', (req, res) => {
   // console.log(`651: ${JSON.stringify(et)}`);
   // console.log(`653: ${JSON.stringify(req.body)}`);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
-    const p = JSON.parse(req.body.content);
+    // const p = JSON.parse(req.body.content);
     // console.log(`655: ${p.uuid}`);
     // console.log(`656: ${JSON.stringify(p.uuid)}`);
     const payload = {
@@ -677,7 +677,7 @@ server.post('/recordings', (req, res) => {
     const token = jwt.sign(payload, process.env.ZOOM_SECRET);
     const g = {
       method: 'GET',
-      uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings',
+      uri: 'https://api.zoom.us/v2/meetings/' + 'EaNoROSXTDum21Kw9PtVDw==' + '/recordings',
       headers: {
         Authorization: 'Bearer' + token,
         "alg": 'HS256',
@@ -754,7 +754,8 @@ server.post('/recordings', (req, res) => {
       }).on('end', () => {
         console.log(data);
       }); */
-      request(body.recording_files[0].download_url).pipe(fs.createWriteStream(__dirname + '/LECTUREVIDEO.mp4'));
+      const cWS = request(body.recording_files[0].download_url).pipe(fs.createWriteStream(__dirname + '/LECTUREVIDEO.mp4'));
+
       const params = {
         'params': {
           'part': 'snippet,status'
@@ -773,7 +774,9 @@ server.post('/recordings', (req, res) => {
           'mediaFilename': '',
         };
 
-      videosInsert(params, creds);
+        cWS.on('open', () => {
+          videosInsert(params, creds);
+        });
       res.send('It probably worked');
       console.log('673 RESPONSE: ' + JSON.stringify(response));
       console.log('674 BODY: ' + JSON.stringify(body));
