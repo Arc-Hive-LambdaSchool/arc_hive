@@ -1,9 +1,9 @@
-require('dotenv').config();
+require('dotenv').config(); // ?
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const request = require('request');
-const mongodb = require('mongodb');
+const mongodb = require('mongodb'); // ?
 const port = process.env.PORT || 5001;
 const Airtable = require('airtable');
 const slackModel = require('./slackModel');
@@ -14,48 +14,56 @@ const debug = require('debug')('slash-command-template:index');
 const users = require('./users.js');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const readline = require('readline');
+const readline = require('readline'); // ?
 const google = require('googleapis');
 const ytAPI = google.youtube('v3');
 const util = require('util');
 const googleAuth = require('google-auth-library');
-const opn = require('opn');
+const opn = require('opn'); // ?
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const passport = require('passport');
-const AWS = require('aws-sdk');
-const path = require('path');
+const passport = require('passport'); // ?
+const AWS = require('aws-sdk'); // ?
+const path = require('path'); // ?
 
-
+// ? v
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
   apiKey: process.env.AIR_TABLE_KEY
 });
 let base = Airtable.base('appMs812ZOuhtf8Un');
+// ? ^
 
 const server = express();
 
-
+// Sets up scope of permitted actions to YouTube
 const SCOPES = ['https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/youtube.upload'];
+
+// YouTube credentials
 const creds = {
   client_secret: process.env.YOUTUBE_CLIENT_SECRET,
   client_id: process.env.YOUTUBE_CLIENT_ID,
   redirect_uri: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
 };
 
+// Google Api declarations for authorized YouTube access
 const auth = new googleAuth();
 let oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
 const tokePath = path.join(__dirname, 'creds.json');
 let toke;
 
-mongoose.Promise = global.Promise;
+// Not Using but save for now
+// mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
 
+// BodyParser boilerplate
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
 /*=======================================================================
 =========================================================================
-* AUTH ROUTES
+* AUTHORIZATION ROUTES:
+* Authorizes the user to interact with YouTube
+* Confirm access token before proceeding with the rest of the program (first route hit)
 =========================================================================
 ========================================================================*/
 
@@ -63,19 +71,26 @@ server.use(bodyParser.urlencoded({extended: true}));
 * ==============INITIAL YOUTUBE AUTH ROUTE==============
 **************************************************************************/
 server.get('/auth', (req, res) => {
-
+  // ADD: If statement to check for valid token
+    // If valid token redirect to /interactive-component
   const getNewToken = (oAuthTraveler) => {
     const authUrl = oAuthTraveler.generateAuthUrl({
       access_type: 'offline',
       scope: SCOPES
     });
+
+    // NOT USING v
     // opn(authUrl, {app: 'google chrome'});
+
     res.redirect(authUrl);
   };
   getNewToken(oAuthTraveler);
-  console.log('704: ' + JSON.stringify(oAuthTraveler));
+  // console.log('704: ' + JSON.stringify(oAuthTraveler));
 });
 
+/*************************************************************************
+* ==============CONFIRMATION YOUTUBE AUTH ROUTE==============
+**************************************************************************/
 server.get('/auth-confirmation', (req, res) => {
   const code = req.query.code;
 
@@ -652,7 +667,7 @@ server.post('/recordings', (req, res) => {
   // console.log(`651: ${JSON.stringify(et)}`);
   // console.log(`653: ${JSON.stringify(req.body)}`);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
-    // const p = JSON.parse(req.body.content);
+    const p = JSON.parse(req.body.content);
     // console.log(`655: ${p.uuid}`);
     // console.log(`656: ${JSON.stringify(p.uuid)}`);
     const payload = {
@@ -662,7 +677,7 @@ server.post('/recordings', (req, res) => {
     const token = jwt.sign(payload, process.env.ZOOM_SECRET);
     const g = {
       method: 'GET',
-      uri: 'https://api.zoom.us/v2/meetings/' + 'P0HJjZ4BSWmSawtRnRKlKA==' + '/recordings',
+      uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings',
       headers: {
         Authorization: 'Bearer' + token,
         "alg": 'HS256',
@@ -715,7 +730,7 @@ server.post('/recordings', (req, res) => {
         const parameters = requestData['params'];
         parameters['auth'] = oauth2Client;
         parameters['media'] = {
-          "body": fs.createReadStream(__dirname + '/LECTUREVIDEO.mp4'),                       // request(requestData.mediaFilename).pipe(fs.createWriteStream('video.mp4')),
+          "body": fs.createReadStream(__dirname + '/LECTUREVIDEO.mp4'),                       // request(requestData.mediaFilename).pipe(fs.createWriteStream('LECTUREVIDEO.mp4')),
           "mimeType": "video/mp4"
         };
         parameters['notifySubscribers'] = false;
@@ -732,13 +747,14 @@ server.post('/recordings', (req, res) => {
         }));
       };
       /*
-      const readStream = fs.createReadStream(body.recording_files[0].download_url); // body.recording_files[0].download_url  request('http://fromrussiawithlove.com/baby.mp3').pipe(fs.createWriteStream('song.mp3'))
+      const readStream = fs.createReadStream(body.recording_files[0].download_url); // body.recording_files[0].download_url
        let data;
       readStream.on('data', (chunk) => {
         data += chunk;
       }).on('end', () => {
         console.log(data);
       }); */
+      request(body.recording_files[0].download_url).pipe(fs.createWriteStream(__dirname + '/LECTUREVIDEO.mp4'));
       const params = {
         'params': {
           'part': 'snippet,status'
@@ -754,7 +770,7 @@ server.post('/recordings', (req, res) => {
           'status.embeddable': '',
           'status.license': '',
           },
-          'mediaFilename': 'https://api.zoom.us/recording/download/qtTlE6cR1GUA162Cq6RdlPbSbPbzmmPKpZeYgDSpAn8A36VyByBl0-U9nfRT7mtm',
+          'mediaFilename': '',
         };
 
       videosInsert(params, creds);
