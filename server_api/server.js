@@ -803,10 +803,9 @@ server.post('/recordings', (req, res) => {
         };
         */
 
-        request(body.recording_files[0].download_url).pipe(fs.createWriteStream(__dirname + '/LECTUREVIDEO.mp4').on('finish', () => {
+        request(body.recording_files[0].download_url).pipe(fs.createWriteStream(__dirname + '/LECTUREVIDEO.mp4')).on('finish', () => {
           videosInsert(params, creds);
         });
-      );
 
         // cWS.on('open', () => {
         //
