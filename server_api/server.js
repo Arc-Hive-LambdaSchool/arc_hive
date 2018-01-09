@@ -576,6 +576,7 @@ server.post('/zoom', (req, res) => { // Changed get to post
       "topic": req.body.topic,
       "type": 1,
       "host_id": "268933",
+      "agenda": req.body.cohort + ';' + req.body.tags
       "settings": {
         "auto_recording": "cloud",
       },
@@ -774,7 +775,8 @@ server.post('/recordings', (req, res) => {
                 'content-type': 'application/json',
               },
               body: {
-                arcLink: 'https://youtu.be/' + data.id
+                arcLink: 'https://youtu.be/' + data.id,
+                tags: data.snippet.description,
               },
               json: true
             };
@@ -798,7 +800,7 @@ server.post('/recordings', (req, res) => {
         },
         'properties': {
           'snippet.categoryId': '22',
-          'snippet.description': 'Lecture',
+          'snippet.description': body.agenda,
           'snippet.title': body.topic,
           'status.privacyStatus': 'unlisted',
           'status.publicStatsViewable': '',
