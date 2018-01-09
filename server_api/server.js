@@ -742,6 +742,13 @@ server.post('/recordings', (req, res) => {
           }
           if (data) {
             console.log(util.inspect(data, false, null));
+            request.delete('https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings/' + p.recording_files[0].id, (err, response, body) => {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(`749 Response: ${response}`);
+              }
+            });
           }
 
         }));
