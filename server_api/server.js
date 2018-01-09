@@ -742,9 +742,17 @@ server.post('/recordings', (req, res) => {
           }
           if (data) {
             console.log(util.inspect(data, false, null));
-            const trash = 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings/' + p.recording_files[0].id;
-            console.log(`trash: ${trash}`);
-            request.delete(trash, (err, response, body) => {
+            const trash = {
+              method: 'DELETE',
+              uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings/' + p.recording_files[0].id,
+              headers: {
+                Authorization: 'Bearer' + token,
+                "alg": 'HS256',
+                "typ": 'JWT',
+              },
+              json: true
+            };
+            request.(trash, (err, response, body) => {
               if (err) {
                 console.log(err);
               } else {
