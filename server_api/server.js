@@ -576,7 +576,7 @@ server.post('/zoom', (req, res) => { // Changed get to post
       "topic": req.body.topic,
       "type": 1,
       "host_id": "268933",
-      "agenda": req.body.cohort + ';' + req.body.tags
+      "agenda": req.body.cohort + ';' + req.body.tags,
       "settings": {
         "auto_recording": "cloud",
       },
