@@ -752,7 +752,7 @@ server.post('/recordings', (req, res) => {
               },
               json: true
             };
-            request.(trash, (err, response, body) => {
+            request(trash, (err, response, body) => {
               if (err) {
                 console.log(err);
               } else {
