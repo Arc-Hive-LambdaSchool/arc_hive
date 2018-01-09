@@ -1,35 +1,124 @@
-require('dotenv').config();
+require('dotenv').config(); // ?
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const request = require('request');
-const mongodb = require('mongodb');
+const mongodb = require('mongodb'); // ?
 const port = process.env.PORT || 5001;
 const Airtable = require('airtable');
-// const thePrecious = process.env.AIR_TABLE_KEY;
-const thePrecious = 'Bearer keySPG804go0FXK3F'
-//console.log(thePrecious);
-//console.log(process.env);
 const slackModel = require('./slackModel');
 const slackSearch = require('./search');
 const axios = require('axios');
 const qs = require('querystring');
 const debug = require('debug')('slash-command-template:index');
 const users = require('./users.js');
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const readline = require('readline'); // ?
+const google = require('googleapis');
+const ytAPI = google.youtube('v3');
+const util = require('util');
+const googleAuth = require('google-auth-library');
+const opn = require('opn'); // ?
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
+const passport = require('passport'); // ?
+const AWS = require('aws-sdk'); // ?
+const path = require('path'); // ?
 
+// ? v
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
-  apiKey: thePrecious
+  apiKey: process.env.AIR_TABLE_KEY
 });
 let base = Airtable.base('appMs812ZOuhtf8Un');
+// ? ^
 
 const server = express();
 
-mongoose.Promise = global.Promise;
+// Sets up scope of permitted actions to YouTube
+const SCOPES = ['https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/youtube.upload'];
+
+// YouTube credentials
+const creds = {
+  client_secret: process.env.YOUTUBE_CLIENT_SECRET,
+  client_id: process.env.YOUTUBE_CLIENT_ID,
+  redirect_uri: 'https://pacific-waters-60975.herokuapp.com/auth-confirmation',
+};
+
+// Google Api declarations for authorized YouTube access
+const auth = new googleAuth();
+let oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
+const tokePath = path.join(__dirname, 'creds.json');
+let toke;
+
+// Not Using but save for now
+// mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/arc_hive', {useMongoClient: true});
 
+// BodyParser boilerplate
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
+
+/*=======================================================================
+=========================================================================
+* AUTHORIZATION ROUTES:
+* Authorizes the user to interact with YouTube
+* Confirm access token before proceeding with the rest of the program (first route hit)
+=========================================================================
+========================================================================*/
+
+/*************************************************************************
+* ==============INITIAL YOUTUBE AUTH ROUTE==============
+**************************************************************************/
+server.get('/auth', (req, res) => {
+  // ADD: If statement to check for valid token
+    // If valid token redirect to /interactive-component
+  const getNewToken = (oAuthTraveler) => {
+    const authUrl = oAuthTraveler.generateAuthUrl({
+      access_type: 'offline',
+      scope: SCOPES
+    });
+
+    // NOT USING v
+    // opn(authUrl, {app: 'google chrome'});
+
+    res.redirect(authUrl);
+  };
+  getNewToken(oAuthTraveler);
+  // console.log('704: ' + JSON.stringify(oAuthTraveler));
+});
+
+/*************************************************************************
+* ==============CONFIRMATION YOUTUBE AUTH ROUTE==============
+**************************************************************************/
+server.get('/auth-confirmation', (req, res) => {
+  const code = req.query.code;
+
+  const receiveToken = (code) => {
+    oAuthTraveler.getToken(code, ((err, token) => {
+      if (err) {
+        console.log('Error while trying to retrieve access token', err);
+        return;
+      }
+      console.log('716: ' + JSON.stringify(oAuthTraveler));
+      oAuthTraveler.credentials = token;
+      console.log('718: ' + JSON.stringify(oAuthTraveler));
+      fs.writeFile(tokePath, JSON.stringify(oAuthTraveler), (err) => {
+        if (err) {
+          console.log(`91: ${err}`);
+        }
+        console.log('SAVED');
+      });
+    }));
+  };
+
+  receiveToken(code);
+  // toke = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+  // console.log(`Toke: ${JSON.stringify(toke.credentials.access_token)}`);
+  console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
+  res.status(200);
+  res.send('Authorized');
+});
 
 /*=======================================================================
 =========================================================================
@@ -70,7 +159,6 @@ server.get('/', (req, res) => {
     pathArray.push(path.tags);
   }
   if (cohortVal) {
-    console.log(cohortVal);
     pathArray.push(path.cohort);
   }
   if (brownBagVal) {
@@ -150,7 +238,6 @@ server.post('/', (req, res) => {
         Title: req.body.arcTitle,
         Cohort: cohort,
         Tags: tags,
-        Brownbag: brownbag,
       }
     },
     json: true
@@ -170,8 +257,9 @@ server.post('/', (req, res) => {
         user: req.body.userId
       }
       slackSearch.airTableError(errorData);
+    } else {
+      slackSearch.arcConfirmation(req.body);
     }
-    slackSearch.arcConfirmation(req.body);
     res.send(JSON.stringify(body));
   });
 });
@@ -207,28 +295,16 @@ server.post('/commands', (req, res) => {
             type: 'text',
             name: 'tags',
             optional: true,
-            /* options: [
-              { label: 'JS', value: 'JS' },
-              { label: 'React', value: 'React' },
-              { label: 'Redux', value: 'Redux' },
-              { label: 'Auth', value: 'Auth' },
-              { label: 'C', value: 'C' },
-              { label: 'Testing', value: 'Testing' },
-            ], */
+            hint: 'Enter a single tag e.g. brownbag, code challenge, js, auth, react ...'
           },
           {
             label: 'Cohort',
             optional: true,
             type: 'text',
             name: 'cohort',
-            /* options: [
-              { label: 'CS1', value: 'CS1' },
-              { label: 'CS2', value: 'CS2' },
-              { label: 'CS3', value: 'CS3' },
-              { label: 'CS4', value: 'CS4' },
-            ], */
+            hint: 'Enter a single cohort e.g. CS1 or CS2. To get all videos regardless of cohort leave this field blank.'
           },
-          {
+          /* {
             label: 'Brownbag?',
             optional: true,
             type: 'select',
@@ -237,7 +313,7 @@ server.post('/commands', (req, res) => {
               { label: 'Only Brownbags', value: 'onlyBrownBags' },
               { label: 'No Brownbags', value: 'noBrownBags' },
             ]
-          },
+          }, */
           {
             label: 'Sorted By',
             optional: true,
@@ -350,27 +426,14 @@ server.post('/arcCommands', (req, res) => {
               type: 'text',
               name: 'tags',
               optional: true,
-              hint: 'add tags separated by a comma. Ex: React, Redux, Brownbag'
-              /* options: [
-                { label: 'JS', value: 'JS' },
-                { label: 'React', value: 'React' },
-                { label: 'Redux', value: 'Redux' },
-                { label: 'Auth', value: 'Auth' },
-                { label: 'C', value: 'C' },
-                { label: 'Testing', value: 'Testing' },
-              ], */
+              hint: 'Add tags separated by a comma. Ex: React, Redux, Brownbag',
             },
             {
               label: 'Cohort',
               type: 'text',
               name: 'cohort',
               optional: true,
-              /* options: [
-                { label: 'CS1', value: 'CS1' },
-                { label: 'CS2', value: 'CS2' },
-                { label: 'CS3', value: 'CS3' },
-                { label: 'CS4', value: 'CS4' },
-              ], */
+              hint: 'Entering multiple cohorts is the same as entering multiple tags. To add all cohorts enter "all".'
             },
             // {
             //   label: 'Brownbag?',
@@ -484,6 +547,257 @@ server.post('/timestamp', (req, res) => {
     }
   };
 });
+
+/*=======================================================================
+=========================================================================
+* ZOOM ROUTES
+=========================================================================
+========================================================================*/
+
+/*************************************************************************
+* ==============ZOOM CREATE ROUTE==============
+**************************************************************************/
+
+server.post('/zoom', (req, res) => { // Changed get to post
+  const payload = {
+    "iss": process.env.ZOOM_KEY,
+    "exp": Math.floor(Date.now() / 1000) + (60 * 60)
+  };
+  const token = jwt.sign(payload, process.env.ZOOM_SECRET);
+  const z = {
+    method: 'POST',
+    uri: 'https://api.zoom.us/v2/users/' + req.body.zoomEmail + '/meetings',
+    headers: {
+      Authorization: 'Bearer' + token,
+      "alg": 'HS256',
+      "typ": 'JWT',
+    },
+    body: {
+      "topic": req.body.topic,
+      "type": 1,
+      "host_id": "268933",
+      "settings": {
+        "auto_recording": "cloud",
+      },
+    },
+    json: true
+  };
+  request(z, (error, response, body) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+    const zoomData = {
+      cohort: req.body.cohort,
+      zoomLink: body.join_url
+    }
+    slackSearch.startZoom(zoomData);
+    res.send(response);
+  });
+  // res.send('ZOOM ZOOM');
+});
+
+/*************************************************************************
+* ==============ZOOM-SLACK ROUTE==============
+**************************************************************************/
+
+server.post('/slackzoom', (req, res) => {
+  const { token, text, trigger_id } = req.body;
+
+  if (token === process.env.SLACK_VERIFICATION_TOKEN) {
+    const dialog = {
+      token: process.env.SLACK_ACCESS_TOKEN,
+      trigger_id,
+      dialog: JSON.stringify({
+        title: 'Start a zoom meeting',
+        callback_id: 'submit-search',
+        submit_label: 'Submit',
+        elements: [
+          {
+            label: 'Title of lecture',
+            type: 'text',
+            name: 'topic',
+            value: text,
+          },
+          {
+            label: 'Zoom email address',
+            type: 'text',
+            name: 'zoomEmail',
+          },
+          {
+            label: 'Password',
+            type: 'text',
+            name: 'password',
+          },
+          {
+            label: 'Cohort',
+            type: 'text',
+            name: 'cohort',
+          },
+          {
+            label: 'Tags',
+            optional: true,
+            type: 'text',
+            name: 'tags',
+          },
+        ],
+      }),
+    };
+
+    axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
+      .then((result) => {
+        debug('dialog.open: %o', result.data);
+        res.send('');
+      }).catch((err) => {
+        debug('dialog.open call failed: %o', err);
+        res.sendStatus(500);
+      });
+  } else {
+    debug('Verification token mismatch');
+    res.sendStatus(500);
+  }
+});
+
+/*************************************************************************
+* ==============ZOOM-RECORDING ROUTE==============
+**************************************************************************/
+
+server.post('/recordings', (req, res) => {
+  // const et = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+  // console.log(`651: ${JSON.stringify(et)}`);
+  // console.log(`653: ${JSON.stringify(req.body)}`);
+  if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
+    const p = JSON.parse(req.body.content);
+    // console.log(`655: ${p.uuid}`);
+    // console.log(`656: ${JSON.stringify(p.uuid)}`);
+    const payload = {
+      "iss": process.env.ZOOM_KEY,
+      "exp": Math.floor(Date.now() / 1000) + (60 * 60)
+    };
+    const token = jwt.sign(payload, process.env.ZOOM_SECRET);
+    const g = {
+      method: 'GET',
+      uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings',
+      headers: {
+        Authorization: 'Bearer' + token,
+        "alg": 'HS256',
+        "typ": 'JWT',
+      },
+      json: true
+    };
+    request(g, (error, response, body) => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+      const createResource = (properties) => {
+        const resource = {};
+        const normalizedProps = properties;
+        for (let p in properties) {
+          const value = properties[p];
+          if (p && p.substr(-2, 2) == '[]') {
+            const adjustedName = p.replace('[]', '');
+            if (value) {
+              normalizedProps[adjustedName] = value.split(',');
+            }
+            delete normalizedProps[p];
+          }
+        }
+        for (let p in normalizedProps) {
+          if (normalizedProps.hasOwnProperty(p) && normalizedProps[p]) {
+            const propArray = p.split('.');
+            let ref = resource;
+            for (var pa = 0; pa < propArray.length; pa++) {
+              const key = propArray[pa];
+              if (pa == propArray.length - 1) {
+                ref[key] = normalizedProps[p];
+              } else {
+                ref = ref[key] = ref[key] || {};
+              }
+            }
+          };
+        }
+        return resource;
+      };
+
+      const videosInsert = (requestData, creds) => {
+        console.log('596 RequestData: ' + JSON.stringify(requestData));
+        const gAuth = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+        const auth = new googleAuth();
+        const oauth2Client = new auth.OAuth2(creds.clientId, creds.clientSecret, creds.redirectUrl);
+        oauth2Client.credentials = gAuth.credentials;
+        const service = google.youtube('v3');
+        const parameters = requestData['params'];
+        parameters['auth'] = oauth2Client;
+        parameters['media'] = {
+          "body": fs.createReadStream(__dirname + '/LECTUREVIDEO.mp4'),                       // request(requestData.mediaFilename).pipe(fs.createWriteStream('LECTUREVIDEO.mp4')),
+          "mimeType": "video/mp4"
+        };
+        parameters['notifySubscribers'] = false;
+        parameters['resource'] = createResource(requestData['properties']);
+        console.log(`687: ${JSON.stringify(parameters)}`);
+        service.videos.insert(parameters, ((err, data) => {
+          if (err) {
+            console.log('The API returned an error: ' + err);
+          }
+          if (data) {
+            console.log(util.inspect(data, false, null));
+          }
+
+        }));
+      };
+
+      const params = {
+        'params': {
+          'part': 'snippet,status'
+        },
+        'properties': {
+          'snippet.categoryId': '22',
+          'snippet.description': 'Lecture',
+          'snippet.title': body.topic,
+          'status.privacyStatus': 'unlisted',
+          'status.publicStatsViewable': '',
+          'snippet.defaultLanguage': '',
+          'snippet.tags[]': '',
+          'status.embeddable': '',
+          'status.license': '',
+          },
+          'mediaFilename': '',
+        };
+
+        request(body.recording_files[0].download_url).pipe(fs.createWriteStream(__dirname + '/LECTUREVIDEO.mp4')).on('finish', () => {
+          videosInsert(params, creds);
+        });
+
+        // cWS.on('open', () => {
+        //
+        // });
+      res.send('It probably worked');
+      console.log('673 RESPONSE: ' + JSON.stringify(response));
+      console.log('674 BODY: ' + JSON.stringify(body));
+    });
+  } else {
+    res.status(200);
+    res.send(req.body.type);
+  }
+
+});
+
+/*
+server.post('/recordings', (req, res) => {
+  // Sample nodejs code for videos.insert
+  console.log('684: ' + JSON.stringify(req.body));
+  // console.log(JSON.parse(oAuthTravler));
+
+
+});
+*/
+server.get('/recordings-test', (req, res) => {
+  // console.log(req.query.code);
+  // youtube_code = req.query.code;
+  res.send(JSON.stringify(toke));
+});
+
 
 
 

@@ -6,7 +6,7 @@ const request = require('request');
 
 
 const sendConfirmation = (slackSearch) => {
-  console.log(slackSearch);
+  // console.log(slackSearch);
   const field = [];
   for (let i = 0; i < slackSearch.Records.length; i++) {
     field.push({
@@ -23,7 +23,7 @@ const sendConfirmation = (slackSearch) => {
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     channel: slackSearch.userId,
-    text: `All records matching Tags: ${slackSearch.tags}, Cohort: ${slackSearch.cohort}, and Brownbag: ${slackSearch.brownbag}. Sorted from ${slackSearch.sortParam}`,
+    text: `All records matching Tags: ${slackSearch.tags} and Cohort: ${slackSearch.cohort}. Sorted from ${slackSearch.sortParam}`,
     attachments: JSON.stringify([
       {
         fields: field,
@@ -38,7 +38,6 @@ const sendConfirmation = (slackSearch) => {
 };
 
 const airTableError = (slackSearch) => {
-  // console.log(slackSearch);
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: process.env.SLACK_ACCESS_TOKEN,
     channel: slackSearch.user,
@@ -76,8 +75,6 @@ const arcConfirmation = (slackSearch) => {
   }
   console.log(cohorts);
   for (let i = 0; i < cohorts.length; i++) {
-    // console.log(`length: ${slackChan.length}`);
-    // console.log(slackChan[0]);
     axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
       token: process.env.SLACK_ACCESS_TOKEN,
       response_type: "in_channel",
@@ -108,16 +105,6 @@ const arcError = (slackSearch) => {
     response_type: "in_channel",
     channel: `${slackSearch.userId}`,
     text: `Error! Upload unsuccessful. You entered an invalid password`,
-    /* attachments: JSON.stringify([
-      {
-        fields: [
-          {
-            title: `${slackSearch.arcTitle}`,
-            value: slackSearch.arcLink
-          }
-        ],
-      },
-    ]), */
   })).then((result) => {
     debug('arcConfirmation: %o', result.data);
   }).catch((err) => {
@@ -163,6 +150,45 @@ const timestampConfirmation = (slackSearch) => {
   });
 };
 
+const startZoom = (slackSearch) => {
+  console.log(slackSearch);
+  const cohorts = [];
+  if (slackSearch.cohort.toUpperCase() === 'ALL') {
+    for (let i = 1; i <= 12; i++) {
+      cohorts.push('#CS' + [i]);
+    }
+  } else {
+    const slackCohorts = slackSearch.cohort.toUpperCase().split(', ');
+    for (let i = 0; i < slackCohorts.length; i++) {
+      cohorts.push(`#${slackCohorts[i]}`);
+    }
+  }
+  // console.log(cohorts);
+  for (let i = 0; i < cohorts.length; i++) {
+    axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+      token: process.env.SLACK_ACCESS_TOKEN,
+      channel: `${cohorts[i]}`,
+      text: `<!channel>`,
+      attachments: JSON.stringify([
+        {
+          fields: [
+            {
+              title: 'Zoom Link',
+              value: slackSearch.zoomLink,
+            }
+          ],
+        },
+      ]),
+    })).then((result) => {
+      debug('sendConfirmation: %o', result.data);
+    }).catch((err) => {
+      debug('sendConfirmation error: %o', err);
+      console.error(err);
+    });
+  }
+};
+
+
 const create = (userId, submission) => {
   const slackSearch = {};
 
@@ -183,8 +209,32 @@ const create = (userId, submission) => {
     slackSearch.arcLink = submission.arcLink;
     slackSearch.arcTitle = submission.arcTitle;
     slackSearch.arcTime = submission.arcTime;
+    slackSearch.zoomEmail = submission.zoomEmail;
+    slackSearch.topic = submission.topic;
 
-    if (slackSearch.arcLink) {
+    if(slackSearch.zoomEmail) {
+      if (submission.password === process.env.PASSWORD) {
+        // console.log('99 search: ' + JSON.stringify(slackSearch));
+        const z = {
+          method: 'POST',
+          uri: 'https://pacific-waters-60975.herokuapp.com/zoom',
+          headers: {
+            // Authorization: process.env.,
+            'content-type': 'application/json',
+          },
+          body: slackSearch,
+          json: true
+        };
+        request(z, (error, response, body) => {
+          if (error) {
+            console.log(error);
+            return;
+          }
+        });
+      } else {
+        arcError(slackSearch);
+      }
+    } else if (slackSearch.arcLink) {
       if (submission.password === process.env.PASSWORD) {
         // console.log('99 search: ' + JSON.stringify(slackSearch));
         const p = {
@@ -227,4 +277,10 @@ const create = (userId, submission) => {
   }).catch((err) => { console.error(err); });
 };
 
-module.exports = { create, sendConfirmation, arcConfirmation, airTableError };
+module.exports = {
+  create,
+  sendConfirmation,
+  arcConfirmation,
+  airTableError,
+  startZoom,
+};
