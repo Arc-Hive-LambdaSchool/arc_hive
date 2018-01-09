@@ -667,7 +667,7 @@ server.post('/recordings', (req, res) => {
   // console.log(`651: ${JSON.stringify(et)}`);
   // console.log(`653: ${JSON.stringify(req.body)}`);
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
-    // const p = JSON.parse(req.body.content);
+    const p = JSON.parse(req.body.content);
     // console.log(`655: ${p.uuid}`);
     // console.log(`656: ${JSON.stringify(p.uuid)}`);
     const payload = {
@@ -677,7 +677,7 @@ server.post('/recordings', (req, res) => {
     const token = jwt.sign(payload, process.env.ZOOM_SECRET);
     const g = {
       method: 'GET',
-      uri: 'https://api.zoom.us/v2/meetings/' + 'EaNoROSXTDum21Kw9PtVDw==' + '/recordings',
+      uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings',
       headers: {
         Authorization: 'Bearer' + token,
         "alg": 'HS256',
@@ -746,14 +746,6 @@ server.post('/recordings', (req, res) => {
 
         }));
       };
-      /*
-      const readStream = fs.createReadStream(body.recording_files[0].download_url); // body.recording_files[0].download_url
-       let data;
-      readStream.on('data', (chunk) => {
-        data += chunk;
-      }).on('end', () => {
-        console.log(data);
-      }); */
 
       const params = {
         'params': {
@@ -761,8 +753,8 @@ server.post('/recordings', (req, res) => {
         },
         'properties': {
           'snippet.categoryId': '22',
-          'snippet.description': 'Lambda School Lecture',
-          'snippet.title': "Trouble Shooting GoogleAPI",
+          'snippet.description': 'Lecture',
+          'snippet.title': body.topic,
           'status.privacyStatus': 'unlisted',
           'status.publicStatsViewable': '',
           'snippet.defaultLanguage': '',
@@ -772,36 +764,6 @@ server.post('/recordings', (req, res) => {
           },
           'mediaFilename': '',
         };
-        /*
-        const download = (url, dest, cb) => {
-            const file = fs.createWriteStream(dest);
-            const sendReq = request.get(url);
-
-            // verify response code
-            sendReq.on('response', function(response) {
-                if (response.statusCode !== 200) {
-                    return cb('Response status was ' + response.statusCode);
-                }
-            });
-
-            // check for request errors
-            sendReq.on('error', function (err) {
-                fs.unlink(dest);
-                return cb(err.message);
-            });
-
-            sendReq.pipe(file);
-
-            file.on('finish', function() {
-                file.close(cb);  // close() is async, call cb after close completes.
-            });
-
-            file.on('error', function(err) { // Handle errors
-                fs.unlink(dest); // Delete the file async. (But we don't check the result)
-                return cb(err.message);
-            });
-        };
-        */
 
         request(body.recording_files[0].download_url).pipe(fs.createWriteStream(__dirname + '/LECTUREVIDEO.mp4')).on('finish', () => {
           videosInsert(params, creds);
