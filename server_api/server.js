@@ -741,7 +741,10 @@ server.post('/recordings', (req, res) => {
             console.log('The API returned an error: ' + err);
           }
           if (data) {
+            // if success...
             console.log(util.inspect(data, false, null));
+
+            // Options object used to make the delete request to Zoom
             const trash = {
               method: 'DELETE',
               uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings',
@@ -752,11 +755,36 @@ server.post('/recordings', (req, res) => {
               },
               json: true
             };
+
+            // Request to Zoom that moves the uploaded video to trash
             request(trash, (err, response, body) => {
               if (err) {
                 console.log(err);
               } else {
                 console.log(`749 Response: ${JSON.stringify(response)}`);
+              }
+            });
+
+            // Options object used in the request to /
+            const paste = {
+              method: 'POST',
+              uri: 'https://pacific-waters-60975.herokuapp.com/',
+              headers: {
+                Authorization: process.env.AIR_TABLE_KEY,
+                'content-type': 'application/json',
+              },
+              body: {
+                arcLink: 'https://youtu.be/' + data.id
+              },
+              json: true
+            };
+
+            // Post request to / (which is an AirTable route) sending the YouTube link
+            request(paste, (err, response, body) => {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(JSON.stringify(response));
               }
             });
           }
