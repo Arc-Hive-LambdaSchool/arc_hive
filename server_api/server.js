@@ -744,7 +744,7 @@ server.post('/recordings', (req, res) => {
             console.log(util.inspect(data, false, null));
             const trash = {
               method: 'DELETE',
-              uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings/' + p.recording_files[0].id,
+              uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings',
               headers: {
                 Authorization: 'Bearer' + token,
                 "alg": 'HS256',
