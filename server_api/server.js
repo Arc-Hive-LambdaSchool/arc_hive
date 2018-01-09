@@ -559,6 +559,7 @@ server.post('/timestamp', (req, res) => {
 **************************************************************************/
 
 server.post('/zoom', (req, res) => { // Changed get to post
+  console.log(`562 Body: ${JSON.stringify(req.body)}`);
   const payload = {
     "iss": process.env.ZOOM_KEY,
     "exp": Math.floor(Date.now() / 1000) + (60 * 60)
@@ -583,6 +584,7 @@ server.post('/zoom', (req, res) => { // Changed get to post
     },
     json: true
   };
+  console.log(`586 Z: ${JSON.stringify(z)}`);
   request(z, (error, response, body) => {
     if (error) {
       console.log(error);
