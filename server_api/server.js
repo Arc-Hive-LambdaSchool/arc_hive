@@ -590,6 +590,7 @@ server.post('/zoom', (req, res) => { // Changed get to post
       console.log(error);
       return;
     }
+    console.log(`593 Response: ${JSON.stringify(response)}`);
     const zoomData = {
       cohort: req.body.cohort,
       zoomLink: body.join_url
