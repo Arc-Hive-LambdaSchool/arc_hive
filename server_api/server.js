@@ -82,14 +82,19 @@ server.get('/auth', (req, res) => {
 
   const testValidation = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
   console.log(JSON.stringify(testValidation));
-  const validationURI = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${testValidation.credentials.access_token}`;
-  request(validationURI, (err, response, body) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(JSON.stringify(response));
-    }
-  });
+  if (testValidation.credentials) {
+    const validationURI = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${testValidation.credentials.access_token}`;
+    request(validationURI, (err, response, body) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(JSON.stringify(response));
+      }
+    });
+  } else {
+    getNewToken(oAuthTraveler);
+  }
+
   // fs.readFile(tokePath, (err, token) => {
   //   console.log(JSON.stringify(token));
   //   if (err) {
