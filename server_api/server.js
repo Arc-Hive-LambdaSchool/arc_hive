@@ -80,34 +80,37 @@ server.get('/auth', (req, res) => {
     res.redirect(authUrl);
   };
 
-  fs.readFile(tokePath, (err, token) => {
-    console.log(JSON.stringify(token));
-    if (err) {
-      console.log(err);
-      getNewToken(oAuthTraveler);
-    } else {
-      // oauth2Client.credentials = JSON.parse(token);
-      // callback(oauth2Client, requestData);
-      const redirect = {
-        method: 'POST',
-        uri: 'https://pacific-waters-60975.herokuapp.com/slackzoom',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: {
-          token: process.env.SLACK_VERIFICATION_TOKEN,
-        },
-        json: true
-      };
-      request(redirect, (err, response, body) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log('Token Valid. Redirecting to /slackzoom');
-        }
-      });
-    }
-  });
+  const testValidation = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+  console.log(JSON.stringify(testValidation));
+
+  // fs.readFile(tokePath, (err, token) => {
+  //   console.log(JSON.stringify(token));
+  //   if (err) {
+  //     console.log(err);
+  //     getNewToken(oAuthTraveler);
+  //   } else {
+  //     // oauth2Client.credentials = JSON.parse(token);
+  //     // callback(oauth2Client, requestData);
+  //     const redirect = {
+  //       method: 'POST',
+  //       uri: 'https://pacific-waters-60975.herokuapp.com/slackzoom',
+  //       headers: {
+  //         'content-type': 'application/json',
+  //       },
+  //       body: {
+  //         token: process.env.SLACK_VERIFICATION_TOKEN,
+  //       },
+  //       json: true
+  //     };
+  //     request(redirect, (err, response, body) => {
+  //       if (err) {
+  //         console.log(err);
+  //       } else {
+  //         console.log('Token Valid. Redirecting to /slackzoom');
+  //       }
+  //     });
+  //   }
+  // });
     // NOT USING v
     // opn(authUrl, {app: 'google chrome'});
   // console.log('704: ' + JSON.stringify(oAuthTraveler));
