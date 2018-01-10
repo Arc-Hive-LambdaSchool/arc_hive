@@ -272,6 +272,9 @@ server.post('/', (req, res) => {
       if (req.body.userId) {
         slackData.userId = req.body.userId;
       }
+      if (typeof(slackData.cohort) === 'object') {
+        slackData.cohort = slackData.cohort.join(', ');
+      }
       slackSearch.arcConfirmation(slackData);
     }
     res.send(JSON.stringify(body));
