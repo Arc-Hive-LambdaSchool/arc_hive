@@ -25,13 +25,13 @@ const passport = require('passport'); // ?
 const AWS = require('aws-sdk'); // ?
 const path = require('path'); // ?
 
-// ? v
+// This code is worthless garbage
 // Airtable.configure({
 //   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
 //   apiKey: process.env.AIR_TABLE_KEY
 // });
 // let base = Airtable.base('appMs812ZOuhtf8Un');
-// ? ^
+//
 
 const server = express();
 
@@ -49,7 +49,6 @@ const creds = {
 const auth = new googleAuth();
 let oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
 const tokePath = path.join(__dirname, 'creds.json');
-let toke;
 
 // Not Using but save for now
 // mongoose.Promise = global.Promise;
@@ -72,19 +71,26 @@ server.use(bodyParser.urlencoded({extended: true}));
 **************************************************************************/
 server.get('/auth', (req, res) => {
   // ADD: If statement to check for valid token
-    // If valid token redirect to /interactive-component
+    // If valid token redirect to /slackzoom
   const getNewToken = (oAuthTraveler) => {
     const authUrl = oAuthTraveler.generateAuthUrl({
       access_type: 'offline',
       scope: SCOPES
     });
-
-    // NOT USING v
-    // opn(authUrl, {app: 'google chrome'});
-
     res.redirect(authUrl);
   };
-  getNewToken(oAuthTraveler);
+
+  fs.readFile(tokePath, function(err, token) {
+    if (err) {
+      getNewToken(oAuthTraveler);
+    } else {
+      // oauth2Client.credentials = JSON.parse(token);
+      // callback(oauth2Client, requestData);
+      res.redirect('/slackzoom');
+    }
+  });
+    // NOT USING v
+    // opn(authUrl, {app: 'google chrome'});
   // console.log('704: ' + JSON.stringify(oAuthTraveler));
 });
 
@@ -117,7 +123,7 @@ server.get('/auth-confirmation', (req, res) => {
   // console.log(`Toke: ${JSON.stringify(toke.credentials.access_token)}`);
   console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   res.status(200);
-  res.send('Authorized');
+  res.redirect('/slackzoom');
 });
 
 /*=======================================================================
@@ -853,24 +859,6 @@ server.post('/recordings', (req, res) => {
   }
 
 });
-
-/*
-server.post('/recordings', (req, res) => {
-  // Sample nodejs code for videos.insert
-  console.log('684: ' + JSON.stringify(req.body));
-  // console.log(JSON.parse(oAuthTravler));
-
-
-});
-*/
-server.get('/recordings-test', (req, res) => {
-  // console.log(req.query.code);
-  // youtube_code = req.query.code;
-  res.send(JSON.stringify(toke));
-});
-
-
-
 
 server.listen(port, () => {
   console.log(`Servs up dude ${port}`);
