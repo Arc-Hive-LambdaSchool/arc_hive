@@ -83,6 +83,10 @@ server.get('/auth', (req, res) => {
   const testValidation = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
   console.log(JSON.stringify(testValidation));
 
+  if (testValidation = {}) {
+    getNewToken(oAuthTraveler);
+  }
+
   // fs.readFile(tokePath, (err, token) => {
   //   console.log(JSON.stringify(token));
   //   if (err) {
