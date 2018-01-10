@@ -263,7 +263,15 @@ server.post('/', (req, res) => {
       }
       slackSearch.airTableError(errorData);
     } else {
-      slackSearch.arcConfirmation(req.body);
+      const slackData = {
+        cohort: body.Cohort,
+        arcTitle: body.Title,
+        arcLink: body.Link,
+      };
+      if (req.body.userId) {
+        slackData.userId = req.body.userId;
+      }
+      slackSearch.arcConfirmation(slackData);
     }
     res.send(JSON.stringify(body));
   });
