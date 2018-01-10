@@ -268,6 +268,7 @@ server.post('/', (req, res) => {
         arcTitle: body.Title,
         arcLink: body.Link,
       };
+      console.log(`SlackData: ${JSON.stringify(slackData)}`);
       if (req.body.userId) {
         slackData.userId = req.body.userId;
       }
