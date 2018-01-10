@@ -82,12 +82,14 @@ server.get('/auth', (req, res) => {
 
   const testValidation = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
   console.log(JSON.stringify(testValidation));
-
-  if (testValidation === {}) {
-    getNewToken(oAuthTraveler);
-  }
-
-  getNewToken(oAuthTraveler);
+  const validationURI = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${testValidation.credentials.access_token}`;
+  request(validationURI, (err, response, body) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(JSON.stringify(response));
+    }
+  });
   // fs.readFile(tokePath, (err, token) => {
   //   console.log(JSON.stringify(token));
   //   if (err) {
@@ -133,9 +135,9 @@ server.get('/auth-confirmation', (req, res) => {
         console.log('Error while trying to retrieve access token', err);
         return;
       }
-      console.log('716: ' + JSON.stringify(oAuthTraveler));
+      // console.log('716: ' + JSON.stringify(oAuthTraveler));
       oAuthTraveler.credentials = token;
-      console.log('718: ' + JSON.stringify(oAuthTraveler));
+      // console.log('718: ' + JSON.stringify(oAuthTraveler));
       fs.writeFile(tokePath, JSON.stringify(oAuthTraveler), (err) => {
         if (err) {
           console.log(`91: ${err}`);
@@ -148,7 +150,7 @@ server.get('/auth-confirmation', (req, res) => {
   receiveToken(code);
   // toke = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
   // console.log(`Toke: ${JSON.stringify(toke.credentials.access_token)}`);
-  console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
+  // console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   const redirect = {
     method: 'POST',
     uri: 'https://pacific-waters-60975.herokuapp.com/slackzoom',
