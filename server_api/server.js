@@ -574,7 +574,7 @@ server.post('/zoom', (req, res) => { // Changed get to post
       "typ": 'JWT',
     },
     body: {
-      "topic": req.body.topic,
+      "topic": req.body.topic + ':' + req.body.cohort + ';' + req.body.tags,
       "type": 1,
       "host_id": "268933",
       "agenda": req.body.cohort + ';' + req.body.tags,
@@ -797,15 +797,17 @@ server.post('/recordings', (req, res) => {
 
         }));
       };
-
+      const temp = body.topic.split(':');
+      const description = temp[1];
+      const title = temp[0];
       const params = {
         'params': {
           'part': 'snippet,status'
         },
         'properties': {
           'snippet.categoryId': '22',
-          'snippet.description': body.agenda,
-          'snippet.title': body.topic,
+          'snippet.description': description,
+          'snippet.title': title,
           'status.privacyStatus': 'unlisted',
           'status.publicStatsViewable': '',
           'snippet.defaultLanguage': '',
