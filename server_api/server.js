@@ -87,6 +87,7 @@ server.get('/auth', (req, res) => {
     getNewToken(oAuthTraveler);
   }
 
+  getNewToken(oAuthTraveler);
   // fs.readFile(tokePath, (err, token) => {
   //   console.log(JSON.stringify(token));
   //   if (err) {
