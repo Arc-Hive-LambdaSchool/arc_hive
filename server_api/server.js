@@ -77,6 +77,7 @@ server.post('/auth', (req, res) => {
       access_type: 'offline',
       scope: SCOPES
     });
+    opn('google.com');
     res.redirect(authUrl);
   };
 
