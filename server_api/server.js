@@ -669,8 +669,9 @@ server.post('/slackzoom', (req, res) => {
 server.post('/recordings', (req, res) => {
   // const et = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
   // console.log(`651: ${JSON.stringify(et)}`);
-  // console.log(`653: ${JSON.stringify(req.body)}`);
+
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
+    console.log(`653: ${JSON.stringify(req.body)}`);
     const p = JSON.parse(req.body.content);
     // console.log(`655: ${p.uuid}`);
     // console.log(`656: ${JSON.stringify(p.uuid)}`);
