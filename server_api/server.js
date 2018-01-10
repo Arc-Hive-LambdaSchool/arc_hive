@@ -786,6 +786,7 @@ server.post('/recordings', (req, res) => {
               body: {
                 arcLink: 'https://youtu.be/' + data.id,
                 description: data.snippet.description,
+                title: data.snippet.title,
               },
               json: true
             };
