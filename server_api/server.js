@@ -213,6 +213,11 @@ server.post('/', (req, res) => {
   let cohort = ['N/A'];
   let tags = ['N/A'];
   let link = req.body.arcLink;
+  if (req.body.description) {
+    const temp = req.body.description.toUpperCase().split(';');
+    cohort = [temp[0]];
+    tags = temp[1].split(', ');
+  }
   if (req.body.cohort) {
     cohort = req.body.cohort.toUpperCase().split(', ');
   }
@@ -780,7 +785,7 @@ server.post('/recordings', (req, res) => {
               },
               body: {
                 arcLink: 'https://youtu.be/' + data.id,
-                tags: data.snippet.description,
+                description: data.snippet.description,
               },
               json: true
             };
