@@ -213,6 +213,11 @@ server.post('/', (req, res) => {
   let cohort = ['N/A'];
   let tags = ['N/A'];
   let link = req.body.arcLink;
+  if (req.body.description) {
+    const temp = req.body.description.toUpperCase().split(';');
+    cohort = [temp[0]];
+    tags = temp[1].split(', ');
+  }
   if (req.body.cohort) {
     cohort = req.body.cohort.toUpperCase().split(', ');
   }
@@ -258,7 +263,19 @@ server.post('/', (req, res) => {
       }
       slackSearch.airTableError(errorData);
     } else {
-      slackSearch.arcConfirmation(req.body);
+      const slackData = {
+        "cohort": body.fields.Cohort,
+        "arcTitle": body.fields.Title,
+        "arcLink": body.fields.Link,
+      };
+      console.log(`SlackData: ${JSON.stringify(slackData)}`);
+      if (req.body.userId) {
+        slackData.userId = req.body.userId;
+      }
+      if (typeof(slackData.cohort) === 'object') {
+        slackData.cohort = slackData.cohort.join(', ');
+      }
+      slackSearch.arcConfirmation(slackData);
     }
     res.send(JSON.stringify(body));
   });
@@ -559,6 +576,7 @@ server.post('/timestamp', (req, res) => {
 **************************************************************************/
 
 server.post('/zoom', (req, res) => { // Changed get to post
+  console.log(`562 Body: ${JSON.stringify(req.body)}`);
   const payload = {
     "iss": process.env.ZOOM_KEY,
     "exp": Math.floor(Date.now() / 1000) + (60 * 60)
@@ -573,20 +591,23 @@ server.post('/zoom', (req, res) => { // Changed get to post
       "typ": 'JWT',
     },
     body: {
-      "topic": req.body.topic,
+      "topic": req.body.topic + ':' + req.body.cohort + ';' + req.body.tags,
       "type": 1,
       "host_id": "268933",
+      "agenda": req.body.cohort + ';' + req.body.tags,
       "settings": {
         "auto_recording": "cloud",
       },
     },
     json: true
   };
+  console.log(`586 Z: ${JSON.stringify(z)}`);
   request(z, (error, response, body) => {
     if (error) {
       console.log(error);
       return;
     }
+    console.log(`593 Response: ${JSON.stringify(response)}`);
     const zoomData = {
       cohort: req.body.cohort,
       zoomLink: body.join_url
@@ -665,8 +686,9 @@ server.post('/slackzoom', (req, res) => {
 server.post('/recordings', (req, res) => {
   // const et = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
   // console.log(`651: ${JSON.stringify(et)}`);
-  // console.log(`653: ${JSON.stringify(req.body)}`);
+
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
+    console.log(`653: ${JSON.stringify(req.body)}`);
     const p = JSON.parse(req.body.content);
     // console.log(`655: ${p.uuid}`);
     // console.log(`656: ${JSON.stringify(p.uuid)}`);
@@ -741,20 +763,69 @@ server.post('/recordings', (req, res) => {
             console.log('The API returned an error: ' + err);
           }
           if (data) {
+            // if success...
             console.log(util.inspect(data, false, null));
+
+            // Options object used to make the delete request to Zoom
+            const trash = {
+              method: 'DELETE',
+              uri: 'https://api.zoom.us/v2/meetings/' + p.uuid + '/recordings',
+              headers: {
+                Authorization: 'Bearer' + token,
+                "alg": 'HS256',
+                "typ": 'JWT',
+              },
+              json: true
+            };
+
+            // Request to Zoom that moves the uploaded video to trash
+            request(trash, (err, response, body) => {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(`749 Response: ${JSON.stringify(response)}`);
+              }
+            });
+
+            // Options object used in the request to /
+            const paste = {
+              method: 'POST',
+              uri: 'https://pacific-waters-60975.herokuapp.com/',
+              headers: {
+                Authorization: process.env.AIR_TABLE_KEY,
+                'content-type': 'application/json',
+              },
+              body: {
+                arcLink: 'https://youtu.be/' + data.id,
+                description: data.snippet.description,
+                arcTitle: data.snippet.title,
+              },
+              json: true
+            };
+
+            // Post request to / (which is an AirTable route) sending the YouTube link
+            request(paste, (err, response, body) => {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(JSON.stringify(response));
+              }
+            });
           }
 
         }));
       };
-
+      const temp = body.topic.split(':');
+      const description = temp[1];
+      const title = temp[0];
       const params = {
         'params': {
           'part': 'snippet,status'
         },
         'properties': {
           'snippet.categoryId': '22',
-          'snippet.description': 'Lecture',
-          'snippet.title': body.topic,
+          'snippet.description': description,
+          'snippet.title': title,
           'status.privacyStatus': 'unlisted',
           'status.publicStatsViewable': '',
           'snippet.defaultLanguage': '',
