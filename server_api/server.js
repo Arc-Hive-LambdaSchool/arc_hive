@@ -26,11 +26,11 @@ const AWS = require('aws-sdk'); // ?
 const path = require('path'); // ?
 
 // ? v
-Airtable.configure({
-  endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
-  apiKey: process.env.AIR_TABLE_KEY
-});
-let base = Airtable.base('appMs812ZOuhtf8Un');
+// Airtable.configure({
+//   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
+//   apiKey: process.env.AIR_TABLE_KEY
+// });
+// let base = Airtable.base('appMs812ZOuhtf8Un');
 // ? ^
 
 const server = express();
