@@ -77,53 +77,12 @@ server.post('/auth', (req, res) => {
       access_type: 'offline',
       scope: SCOPES
     });
-    opn('google.com');
+
     res.redirect(authUrl);
   };
 
-  const testValidation = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
-  console.log(JSON.stringify(testValidation));
-  if (testValidation.credentials) {
-    const validationURI = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${testValidation.credentials.access_token}`;
-    request(validationURI, (err, response, body) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(JSON.stringify(response));
-      }
-    });
-  } else {
-    getNewToken(oAuthTraveler);
-  }
+  getNewToken(oAuthTraveler);
 
-  // fs.readFile(tokePath, (err, token) => {
-  //   console.log(JSON.stringify(token));
-  //   if (err) {
-  //     console.log(err);
-  //     getNewToken(oAuthTraveler);
-  //   } else {
-  //     // oauth2Client.credentials = JSON.parse(token);
-  //     // callback(oauth2Client, requestData);
-  //     const redirect = {
-  //       method: 'POST',
-  //       uri: 'https://pacific-waters-60975.herokuapp.com/slackzoom',
-  //       headers: {
-  //         'content-type': 'application/json',
-  //       },
-  //       body: {
-  //         token: process.env.SLACK_VERIFICATION_TOKEN,
-  //       },
-  //       json: true
-  //     };
-  //     request(redirect, (err, response, body) => {
-  //       if (err) {
-  //         console.log(err);
-  //       } else {
-  //         console.log('Token Valid. Redirecting to /slackzoom');
-  //       }
-  //     });
-  //   }
-  // });
     // NOT USING v
     // opn(authUrl, {app: 'google chrome'});
   // console.log('704: ' + JSON.stringify(oAuthTraveler));
@@ -680,59 +639,90 @@ server.post('/zoom', (req, res) => { // Changed get to post
 **************************************************************************/
 
 server.post('/slackzoom', (req, res) => {
-  const { token, text, trigger_id } = req.body;
+  const { token, text, trigger_id, user_id } = req.body;
 
   if (token === process.env.SLACK_VERIFICATION_TOKEN) {
-    const dialog = {
-      token: process.env.SLACK_ACCESS_TOKEN,
-      trigger_id,
-      dialog: JSON.stringify({
-        title: 'Start a zoom meeting',
-        callback_id: 'submit-search',
-        submit_label: 'Submit',
-        elements: [
-          {
-            label: 'Title of lecture',
-            type: 'text',
-            name: 'topic',
-            value: text,
-          },
-          {
-            label: 'Zoom email address',
-            type: 'text',
-            name: 'zoomEmail',
-          },
-          {
-            label: 'Password',
-            type: 'text',
-            name: 'password',
-          },
-          {
-            label: 'Cohort',
-            type: 'text',
-            name: 'cohort',
-          },
-          {
-            label: 'Tags',
-            optional: true,
-            type: 'text',
-            name: 'tags',
-          },
-        ],
-      }),
-    };
 
-    axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
-      .then((result) => {
-        debug('dialog.open: %o', result.data);
-        res.send('');
-      }).catch((err) => {
-        debug('dialog.open call failed: %o', err);
-        res.sendStatus(500);
+    const testValidation = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+    console.log(JSON.stringify(testValidation));
+    if (testValidation.credentials) {
+      const validationURI = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${testValidation.credentials.access_token}`;
+      request(validationURI, (err, response, body) => {
+        if (err) {
+          console.log(err);
+        } else {
+          const dialog = {
+            token: process.env.SLACK_ACCESS_TOKEN,
+            trigger_id,
+            dialog: JSON.stringify({
+              title: 'Start a zoom meeting',
+              callback_id: 'submit-search',
+              submit_label: 'Submit',
+              elements: [
+                {
+                  label: 'Title of lecture',
+                  type: 'text',
+                  name: 'topic',
+                  value: text,
+                },
+                {
+                  label: 'Zoom email address',
+                  type: 'text',
+                  name: 'zoomEmail',
+                },
+                {
+                  label: 'Password',
+                  type: 'text',
+                  name: 'password',
+                },
+                {
+                  label: 'Cohort',
+                  type: 'text',
+                  name: 'cohort',
+                },
+                {
+                  label: 'Tags',
+                  optional: true,
+                  type: 'text',
+                  name: 'tags',
+                },
+              ],
+            }),
+          };
+
+          axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
+            .then((result) => {
+              debug('dialog.open: %o', result.data);
+              res.send('');
+            }).catch((err) => {
+              debug('dialog.open call failed: %o', err);
+              res.sendStatus(500);
+            });
+        }
       });
-  } else {
-    debug('Verification token mismatch');
-    res.sendStatus(500);
+    } else {
+      axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+        token: process.env.SLACK_ACCESS_TOKEN,
+        channel: user_id,
+        text: `You are not logged in. Please click the authorization link below and try again`,
+        attachments: JSON.stringify([
+          {
+            fields: [{
+              title: 'Authorization Page',
+              value: 'https://pacific-waters-60975.herokuapp.com/auth'
+            }],
+          },
+        ]),
+      })).then((result) => {
+        debug('sendConfirmation: %o', result.data);
+      }).catch((err) => {
+        debug('sendConfirmation error: %o', err);
+        console.error(err);
+      });
+    } else {
+      debug('Verification token mismatch');
+      res.sendStatus(500);
+    }
   }
 });
 
