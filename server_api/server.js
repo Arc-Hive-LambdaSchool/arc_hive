@@ -264,9 +264,9 @@ server.post('/', (req, res) => {
       slackSearch.airTableError(errorData);
     } else {
       const slackData = {
-        "cohort": body.Cohort,
-        "arcTitle": body.Title,
-        "arcLink": body.Link,
+        "cohort": body.fields.Cohort,
+        "arcTitle": body.fields.Title,
+        "arcLink": body.fields.Link,
       };
       console.log(`SlackData: ${JSON.stringify(slackData)}`);
       if (req.body.userId) {
