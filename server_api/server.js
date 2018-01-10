@@ -80,8 +80,10 @@ server.get('/auth', (req, res) => {
     res.redirect(authUrl);
   };
 
-  fs.readFile(tokePath, function(err, token) {
+  fs.readFile(tokePath, (err, token) => {
+    console.log(JSON.stringify(token));
     if (err) {
+      console.log(err);
       getNewToken(oAuthTraveler);
     } else {
       // oauth2Client.credentials = JSON.parse(token);
