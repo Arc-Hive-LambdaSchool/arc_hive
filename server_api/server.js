@@ -719,10 +719,11 @@ server.post('/slackzoom', (req, res) => {
         debug('sendConfirmation error: %o', err);
         console.error(err);
       });
-    } else {
-      debug('Verification token mismatch');
-      res.sendStatus(500);
     }
+
+  } else {
+    debug('Verification token mismatch');
+    res.sendStatus(500);
   }
 });
 
