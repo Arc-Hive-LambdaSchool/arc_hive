@@ -116,24 +116,8 @@ server.get('/auth-confirmation', (req, res) => {
   // toke = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
   // console.log(`Toke: ${JSON.stringify(toke.credentials.access_token)}`);
   // console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
-  const redirect = {
-    method: 'POST',
-    uri: 'https://pacific-waters-60975.herokuapp.com/slackzoom',
-    headers: {
-      'content-type': 'application/json',
-    },
-    body: {
-      token: process.env.SLACK_VERIFICATION_TOKEN,
-    },
-    json: true
-  };
-  request(redirect, (err, response, body) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Token Valid. Redirecting to /slackzoom');
-    }
-  });
+  res.status(200);
+  res.send('You are now Authorized');
 });
 
 /*=======================================================================
