@@ -315,7 +315,7 @@ server.post('/commands', (req, res) => {
             type: 'text',
             name: 'tags',
             optional: true,
-            hint: 'Enter one or more tags separated by commas e.g. brownbag, code challenge, js, auth, react (note: the search returns results containing all tags entered)'
+            hint: 'Enter one or more tags separated by commas e.g. brownbag, code challenge, js, auth, react'
           },
           {
             label: 'Cohort',
