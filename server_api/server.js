@@ -215,6 +215,7 @@ server.post('/', (req, res) => {
   let link = req.body.arcLink;
   if (req.body.description) {
     const temp = req.body.description.toUpperCase().split(': ');
+    console.log(temp);
     cohort = [temp[0]];
     tags = temp[1].split(', ');
   }
