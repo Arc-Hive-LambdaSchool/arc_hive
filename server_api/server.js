@@ -214,7 +214,7 @@ server.post('/', (req, res) => {
   let tags = ['N/A'];
   let link = req.body.arcLink;
   if (req.body.description) {
-    const temp = req.body.description.toUpperCase().split(';');
+    const temp = req.body.description.toUpperCase().split(': ');
     cohort = [temp[0]];
     tags = temp[1].split(', ');
   }
@@ -594,7 +594,7 @@ server.post('/zoom', (req, res) => { // Changed get to post
       "typ": 'JWT',
     },
     body: {
-      "topic": req.body.topic + ':' + req.body.cohort + ';' + req.body.tags,
+      "topic": req.body.topic + ';' + req.body.cohort + ': ' + req.body.tags,
       "type": 1,
       "host_id": "268933",
       "agenda": req.body.cohort + ';' + req.body.tags,
