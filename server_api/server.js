@@ -25,13 +25,13 @@ const passport = require('passport'); // ?
 const AWS = require('aws-sdk'); // ?
 const path = require('path'); // ?
 
-// ? v
-Airtable.configure({
-  endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
-  apiKey: process.env.AIR_TABLE_KEY
-});
-let base = Airtable.base('appMs812ZOuhtf8Un');
-// ? ^
+// This code is worthless garbage
+// Airtable.configure({
+//   endpointUrl: 'https://api.airtable.com/v0/appMs812ZOuhtf8Un/Table%201',
+//   apiKey: process.env.AIR_TABLE_KEY
+// });
+// let base = Airtable.base('appMs812ZOuhtf8Un');
+//
 
 const server = express();
 
@@ -49,7 +49,6 @@ const creds = {
 const auth = new googleAuth();
 let oAuthTraveler = new auth.OAuth2(creds.client_id, creds.client_secret, creds.redirect_uri);
 const tokePath = path.join(__dirname, 'creds.json');
-let toke;
 
 // Not Using but save for now
 // mongoose.Promise = global.Promise;
@@ -72,19 +71,20 @@ server.use(bodyParser.urlencoded({extended: true}));
 **************************************************************************/
 server.get('/auth', (req, res) => {
   // ADD: If statement to check for valid token
-    // If valid token redirect to /interactive-component
+    // If valid token redirect to /slackzoom
   const getNewToken = (oAuthTraveler) => {
     const authUrl = oAuthTraveler.generateAuthUrl({
       access_type: 'offline',
       scope: SCOPES
     });
 
-    // NOT USING v
-    // opn(authUrl, {app: 'google chrome'});
-
     res.redirect(authUrl);
   };
+
   getNewToken(oAuthTraveler);
+
+    // NOT USING v
+    // opn(authUrl, {app: 'google chrome'});
   // console.log('704: ' + JSON.stringify(oAuthTraveler));
 });
 
@@ -100,9 +100,9 @@ server.get('/auth-confirmation', (req, res) => {
         console.log('Error while trying to retrieve access token', err);
         return;
       }
-      console.log('716: ' + JSON.stringify(oAuthTraveler));
+      // console.log('716: ' + JSON.stringify(oAuthTraveler));
       oAuthTraveler.credentials = token;
-      console.log('718: ' + JSON.stringify(oAuthTraveler));
+      // console.log('718: ' + JSON.stringify(oAuthTraveler));
       fs.writeFile(tokePath, JSON.stringify(oAuthTraveler), (err) => {
         if (err) {
           console.log(`91: ${err}`);
@@ -115,9 +115,9 @@ server.get('/auth-confirmation', (req, res) => {
   receiveToken(code);
   // toke = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
   // console.log(`Toke: ${JSON.stringify(toke.credentials.access_token)}`);
-  console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
+  // console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   res.status(200);
-  res.send('Authorized');
+  res.send('You are now Authorized');
 });
 
 /*=======================================================================
@@ -221,9 +221,12 @@ server.post('/', (req, res) => {
   if (req.body.cohort) {
     cohort = req.body.cohort.toUpperCase().split(', ');
   }
-  if (req.body.arcTime) {
-    link += '?t=' + req.body.arcTime;
-  }
+
+  // Not in use
+  // if (req.body.arcTime) {
+  //   link += '?t=' + req.body.arcTime;
+  // }
+
   if (req.body.tags) {
     tags = req.body.tags.toUpperCase().split(', ');
   }
@@ -312,14 +315,14 @@ server.post('/commands', (req, res) => {
             type: 'text',
             name: 'tags',
             optional: true,
-            hint: 'Enter a single tag e.g. brownbag, code challenge, js, auth, react ...'
+            hint: 'Enter tag(s) separated by commas e.g. brownbag, code challenge, react (note: only videos with tags matching ALL params are returned)'
           },
           {
             label: 'Cohort',
             optional: true,
             type: 'text',
             name: 'cohort',
-            hint: 'Enter a single cohort e.g. CS1 or CS2. To get all videos regardless of cohort leave this field blank.'
+            hint: 'Enter cohort(s) in the same format as above e.g. CS1, CS2 To get all videos regardless of cohort leave this field blank.'
           },
           /* {
             label: 'Brownbag?',
@@ -623,56 +626,88 @@ server.post('/zoom', (req, res) => { // Changed get to post
 **************************************************************************/
 
 server.post('/slackzoom', (req, res) => {
-  const { token, text, trigger_id } = req.body;
+  const { token, text, trigger_id, user_id } = req.body;
 
   if (token === process.env.SLACK_VERIFICATION_TOKEN) {
-    const dialog = {
-      token: process.env.SLACK_ACCESS_TOKEN,
-      trigger_id,
-      dialog: JSON.stringify({
-        title: 'Start a zoom meeting',
-        callback_id: 'submit-search',
-        submit_label: 'Submit',
-        elements: [
-          {
-            label: 'Title of lecture',
-            type: 'text',
-            name: 'topic',
-            value: text,
-          },
-          {
-            label: 'Zoom email address',
-            type: 'text',
-            name: 'zoomEmail',
-          },
-          {
-            label: 'Password',
-            type: 'text',
-            name: 'password',
-          },
-          {
-            label: 'Cohort',
-            type: 'text',
-            name: 'cohort',
-          },
-          {
-            label: 'Tags',
-            optional: true,
-            type: 'text',
-            name: 'tags',
-          },
-        ],
-      }),
-    };
 
-    axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
-      .then((result) => {
-        debug('dialog.open: %o', result.data);
-        res.send('');
-      }).catch((err) => {
-        debug('dialog.open call failed: %o', err);
-        res.sendStatus(500);
+    const testValidation = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
+    console.log(JSON.stringify(testValidation));
+    if (testValidation.credentials) {
+      const validationURI = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${testValidation.credentials.access_token}`;
+      request(validationURI, (err, response, body) => {
+        if (err) {
+          console.log(err);
+        } else {
+          const dialog = {
+            token: process.env.SLACK_ACCESS_TOKEN,
+            trigger_id,
+            dialog: JSON.stringify({
+              title: 'Start a zoom meeting',
+              callback_id: 'submit-search',
+              submit_label: 'Submit',
+              elements: [
+                {
+                  label: 'Title of lecture',
+                  type: 'text',
+                  name: 'topic',
+                  value: text,
+                },
+                {
+                  label: 'Zoom email address',
+                  type: 'text',
+                  name: 'zoomEmail',
+                },
+                {
+                  label: 'Password',
+                  type: 'text',
+                  name: 'password',
+                },
+                {
+                  label: 'Cohort',
+                  type: 'text',
+                  name: 'cohort',
+                },
+                {
+                  label: 'Tags',
+                  optional: true,
+                  type: 'text',
+                  name: 'tags',
+                },
+              ],
+            }),
+          };
+
+          axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
+            .then((result) => {
+              debug('dialog.open: %o', result.data);
+              res.send('');
+            }).catch((err) => {
+              debug('dialog.open call failed: %o', err);
+              res.sendStatus(500);
+            });
+        }
       });
+    } else {
+      axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
+        token: process.env.SLACK_ACCESS_TOKEN,
+        channel: user_id,
+        text: `You are not logged in. Please click the authorization link below and try again`,
+        attachments: JSON.stringify([
+          {
+            fields: [{
+              title: 'Authorization Page',
+              value: 'https://pacific-waters-60975.herokuapp.com/auth'
+            }],
+          },
+        ]),
+      })).then((result) => {
+        debug('sendConfirmation: %o', result.data);
+      }).catch((err) => {
+        debug('sendConfirmation error: %o', err);
+        console.error(err);
+      });
+    }
+
   } else {
     debug('Verification token mismatch');
     res.sendStatus(500);
@@ -853,24 +888,6 @@ server.post('/recordings', (req, res) => {
   }
 
 });
-
-/*
-server.post('/recordings', (req, res) => {
-  // Sample nodejs code for videos.insert
-  console.log('684: ' + JSON.stringify(req.body));
-  // console.log(JSON.parse(oAuthTravler));
-
-
-});
-*/
-server.get('/recordings-test', (req, res) => {
-  // console.log(req.query.code);
-  // youtube_code = req.query.code;
-  res.send(JSON.stringify(toke));
-});
-
-
-
 
 server.listen(port, () => {
   console.log(`Servs up dude ${port}`);
