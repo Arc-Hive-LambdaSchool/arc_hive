@@ -852,7 +852,7 @@ server.post('/recordings', (req, res) => {
 
         }));
       };
-      const temp = body.topic.split(':');
+      const temp = body.topic.split(';');
       const description = temp[1];
       const title = temp[0];
       const params = {
