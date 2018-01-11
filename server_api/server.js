@@ -69,7 +69,7 @@ server.use(bodyParser.urlencoded({extended: true}));
 /*************************************************************************
 * ==============INITIAL YOUTUBE AUTH ROUTE==============
 **************************************************************************/
-server.post('/auth', (req, res) => {
+server.get('/auth', (req, res) => {
   // ADD: If statement to check for valid token
     // If valid token redirect to /slackzoom
   const getNewToken = (oAuthTraveler) => {
