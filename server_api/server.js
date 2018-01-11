@@ -315,14 +315,14 @@ server.post('/commands', (req, res) => {
             type: 'text',
             name: 'tags',
             optional: true,
-            hint: 'Enter one or more tags separated by commas e.g. brownbag, code challenge, react (note: the search returns results containing all tags entered)'
+            hint: 'Enter tag(s) separated by commas e.g. brownbag, code challenge, react (note: only videos with tags matching ALL params are returned)'
           },
           {
             label: 'Cohort',
             optional: true,
             type: 'text',
             name: 'cohort',
-            hint: 'Enter a single cohort e.g. CS1 or CS2. To get all videos regardless of cohort leave this field blank.'
+            hint: 'Enter cohort(s) in the same format as above e.g. CS1, CS2 To get all videos regardless of cohort leave this field blank.'
           },
           /* {
             label: 'Brownbag?',
