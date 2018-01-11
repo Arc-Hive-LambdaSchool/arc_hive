@@ -151,7 +151,7 @@ const timestampConfirmation = (slackSearch) => {
 };
 
 const startZoom = (slackSearch) => {
-  console.log(slackSearch);
+  
   const cohorts = [];
   if (slackSearch.cohort.toUpperCase() === 'ALL') {
     for (let i = 1; i <= 12; i++) {
@@ -214,7 +214,7 @@ const create = (userId, submission) => {
 
     if(slackSearch.zoomEmail) {
       if (submission.password === process.env.PASSWORD) {
-        // console.log('99 search: ' + JSON.stringify(slackSearch));
+
         const z = {
           method: 'POST',
           uri: 'https://pacific-waters-60975.herokuapp.com/zoom',
@@ -229,6 +229,8 @@ const create = (userId, submission) => {
           if (error) {
             console.log(error);
             return;
+          } else {
+            console.log('Zoom data object successfully created from slacksearch data. Forwarding to /Zoom to create Zoom link.');
           }
         });
       } else {

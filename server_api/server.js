@@ -82,10 +82,6 @@ server.get('/auth', (req, res) => {
   };
 
   getNewToken(oAuthTraveler);
-
-    // NOT USING v
-    // opn(authUrl, {app: 'google chrome'});
-  // console.log('704: ' + JSON.stringify(oAuthTraveler));
 });
 
 /*************************************************************************
@@ -100,22 +96,19 @@ server.get('/auth-confirmation', (req, res) => {
         console.log('Error while trying to retrieve access token', err);
         return;
       }
-      // console.log('716: ' + JSON.stringify(oAuthTraveler));
+
       oAuthTraveler.credentials = token;
-      // console.log('718: ' + JSON.stringify(oAuthTraveler));
+
       fs.writeFile(tokePath, JSON.stringify(oAuthTraveler), (err) => {
         if (err) {
           console.log(`91: ${err}`);
         }
-        console.log('SAVED');
+        console.log('Authorization successful. Google OAuth2 Token saved. Ready for /startzoom.');
       });
     }));
   };
 
   receiveToken(code);
-  // toke = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
-  // console.log(`Toke: ${JSON.stringify(toke.credentials.access_token)}`);
-  // console.log(`719: ${JSON.stringify(oAuthTraveler)}`);
   res.status(200);
   res.send('You are now Authorized');
 });
@@ -208,14 +201,14 @@ server.get('/', (req, res) => {
 * =============AIRTABLE CREATE-POST ROUTE==============
 **************************************************************************/
 server.post('/', (req, res) => {
-  console.log(JSON.stringify(req.body));
+
   let brownbag = null;
   let cohort = ['N/A'];
   let tags = ['N/A'];
   let link = req.body.arcLink;
   if (req.body.description) {
     const temp = req.body.description.toUpperCase().split(': ');
-    console.log(temp);
+
     cohort = [temp[0]];
     tags = temp[1].split(', ');
   }
@@ -253,13 +246,10 @@ server.post('/', (req, res) => {
   };
   request(p, (error, response, body) => {
     if (error) {
-      console.log('HI I AM AN ERROR')
       console.log(error);
       return;
     }
-     console.log('server 158 Response: ' + JSON.stringify(response));
-     console.log('server 159 Body: ' + JSON.stringify(body));
-
+    console.log(`YouTube link, cohort, and content tags have been successfully entered in AirTable.`);
     if (body.error) {
       const errorData = {
         error: body.error,
@@ -272,7 +262,7 @@ server.post('/', (req, res) => {
         "arcTitle": body.fields.Title,
         "arcLink": body.fields.Link,
       };
-      console.log(`SlackData: ${JSON.stringify(slackData)}`);
+
       if (req.body.userId) {
         slackData.userId = req.body.userId;
       }
@@ -487,87 +477,87 @@ server.post('/arcCommands', (req, res) => {
 /*************************************************************************
 * ==============SLACK ARCCOMMANDS-POST ROUTE==============
 **************************************************************************/
-server.post('/timestamp', (req, res) => {
-  const { token, text, trigger_id, user_id } = req.body;
-
-  const findUser = (userId) => {
-
-    const fetchUserName = new Promise((resolve, reject) => {
-      users.find(userId).then((result) => {
-        debug(`Find user: ${userId}`);
-        resolve(result.data.user.profile.real_name);
-      }).catch((err) => { reject(err); });
-    });
-
-    fetchUserName.then((result) => {
-      openDialog(result);
-      return;
-    }).catch((err) => { console.error(err); });
-  };
-
-  findUser(user_id);
-
-  const openDialog = (userName) => {
-    if (token === process.env.SLACK_VERIFICATION_TOKEN) {
-      const dialog = {
-        token: process.env.SLACK_ACCESS_TOKEN,
-        trigger_id,
-        dialog: JSON.stringify({
-          title: 'add a timestamp',
-          callback_id: 'submit-search',
-          submit_label: 'Submit',
-          elements: [
-            {
-              label: 'Video Link',
-              type: 'text',
-              name: 'arcLink',
-              value: text,
-            },
-            {
-              label: 'Video Title',
-              type: 'text',
-              name: 'arcTitle',
-            },
-            {
-              label: 'Password',
-              type: 'text',
-              name: 'password'
-            },
-            // {
-            //   label: 'Instructor',
-            //   type: 'text',
-            //   name: 'arcInstructor',
-            //   value: userName,
-            // },
-            {
-              label: 'Enter time',
-              type: 'text',
-              name: 'arcTime',
-              hint: 'e.g. 1h2m35s'
-            },
-            {
-              label: 'Tags',
-              type: 'text',
-              name: 'tags',
-            },
-          ],
-        }),
-      };
-
-      axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
-        .then((result) => {
-          debug('dialog.open: %o', result.data);
-          res.send('');
-        }).catch((err) => {
-          debug('dialog.open call failed: %o', err);
-          res.sendStatus(500);
-        });
-    } else {
-      debug('Verification token mismatch');
-      res.sendStatus(500);
-    }
-  };
-});
+// server.post('/timestamp', (req, res) => {
+//   const { token, text, trigger_id, user_id } = req.body;
+//
+//   const findUser = (userId) => {
+//
+//     const fetchUserName = new Promise((resolve, reject) => {
+//       users.find(userId).then((result) => {
+//         debug(`Find user: ${userId}`);
+//         resolve(result.data.user.profile.real_name);
+//       }).catch((err) => { reject(err); });
+//     });
+//
+//     fetchUserName.then((result) => {
+//       openDialog(result);
+//       return;
+//     }).catch((err) => { console.error(err); });
+//   };
+//
+//   findUser(user_id);
+//
+//   const openDialog = (userName) => {
+//     if (token === process.env.SLACK_VERIFICATION_TOKEN) {
+//       const dialog = {
+//         token: process.env.SLACK_ACCESS_TOKEN,
+//         trigger_id,
+//         dialog: JSON.stringify({
+//           title: 'add a timestamp',
+//           callback_id: 'submit-search',
+//           submit_label: 'Submit',
+//           elements: [
+//             {
+//               label: 'Video Link',
+//               type: 'text',
+//               name: 'arcLink',
+//               value: text,
+//             },
+//             {
+//               label: 'Video Title',
+//               type: 'text',
+//               name: 'arcTitle',
+//             },
+//             {
+//               label: 'Password',
+//               type: 'text',
+//               name: 'password'
+//             },
+//             // {
+//             //   label: 'Instructor',
+//             //   type: 'text',
+//             //   name: 'arcInstructor',
+//             //   value: userName,
+//             // },
+//             {
+//               label: 'Enter time',
+//               type: 'text',
+//               name: 'arcTime',
+//               hint: 'e.g. 1h2m35s'
+//             },
+//             {
+//               label: 'Tags',
+//               type: 'text',
+//               name: 'tags',
+//             },
+//           ],
+//         }),
+//       };
+//
+//       axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
+//         .then((result) => {
+//           debug('dialog.open: %o', result.data);
+//           res.send('');
+//         }).catch((err) => {
+//           debug('dialog.open call failed: %o', err);
+//           res.sendStatus(500);
+//         });
+//     } else {
+//       debug('Verification token mismatch');
+//       res.sendStatus(500);
+//     }
+//   };
+// });
 
 /*=======================================================================
 =========================================================================
@@ -580,12 +570,14 @@ server.post('/timestamp', (req, res) => {
 **************************************************************************/
 
 server.post('/zoom', (req, res) => { // Changed get to post
-  console.log(`562 Body: ${JSON.stringify(req.body)}`);
+
   const payload = {
     "iss": process.env.ZOOM_KEY,
     "exp": Math.floor(Date.now() / 1000) + (60 * 60)
   };
+
   const token = jwt.sign(payload, process.env.ZOOM_SECRET);
+
   const z = {
     method: 'POST',
     uri: 'https://api.zoom.us/v2/users/' + req.body.zoomEmail + '/meetings',
@@ -605,18 +597,18 @@ server.post('/zoom', (req, res) => { // Changed get to post
     },
     json: true
   };
-  console.log(`586 Z: ${JSON.stringify(z)}`);
+
   request(z, (error, response, body) => {
     if (error) {
       console.log(error);
       return;
     }
-    console.log(`593 Response: ${JSON.stringify(response)}`);
     const zoomData = {
       cohort: req.body.cohort,
       zoomLink: body.join_url,
       title: req.body.topic
     }
+    console.log(`Zoom meeting successfully created. Sending Zoom link and lecture title to cohort channel.`);
     slackSearch.startZoom(zoomData);
     res.send(response);
   });
@@ -633,13 +625,14 @@ server.post('/slackzoom', (req, res) => {
   if (token === process.env.SLACK_VERIFICATION_TOKEN) {
 
     const testValidation = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
-    console.log(JSON.stringify(testValidation));
+
     if (testValidation.credentials) {
       const validationURI = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${testValidation.credentials.access_token}`;
       request(validationURI, (err, response, body) => {
         if (err) {
           console.log(err);
         } else {
+          console.log(`YouTube authorization successful. Sending StartZoom menu to Slack.`);
           const dialog = {
             token: process.env.SLACK_ACCESS_TOKEN,
             trigger_id,
@@ -690,6 +683,7 @@ server.post('/slackzoom', (req, res) => {
         }
       });
     } else {
+      console.log(`Youtube authorization failed. Sending authorization link to Slack.`);
       axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
         token: process.env.SLACK_ACCESS_TOKEN,
         channel: user_id,
@@ -721,14 +715,11 @@ server.post('/slackzoom', (req, res) => {
 **************************************************************************/
 
 server.post('/recordings', (req, res) => {
-  // const et = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
-  // console.log(`651: ${JSON.stringify(et)}`);
 
   if (req.body.type === 'RECORDING_MEETING_COMPLETED') {
-    console.log(`653: ${JSON.stringify(req.body)}`);
+    console.log(`Zoom cloud recording successfully processed.`);
     const p = JSON.parse(req.body.content);
-    // console.log(`655: ${p.uuid}`);
-    // console.log(`656: ${JSON.stringify(p.uuid)}`);
+
     const payload = {
       "iss": process.env.ZOOM_KEY,
       "exp": Math.floor(Date.now() / 1000) + (60 * 60)
@@ -749,6 +740,7 @@ server.post('/recordings', (req, res) => {
         console.log(error);
         return;
       }
+      console.log(`Successfully retrieved Zoom cloud recording metadata. Preparing metadata to be sent to YouTube.`);
       const createResource = (properties) => {
         const resource = {};
         const normalizedProps = properties;
@@ -780,7 +772,7 @@ server.post('/recordings', (req, res) => {
       };
 
       const videosInsert = (requestData, creds) => {
-        console.log('596 RequestData: ' + JSON.stringify(requestData));
+
         const gAuth = JSON.parse(fs.readFileSync(tokePath, 'utf8'));
         const auth = new googleAuth();
         const oauth2Client = new auth.OAuth2(creds.clientId, creds.clientSecret, creds.redirectUrl);
@@ -794,13 +786,14 @@ server.post('/recordings', (req, res) => {
         };
         parameters['notifySubscribers'] = false;
         parameters['resource'] = createResource(requestData['properties']);
-        console.log(`687: ${JSON.stringify(parameters)}`);
+
         service.videos.insert(parameters, ((err, data) => {
           if (err) {
             console.log('The API returned an error: ' + err);
           }
           if (data) {
             // if success...
+            console.log(`Video successfully uploaded to YouTube. Video metadata:`)
             console.log(util.inspect(data, false, null));
 
             // Options object used to make the delete request to Zoom
@@ -820,7 +813,7 @@ server.post('/recordings', (req, res) => {
               if (err) {
                 console.log(err);
               } else {
-                console.log(`749 Response: ${JSON.stringify(response)}`);
+                console.log(`Zoom cloud recording successfully moved to cloud trash bin.`);
               }
             });
 
@@ -845,7 +838,7 @@ server.post('/recordings', (req, res) => {
               if (err) {
                 console.log(err);
               } else {
-                console.log(JSON.stringify(response));
+                console.log(`Sending YouTube link and metadata to AirTable`);
               }
             });
           }
@@ -881,8 +874,6 @@ server.post('/recordings', (req, res) => {
         //
         // });
       res.send('It probably worked');
-      console.log('673 RESPONSE: ' + JSON.stringify(response));
-      console.log('674 BODY: ' + JSON.stringify(body));
     });
   } else {
     res.status(200);
