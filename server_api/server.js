@@ -221,9 +221,12 @@ server.post('/', (req, res) => {
   if (req.body.cohort) {
     cohort = req.body.cohort.toUpperCase().split(', ');
   }
-  if (req.body.arcTime) {
-    link += '?t=' + req.body.arcTime;
-  }
+
+  // Not in use
+  // if (req.body.arcTime) {
+  //   link += '?t=' + req.body.arcTime;
+  // }
+
   if (req.body.tags) {
     tags = req.body.tags.toUpperCase().split(', ');
   }
@@ -312,7 +315,7 @@ server.post('/commands', (req, res) => {
             type: 'text',
             name: 'tags',
             optional: true,
-            hint: 'Enter a single tag e.g. brownbag, code challenge, js, auth, react ...'
+            hint: 'Enter one or more tags separated by commas e.g. brownbag, code challenge, js, auth, react (note: the search returns results containing all tags entered)'
           },
           {
             label: 'Cohort',
