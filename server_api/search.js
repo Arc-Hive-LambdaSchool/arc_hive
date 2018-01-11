@@ -173,7 +173,7 @@ const startZoom = (slackSearch) => {
         {
           fields: [
             {
-              title: 'Zoom Link',
+              title: slackSearch.title,
               value: slackSearch.zoomLink,
             }
           ],

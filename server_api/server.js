@@ -613,7 +613,8 @@ server.post('/zoom', (req, res) => { // Changed get to post
     console.log(`593 Response: ${JSON.stringify(response)}`);
     const zoomData = {
       cohort: req.body.cohort,
-      zoomLink: body.join_url
+      zoomLink: body.join_url,
+      title: req.body.topic
     }
     slackSearch.startZoom(zoomData);
     res.send(response);
