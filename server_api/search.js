@@ -59,7 +59,7 @@ const airTableError = (slackSearch) => {
 };
 
 const arcConfirmation = (slackSearch) => {
-  console.log(slackSearch);
+  
   const cohorts = [];
   if (slackSearch.cohort === null) {
     cohorts.push(slackSearch.userId);
@@ -73,7 +73,7 @@ const arcConfirmation = (slackSearch) => {
       cohorts.push(`#${slackCohorts[i]}`);
     }
   }
-  console.log(cohorts);
+
   for (let i = 0; i < cohorts.length; i++) {
     axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
       token: process.env.SLACK_ACCESS_TOKEN,
@@ -151,7 +151,7 @@ const timestampConfirmation = (slackSearch) => {
 };
 
 const startZoom = (slackSearch) => {
-  console.log(slackSearch);
+
   const cohorts = [];
   if (slackSearch.cohort.toUpperCase() === 'ALL') {
     for (let i = 1; i <= 12; i++) {
@@ -173,7 +173,7 @@ const startZoom = (slackSearch) => {
         {
           fields: [
             {
-              title: 'Zoom Link',
+              title: slackSearch.title,
               value: slackSearch.zoomLink,
             }
           ],
@@ -214,7 +214,7 @@ const create = (userId, submission) => {
 
     if(slackSearch.zoomEmail) {
       if (submission.password === process.env.PASSWORD) {
-        // console.log('99 search: ' + JSON.stringify(slackSearch));
+
         const z = {
           method: 'POST',
           uri: 'https://pacific-waters-60975.herokuapp.com/zoom',
@@ -229,6 +229,8 @@ const create = (userId, submission) => {
           if (error) {
             console.log(error);
             return;
+          } else {
+            console.log('Zoom data object successfully created from slacksearch data. Forwarding to /Zoom to create Zoom link.');
           }
         });
       } else {
