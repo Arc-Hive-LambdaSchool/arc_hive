@@ -163,7 +163,6 @@ server.get('/', (req, res) => {
     url += 'AND(' + pathArray.join('%2C+') + ')';
   }
 
-  // console.log(url);
   const g = {
     method: 'GET',
     uri: url + path.sort,

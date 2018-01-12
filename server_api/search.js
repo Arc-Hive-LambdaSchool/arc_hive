@@ -59,7 +59,7 @@ const airTableError = (slackSearch) => {
 };
 
 const arcConfirmation = (slackSearch) => {
-  console.log(slackSearch);
+  
   const cohorts = [];
   if (slackSearch.cohort === null) {
     cohorts.push(slackSearch.userId);
@@ -73,7 +73,7 @@ const arcConfirmation = (slackSearch) => {
       cohorts.push(`#${slackCohorts[i]}`);
     }
   }
-  console.log(cohorts);
+
   for (let i = 0; i < cohorts.length; i++) {
     axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
       token: process.env.SLACK_ACCESS_TOKEN,
@@ -151,7 +151,7 @@ const timestampConfirmation = (slackSearch) => {
 };
 
 const startZoom = (slackSearch) => {
-  
+
   const cohorts = [];
   if (slackSearch.cohort.toUpperCase() === 'ALL') {
     for (let i = 1; i <= 12; i++) {
