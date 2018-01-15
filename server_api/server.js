@@ -375,7 +375,7 @@ server.post('/interactive-component', (req, res) => {
       const fetchAuthorizedMembers = new Promise((resolve, reject) => {
         authorizedMembers.memberList(userId).then((result) => {
           debug(`Get member list`);
-          resolve(result.data.members);
+          resolve(result.data);
         }).catch((err) => { reject(err); });
       });
 
@@ -384,6 +384,7 @@ server.post('/interactive-component', (req, res) => {
         slackSearch.create(userId, submission, result)
       })
     }
+    console.log(body.user.id);
     findAuthorizedMembers(body.user.id, body.submission);
   } else {
     debug('Token mismatch');
