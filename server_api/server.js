@@ -20,10 +20,11 @@ const ytAPI = google.youtube('v3');
 const util = require('util');
 const googleAuth = require('google-auth-library');
 const opn = require('opn'); // ?
-const GoogleStrategy = require('passport-google-oauth2').Strategy;
+const GoogleStrategy = require('passport-google-oauth2').Strategy; // ?
 const passport = require('passport'); // ?
 const AWS = require('aws-sdk'); // ?
 const path = require('path'); // ?
+const authorizedMembers = require('./members');
 
 // This code is worthless garbage
 // Airtable.configure({
@@ -359,6 +360,7 @@ server.post('/commands', (req, res) => {
 **************************************************************************/
 server.post('/interactive-component', (req, res) => {
   const body = JSON.parse(req.body.payload);
+  console.log(JSON.stringify(body));
 
   // check that the verification token matches expected value
   if (body.token === process.env.SLACK_VERIFICATION_TOKEN) {
@@ -369,7 +371,21 @@ server.post('/interactive-component', (req, res) => {
     res.send('');
 
     // create Helpdesk ticket
-    slackSearch.create(body.user.id, body.submission);
+    const findAuthorizedMembers = (userId, submission) => {
+      const fetchAuthorizedMembers = new Promise((resolve, reject) => {
+        authorizedMembers.memberList(userId).then((result) => {
+          debug(`Get member list`);
+          resolve(result.data.members);
+        }).catch((err) => { reject(err); });
+      });
+
+      fetchAuthorizedMembers.then((result) => {
+        console.log(result);
+        slackSearch.create(userId, submission, result)
+      })
+    }
+    console.log(body.user.id);
+    findAuthorizedMembers(body.user.id, body.submission);
   } else {
     debug('Token mismatch');
     res.sendStatus(500);
@@ -426,11 +442,11 @@ server.post('/arcCommands', (req, res) => {
               value: `[Title] by ${userName}`,
               hint: 'Replace "[Title]" with your title',
             },
-            {
-              label: 'Password',
-              type: 'text',
-              name: 'password',
-            },
+            // {
+            //   label: 'Password',
+            //   type: 'text',
+            //   name: 'password',
+            // },
             {
               label: 'Tags',
               type: 'text',
@@ -651,11 +667,11 @@ server.post('/slackzoom', (req, res) => {
                   type: 'text',
                   name: 'zoomEmail',
                 },
-                {
-                  label: 'Password',
-                  type: 'text',
-                  name: 'password',
-                },
+                // {
+                //   label: 'Password',
+                //   type: 'text',
+                //   name: 'password',
+                // },
                 {
                   label: 'Cohort',
                   type: 'text',
