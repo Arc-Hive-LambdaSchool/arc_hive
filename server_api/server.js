@@ -360,6 +360,7 @@ server.post('/commands', (req, res) => {
 **************************************************************************/
 server.post('/interactive-component', (req, res) => {
   const body = JSON.parse(req.body.payload);
+  console.log(JSON.stringify(body));
 
   // check that the verification token matches expected value
   if (body.token === process.env.SLACK_VERIFICATION_TOKEN) {
