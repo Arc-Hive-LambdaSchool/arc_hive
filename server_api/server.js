@@ -379,6 +379,7 @@ server.post('/interactive-component', (req, res) => {
       });
 
       fetchAuthorizedMembers.then((result) => {
+        console.log(result);
         slackSearch.create(userId, submission, result)
       })
     }
