@@ -59,7 +59,7 @@ const airTableError = (slackSearch) => {
 };
 
 const arcConfirmation = (slackSearch) => {
-  
+
   const cohorts = [];
   if (slackSearch.cohort === null) {
     cohorts.push(slackSearch.userId);
@@ -104,7 +104,7 @@ const arcError = (slackSearch) => {
     token: process.env.SLACK_ACCESS_TOKEN,
     response_type: "in_channel",
     channel: `${slackSearch.userId}`,
-    text: `Error! Upload unsuccessful. You entered an invalid password`,
+    text: `Error! You are not Authorized to use this command.`,
   })).then((result) => {
     debug('arcConfirmation: %o', result.data);
   }).catch((err) => {
@@ -189,7 +189,7 @@ const startZoom = (slackSearch) => {
 };
 
 
-const create = (userId, submission) => {
+const create = (userId, submission, members) => {
   const slackSearch = {};
 
   const fetchUserEmail = new Promise((resolve, reject) => {
@@ -213,7 +213,7 @@ const create = (userId, submission) => {
     slackSearch.topic = submission.topic;
 
     if(slackSearch.zoomEmail) {
-      if (submission.password === process.env.PASSWORD) {
+      if (members.includes(userId)) {
 
         const z = {
           method: 'POST',
@@ -237,7 +237,7 @@ const create = (userId, submission) => {
         arcError(slackSearch);
       }
     } else if (slackSearch.arcLink) {
-      if (submission.password === process.env.PASSWORD) {
+      if (members.includes(userId)) {
         // console.log('99 search: ' + JSON.stringify(slackSearch));
         const p = {
           method: 'POST',
