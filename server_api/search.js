@@ -213,6 +213,7 @@ const create = (userId, submission, members) => {
     slackSearch.topic = submission.topic;
 
     if(slackSearch.zoomEmail) {
+      console.log(members);
       if (members.includes(userId)) {
 
         const z = {
