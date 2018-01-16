@@ -3,6 +3,8 @@
 // e.g. 00:59:59 ---> <link>?t=59m59s
 // e.g. 00:00:59 ---> <link>?t=59s
 
+// https://youtu.be/c9YFYKRcNzY "More Closure/Recursion"
+
 const hms_eg0 = '00:00:00'
 const hms_eg1 = '00:00:59'
 const hms_eg2 = '00:59:59'
