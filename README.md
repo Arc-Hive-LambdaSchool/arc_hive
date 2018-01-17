@@ -26,6 +26,7 @@
 - https://docs.google.com/document/d/1biRjYRykSJU09Gel4Fd4TqAkyadMNcMZcnVcGJ5lAW8/edit
 - [First Week CS1 Demos](https://youtu.be/0FH5zC0tg-Q)
 - [Second Week CS1 Demos](https://youtu.be/eWjym0ahi-4)
+- [Brown Bag Presentation to LS](https://youtu.be/34S7zc6T-0k)
 
 # Minimum Viable Product
 - a teacher pastes a youtube link into Slack with a slash command `arc` or `/arc https://youtu.be/ZihgMcrHOF4`
@@ -172,11 +173,11 @@
 
 # Local Zoom Recording File Sequence
 
-1. While recording:  
+1. While recording:
 ![1) Recording](art/1_Recording.png)
-2. While transcoding:  
+2. While transcoding:
 ![2) Transcoding](art/2_Transcoding.png)
-3. When finished:  
+3. When finished:
 ![3) Finished .mp4](art/3_Fin.png)
 
 ### macOS default recording directory
