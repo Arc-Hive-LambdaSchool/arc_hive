@@ -1,5 +1,5 @@
 # Lambda School Streaming Content: Arc Hive
-https://youtu.be/uxIYIhiGMcE
+Click [here](https://youtu.be/uxIYIhiGMcE) or on the image to see our group presentation!
 
 [![Arc_Hive Demo Day Presentation](art/youTubeImage.png)](https://youtu.be/uxIYIhiGMcE "Cool Beans")
 
