@@ -2,6 +2,8 @@
 - Collected notes for cs1 Group Capstone Project: Lois, Tyge, Evan, Ryan & Patrick
 - NOTE: click on the ▶︎ black ▶︎ triangles ▶︎ to expand a section
 
+![Arc Hive Server API and User Flow](art/art/Arc_Hive_Startzoom.jpeg)
+
 #### KickOff meeting
 - https://docs.google.com/document/d/1sboqV94eDzEiKEs8Lh4W6DTSlwJMIczww0Kpv1__cU4/edit#
 - https://youtu.be/NaCJiR7pi4E
