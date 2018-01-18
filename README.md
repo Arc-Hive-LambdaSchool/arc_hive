@@ -1,4 +1,8 @@
 # Lambda School Streaming Content: Arc Hive
+https://youtu.be/uxIYIhiGMcE
+
+[![Arc_Hive Demo Day Presentation](art/youTubeImage.png)](https://youtu.be/uxIYIhiGMcE "Cool Beans")
+
 - Collected notes for cs1 Group Capstone Project: Lois, Tyge, Evan, Ryan & Patrick
 - NOTE: click on the ▶︎ black ▶︎ triangles ▶︎ to expand a section
 
