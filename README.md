@@ -25,7 +25,6 @@
 </p></details>
 
 #### Weekly presentations to cs1
-- https://docs.google.com/document/d/1biRjYRykSJU09Gel4Fd4TqAkyadMNcMZcnVcGJ5lAW8/edit
 - [First Week CS1 Demos](https://youtu.be/0FH5zC0tg-Q)
 - [Second Week CS1 Demos](https://youtu.be/eWjym0ahi-4)
 - [Brown Bag Presentation to LS](https://youtu.be/34S7zc6T-0k)
@@ -45,6 +44,9 @@
 # Project Management
 ### User Flow Chart
 - https://www.lucidchart.com/invitations/accept/df9009eb-6ffb-467e-9327-38077ed0331a
+
+![version 1](art/Arc_Hive_UserFlowchart2.v1.jpeg)
+![and now with Airtable!](art/Arc_Hive_UserFlowchart2.v2.jpeg)
 
 ### Trello
 - https://trello.com/b/VJ9rXVN4/cms-slackbot
