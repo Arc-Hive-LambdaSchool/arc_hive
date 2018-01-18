@@ -2,11 +2,13 @@ Hello.
 
 My name is Patrick Kennedy.
 
-Our group is called "Arc Hive" and we've created a tool which
-Automates Streaming Content Creation, Dissemination, Archive and Retrieval.
+Our group is called "Arc Hive".
 
-Currently, getting Zoom meetings uploaded to YouTube and the links disseminated
-to students is a time consuming and manually cumbersome process.
+We've created a tool which Automates Streaming Content Creation, Dissemination, Archive and Retrieval.
+
+Currently, it's a time consuming and manually cumbersome process to get recordings
+of Lambda School's lectures uploaded to YouTube and then to get those links disseminated
+to students and archived for later reference.
 
 Our main goals with this project were to:
 1) make it easier for teachers to get recordings of Zoom lecture videos posted on YouTube and
@@ -22,3 +24,22 @@ is archived for future reference in AirTable.
 Finally, our toolset lets students retrieve either a chronological listing
 of all the recorded meetings, or, students can search for specific meetings
 based on tags from our content based management.
+
+
+
+
+
+
+
+
+
+
+Thoughts for subjects to address:
+
+Ryan: Agile methodology, Trello, Documentation, R&D
+
+Tyge: Slack API, your use of the Slack `videos` tool and manually recording to Google doc
+
+Lois: Slack, Zoom, Heroku
+
+Evan: YouTube API, oAuth2
